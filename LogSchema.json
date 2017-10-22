@@ -118,8 +118,8 @@
                     "id":"string",              //触手ID
                     "movement":                 //前进距离
                     {
-                        "dx":"uint32_t",        //dx
-                        "dy":"uint32_t"         //dy
+                        "dx":"int32_t",        //dx
+                        "dy":"int32_t"         //dy
                     }
                 },
                 //...
@@ -129,8 +129,8 @@
                     "id":"string",              //触手ID
                     "movement":                 //前进距离
                     {
-                        "dx":"uint32_t",        //dx
-                        "dy":"uint32_t"         //dy
+                        "dx":"int32_t",        //dx
+                        "dy":"int32_t"         //dy
                     }
                 },
                 //...
@@ -180,8 +180,8 @@
                     "id":"string",              //断触手ID
                     "movement":                 //起始位置移动距离
                     {
-                        "dx":"uint32_t",        //dx
-                        "dy":"uint32_t"         //dy
+                        "dx":"int32_t",        //dx
+                        "dy":"int32_t"         //dy
                     }
                 },
                 //...
