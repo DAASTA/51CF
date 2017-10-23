@@ -15,26 +15,30 @@ var Point = {
 }
 
 var Cell = {
-    createNew: function(_id, _pos, _size, _resources, _category, _house) {
+    createNew: function(_id, _pos, _size, _resources, _team, _level, _race) {
         var cell = {};
         cell.ID = _id;
         cell.pos = _pos;
         cell.size = _size;
         cell.resources = _resources;
-        cell.category = _category;
-        cell.house = _house;
+        cell.team = _team;
+        cell.level = _level;
+        cell.race = _race;
 
         cell.draw = function() {
-            cell.sprite = game.add.sprite(cell.pos.x, cell.pos.y, cell.category + ".png");
-            //change cell's color according to its house
+            cell.sprite = game.add.sprite(cell.pos.x, cell.pos.y, cell.level + ".png");
+            //change cell's color according to its race
             //
 
             //show cell's resources
         }
 
-        cell.update = function(newResources, newSize, newCategory, newHouse) {
+        cell.updateSize = function(newSize, newResources, srcTantecles, dstTantecles, dstBrokenTantecles) {
 
             //animation: expand/shrink to new size
+            //
+
+            // update all tantecles connecting to the cell
             //
 
             cell.size = newSize;
@@ -43,17 +47,20 @@ var Cell = {
             // update cell's resources
             //
             
-            if (cell.category != newCategory) {
-                //change image
-                //
-                cell.category = newCategory;
-            }
+        }
 
-            if (cell.house != newHouse) {
-                // change color
-                //
-                cell.house = newHouse;
-            }
+        cell.updateRace = function(newRace) {
+            //change color or image
+            //
+
+            cell.race = newRace;
+        }
+
+        cell.updateLevel = function(newLevel) {
+            //change size or image
+            //
+
+            cell.level = newLevel;
         }
 
         cell.shake = function() {

@@ -24,7 +24,7 @@ var Tantecle = {
             //draw this tantecle
         }
 
-        tantecle.shorten = function(dx, dy) {
+        tantecle.shrink = function(dx, dy) {
             tantecle.endPoint.update(dx, dy);
             tantecle.length = sqrt((tantecle.endPoint.x - tantecle.startPoint.x)
                                     * (tantecle.endPoint.x - tantecle.startPoint.x)
@@ -57,6 +57,42 @@ var BrokenTantecle = {
     createNew: function(_id, _startPoint, endCell) {
         var brokenTantecle = {};
         brokenTantecle.startPoint = _startPoint;
-        brokenTantecle.endPoint = 
-           }
-}
+        brokenTantecle.ID = _id;
+        var target = cells[endCell];
+        deltaX = - target.pos.x + _startPoint.x;
+        deltaY = - target.pos.y + _startPoint.y;
+        l = sqrt(deltaX * deltaX + deltaY * deltaY);
+        dx = target.size * deltaX / l;
+        dy = target.size * deltaY / l;
+        brokenTantecle.endPoint = Point.createNew(target.pos.x + dx, target.pos.y + dy);
+        
+        brokenTantecle.length = sqrt((tantecle.endPoint.x - tantecle.startPoint.x)
+                                * (tantecle.endPoint.x - tantecle.startPoint.x)
+                              + (tantecle.endPoint.y - tantecle.startPoint.y)
+                                * (tantecle.endPoint.y - tantecle.startPoint.y));
+        
+        brokenTantecle.draw = function() {
+            // draw this brokenTantecle, nearly same as tantecle
+            //
+
+
+        }
+
+        brokenTantecle.expand = function() {
+            // expand the endPoint to the target cell, called when size of the target cell changes
+            //
+        }
+
+        brokenTantecle.shrink = function(dx, dy) {
+            //shrink, reset the startPoint of the brokenTantecle
+            //
+        }
+        
+        brokenTantecle.destroy = function() {
+            brokenTantecles[brokenTantecle.ID] = null;
+        }
+
+        brokenTantecles[brokenTantecle.ID] = brokenTantecle;
+        return brokenTantecle;
+   }
+}  
