@@ -9,8 +9,8 @@ var game = new Phaser.Game(width, height, Phaser.AUTO, '#game');
 // 定义场景
 var states = {
     // 加载场景
-    preload: function() {
-        this.preload = function() {
+    preload: function () {
+        this.preload = function () {
             // 设置背景为黑色
             game.stage.backgroundColor = '#000000';
             // 加载游戏资源
@@ -34,14 +34,14 @@ var states = {
             });
             progressText.anchor.setTo(0.5, 0.5);
             // 监听加载完一个文件的事件
-            game.load.onFileComplete.add(function(progress) {
+            game.load.onFileComplete.add(function (progress) {
                 progressText.text = progress + '%';
             });
             // 监听加载完毕事件
             game.load.onLoadComplete.add(onLoad);
             // 最小展示时间，示例为3秒
             var deadLine = false;
-            setTimeout(function() {
+            setTimeout(function () {
                 deadLine = true;
             }, 100);
             // 加载完毕回调方法
@@ -57,8 +57,8 @@ var states = {
         }
     },
     // 开始场景
-    created: function() {
-        this.create = function() {
+    created: function () {
+        this.create = function () {
             // 添加背景
             var bg = game.add.image(0, 0, 'bg');
             bg.width = game.world.width;
@@ -83,13 +83,13 @@ var states = {
             man.height = man.width / manImage.width * manImage.height;
             man.anchor.setTo(0.5, 0.5);
             // 添加点击事件
-            game.input.onTap.add(function() {
+            game.input.onTap.add(function () {
                 game.state.start('play');
             });
         }
     },
     // 游戏场景
-    play: function() {
+    play: function () {
         var man; // 主角
         var apples; // 苹果
         var score = 0; // 得分
@@ -97,7 +97,7 @@ var states = {
         var scoreMusic;
         var bombMusic;
         var bgMusic;
-        this.create = function() {
+        this.create = function () {
             score = 0;
             // 开启物理引擎
             game.physics.startSystem(Phaser.Physics.Arcade);
@@ -133,16 +133,16 @@ var states = {
             // 是否正在触摸
             var touching = false;
             // 监听按下事件
-            game.input.onDown.add(function(pointer) {
+            game.input.onDown.add(function (pointer) {
                 // 要判断是否点住主角，避免瞬移
                 if (Math.abs(pointer.x - man.x) < man.width / 2) touching = true;
             });
             // 监听离开事件
-            game.input.onUp.add(function() {
+            game.input.onUp.add(function () {
                 touching = false;
             });
             // 监听滑动事件
-            game.input.addMoveCallback(function(pointer, x, y, isTap) {
+            game.input.addMoveCallback(function (pointer, x, y, isTap) {
                 if (!isTap && touching) man.x = x;
             });
             // 添加苹果组
@@ -150,7 +150,7 @@ var states = {
             // 苹果类型
             var appleTypes = ['green', 'red', 'yellow', 'bomb'];
             var appleTimer = game.time.create(true);
-            appleTimer.loop(1000, function() {
+            appleTimer.loop(1000, function () {
                 var x = Math.random() * game.world.width;
                 var index = Math.floor(Math.random() * appleTypes.length);
                 var type = appleTypes[index];
@@ -165,7 +165,7 @@ var states = {
                 // 设置苹果与游戏边缘碰撞，
                 apple.body.collideWorldBounds = true;
                 apple.body.onWorldBounds = new Phaser.Signal();
-                apple.body.onWorldBounds.add(function(apple, up, down, left, right) {
+                apple.body.onWorldBounds.add(function (apple, up, down, left, right) {
                     if (down) {
                         apple.kill();
                         if (apple.type !== 'bomb') game.state.start('over', true, false, score);
@@ -174,7 +174,7 @@ var states = {
             });
             appleTimer.start();
         }
-        this.update = function() {
+        this.update = function () {
             game.physics.arcade.overlap(man, apples, pickApple, null, this);
         }
         // 接触事件
@@ -204,12 +204,12 @@ var states = {
                     alpha: 1,
                     y: goal.y - 20
                 }, 100, Phaser.Easing.Linear.None, true, 0, 0, false);
-                showTween.onComplete.add(function() {
+                showTween.onComplete.add(function () {
                     var hideTween = game.add.tween(goal).to({
                         alpha: 0,
                         y: goal.y - 20
                     }, 100, Phaser.Easing.Linear.None, true, 200, 0, false);
-                    hideTween.onComplete.add(function() {
+                    hideTween.onComplete.add(function () {
                         goal.kill();
                     });
                 });
@@ -224,12 +224,12 @@ var states = {
         }
     },
     // 结束场景
-    over: function() {
+    over: function () {
         var score = 0;
-        this.init = function() {
+        this.init = function () {
             score = arguments[0];
         }
-        this.create = function() {
+        this.create = function () {
             // 添加背景
             var bg = game.add.image(0, 0, 'bg');
             bg.width = game.world.width;
@@ -241,7 +241,7 @@ var states = {
                 fill: '#f2bb15'
             });
             title.anchor.setTo(0.5, 0.5);
-            var scoreStr = '你的得分是：'+score+'分';
+            var scoreStr = '你的得分是：' + score + '分';
             var scoreText = game.add.text(game.world.centerX, game.world.height * 0.4, scoreStr, {
                 fontSize: '30px',
                 fontWeight: 'bold',
@@ -255,7 +255,7 @@ var states = {
             });
             remind.anchor.setTo(0.5, 0.5);
             // 添加点击事件
-            game.input.onTap.add(function() {
+            game.input.onTap.add(function () {
                 game.state.start('play');
             });
         }
@@ -263,7 +263,7 @@ var states = {
 };
 
 // 添加场景到游戏示例中
-Object.keys(states).map(function(key) {
+Object.keys(states).map(function (key) {
     game.state.add(key, states[key]);
 });
 
