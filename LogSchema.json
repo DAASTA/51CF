@@ -1,0 +1,223 @@
+/*
+**  FC15存档格式约定
+**  向界面传递指令（细胞增大、新建触手等）
+**  界面组根据指令进行绘制、渲染
+**  2017年10月22日
+**  界面组：张瑞东
+**  逻辑组：黄思超
+**  架构组：夏卓凡
+**  Key:需要存取的属性值
+**  Value:该属性的数据类型
+*/
+{
+    /*
+    **  头部分
+    **  包括一些全局的信息，在读入LOG时加载
+    */
+    "head":
+    {
+        "totalRounds":"uint32_t",               //总回合数
+        "totalPlayers":"uint32_t",              //总玩家数
+        "playerInfo":                           //每个玩家的信息
+        [
+            {
+                "id":"string",                  //玩家ID
+                "race":"string",                //种族
+                "team":"uint32_t"               //派系 
+            }
+            //...    
+        ]
+    },
+    /* 
+    **  体部分
+    **  包括每个回合的命令信息，按回合进行加载
+    */
+    "body":
+    [
+        {
+            "currentRound":"uint32_t",          //当前回合
+            "runDuration":"uint32_t",           //本回合运行时间
+            "cellActions":                      //细胞的指令
+            [
+                //新增
+                {
+                    "type":"uint8_t",           //新增
+                    "id":"string",              //细胞ID
+                    "size":
+                    {
+                        "width":"uint32_t",     //宽
+                        "height":"uint32_t"     //高
+                    },
+                    "team":"uint32_t",          //派系信息
+                    "level":"uint32_t",         //细胞等级
+                    "race":"string"             //种族
+                },
+                //...
+                //大小/资源值改变
+                {
+                    "type":"uint8_t",           //大小/资源值改变
+                    "id":"string",              //细胞ID
+                    "newSize":                  //新大小
+                    {
+                        "width":"uint32_t",     //宽
+                        "height":"uint32_t"     //高
+                    },
+                    "newResource":"uint32_t",   //新资源值
+                    "srcTentatcles":            //从此细胞发出的触手ID
+                    [
+                        {
+                            "id":"string"       //触手ID
+                        }
+                        //...
+                    ],
+                    "dstTentacles":             //终结于此细胞的触手ID
+                    [
+                        {
+                            "id":"string"       //触手ID
+                        }
+                        //...
+                    ],
+                    "dstTentaclesCut":
+                    [
+                        {
+                            "id":"string"       //触手ID
+                        }
+                        //...
+                    ]
+                },
+                //...
+                //等级改变
+                {
+                    "type":"uint8_t",           //等级改变
+                    "id":"string",              //细胞ID
+                    "newLevel":"uint32_t"       //新等级
+                },
+                //...
+                //派系改变
+                {
+                    "type":"uint8_t",           //派系改变
+                    "id":"string",              //细胞ID
+                    "newTeam":"uint32_t"        //新派系
+                }
+                //...
+            ],
+            "tentacleActions":                  //触手的指令
+            [
+                //新增
+                {
+                    "type":"uint8_t",           //新增
+                    "id":"string",              //触手ID
+                    "srcCell":"string",         //源细胞ID
+                    "dstCell":"string",         //目标细胞ID
+                    "transRate":"uint32_t"      //传输速度
+                },
+                //...
+                //伸长
+                {
+                    "type":"uint8_t",           //伸长
+                    "id":"string",              //触手ID
+                    "movement":                 //前进距离
+                    {
+                        "dx":"int32_t",        //dx
+                        "dy":"int32_t"         //dy
+                    }
+                },
+                //...
+                //缩短
+                {
+                    "type":"uint8_t",           //缩短
+                    "id":"string",              //触手ID
+                    "movement":                 //前进距离
+                    {
+                        "dx":"int32_t",        //dx
+                        "dy":"int32_t"         //dy
+                    }
+                },
+                //...
+                //传输速度改变
+                {
+                    "type":"uint8_t",           //传输速度改变
+                    "id":"string",              //触手ID
+                    "newTransRate":"uint32_t"   //新传输速度
+                },
+                //...
+                //切断
+                {
+                    "type":"uint8_t",           //切断
+                    "id":"string",              //触手ID
+                    "cutPostion":               //切断位置坐标
+                    {
+                        "x":"uint32_t",         //x
+                        "y":"uint32_t"          //y
+                    }
+                },
+                //...
+                //消失
+                {
+                    "type":"uint8_t",           //消失
+                    "id":"string"               //触手ID
+                }
+                //...
+            ],
+            "cutTentacleActions":
+            [
+                 //新增
+                 {
+                    "type":"uint8_t",           //新增
+                    "id":"string",              //断触手ID
+                    "birthPosition":            //起始位置
+                    {
+                        "x":"uint32_t",         //x
+                        "y":"uint32_t"          //y
+                    },     
+                    "dstCell":"string",         //目标细胞ID
+                    "transRate":"uint32_t"      //传输速度
+                },
+                //...
+                //缩短
+                {
+                    "type":"uint8_t",           //缩短
+                    "id":"string",              //断触手ID
+                    "movement":                 //起始位置移动距离
+                    {
+                        "dx":"int32_t",        //dx
+                        "dy":"int32_t"         //dy
+                    }
+                },
+                //...
+                //消失
+                {
+                    "type":"uint8_t",           //消失
+                    "id":"string"               //断触手ID
+                }
+                //...
+            ],
+            "barrierActions":
+            [
+                //新增
+                {
+                    "type":"uint8_t",           //新增
+                    "id":"string",              //障碍ID
+                    "contour":                  //轮廓点集
+                    [
+                        {
+                            "x":"uint32_t",     //x
+                            "y":"uint32_t"      //y
+                        }
+                            //...
+                    ],
+                    "texture":"uint32_t"        //障碍类型
+                },
+                //...
+                //消失
+                {
+                    "type":"uint8_t",           //消失
+                    "id":"string"               //障碍ID
+                }
+                //...
+            ]
+            //使用技能特效定义不明确，还需再商定
+        }
+        //...
+    ]
+}
