@@ -2,6 +2,10 @@ var width = 800;
 var height = 600;
 
 var game = new Phaser.Game(width, height, Phaser.AUTO, '#game');
+var totalRounds;
+var totalPlayers;
+var players;
+var rounds;
 
 var cells = new Array();
 for (var i = 0; i < 4; i++) {
@@ -11,6 +15,91 @@ for (var i = 0; i < 4; i++) {
 var states = {
     preload: function () {
         this.preload = function () {
+
+            $.getJSON("js/LogSchema.json", function(data) {
+                totalRounds = data.head.totalRounds;
+                totalPlayers = data.head.totalPlayers;
+                players = data.head.playerInfo;
+                $.each(data.body, function(i, round) {
+                    var currentRound = round.currentRound;
+                    var duration = round.runDuration;
+                    $.each(round.cellActions, function (j, command) {
+
+                        //新增
+                        if (command.type == 1) {
+                            cells[command.id] = Cell.createNew(command.id, command.pos, command.size, command.resources, command.team, command.level, command.race);
+                            cells[command.id].draw();
+                        }
+
+                        //大小/资源值改变
+                        else if (command.type == 2) {
+                            cells[command.id].updateSize(command.newSize, command.newResouce, command.srcTentacles, command.dstTentacles, command.dstTentaclesCut);
+                        }
+
+                        //等级改变
+                        else if (command.type == 3) {
+                            cells[command.id].updateLevel(command.newLevel);
+                        }
+
+                        //派系改变
+                        else if (command.type == 4) {
+                            cells[command.id].updateTeam(command.newTeam);
+                        }
+                    });
+
+                    $.each(round.tentacleActions, function (j, command) {
+
+                        //新增
+                        if (command.type == 1) {
+                            tentacles[command.id] = Tentacle.createNew(command.id, command.srcCell, command.dstCell, command.transRate);
+                            tentacles[command.id].draw();
+                        }
+
+                        //伸长
+                        if (command.type == 2) {
+                            tentacles[command.id].stretch(command.movement.dx, command.movement.dy);
+                        }
+
+                        //缩短
+                        if (command.type == 3) {
+                            tentacles[command.id].shrink(command.movement.dx, command.movement.dy);
+                        }
+
+                        //传输速度改变
+                        if (command.type == 4) {
+                            tentacles[command.id].updateTransRate(command.newTransRate);
+                        }
+
+                        //切断
+                        if (command.type == 5) {
+                            tentacles[command.id].cutOff(command.cutPosition.x, command.cutPosition.y);
+                        }
+
+                        //消失
+                        if (command.type == 6) {
+                            tentacles[command.id].destroy();
+                        }
+                    });
+
+                    $.each(round.cutTentacleActions, function(j, command) {
+                        
+                        //新增
+                        if (command.type == 1) {
+                            brokenTentacles[command.id] = BrokenTantecle.createNew(command.id, command.birthPosition, command.dstCell, command.transRate);
+                        }
+
+                        //缩短
+                        if (command.type == 2) {
+                            brokenTentacles[command.id].shrink(command.movement.dx, command.movement.dy);
+                        }
+
+                        //消失
+                        if (command.type == 3) {
+                            brokenTentacles[command.id].destroy();
+                        }
+                    });
+                });
+            });
             game.stage.backgroundColor = '#ddd';
 
             game.load.crossOrigin = 'anonymous';

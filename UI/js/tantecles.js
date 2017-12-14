@@ -1,8 +1,9 @@
 var Tantecle = {
     //construction
-    createNew = function (id, source, target) {
+    createNew = function (id, source, target, _transRate) {
         var tantecle = {};
         tantecle.ID = id;
+        tantecle.transRate = _transRate;
         tantecle.startCell = cells[source];
         deltaX = target.pos.x - source.pos.x;
         deltaY = target.pos.y - source.pos.y;
@@ -54,10 +55,11 @@ var Tantecle = {
 }
 
 var BrokenTantecle = {
-    createNew: function(_id, _startPoint, endCell) {
+    createNew: function(_id, _startPoint, endCell, _transRate) {
         var brokenTantecle = {};
         brokenTantecle.startPoint = _startPoint;
         brokenTantecle.ID = _id;
+        brokenTantecle.transRate = _transRate;
         var target = cells[endCell];
         deltaX = - target.pos.x + _startPoint.x;
         deltaY = - target.pos.y + _startPoint.y;
