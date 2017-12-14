@@ -8,6 +8,10 @@
 **  架构组：夏卓凡
 **  Key:需要存取的属性值
 **  Value:该属性的数据类型
+**
+**  2017.12.14更新内容
+**  新建细胞命令需传递细胞位置
+**  细胞的size仅需一个变量表示
 */
 {
     /*
@@ -43,11 +47,12 @@
                 {
                     "type":"uint8_t",           //新增
                     "id":"string",              //细胞ID
-                    "size":
+                    "birthPosition":            //出生位置
                     {
-                        "width":"uint32_t",     //宽
-                        "height":"uint32_t"     //高
+                        "x":"uint32_t",
+                        "y":"uint32_t"
                     },
+                    "size":"uint32_t",          //细胞大小（半径）
                     "team":"uint32_t",          //派系信息
                     "level":"uint32_t",         //细胞等级
                     "race":"string"             //种族
@@ -57,11 +62,7 @@
                 {
                     "type":"uint8_t",           //大小/资源值改变
                     "id":"string",              //细胞ID
-                    "newSize":                  //新大小
-                    {
-                        "width":"uint32_t",     //宽
-                        "height":"uint32_t"     //高
-                    },
+                    "newSize":"uint32_t",        //新大小（半径）
                     "newResource":"uint32_t",   //新资源值
                     "srcTentatcles":            //从此细胞发出的触手ID
                     [

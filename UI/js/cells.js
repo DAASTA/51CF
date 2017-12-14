@@ -1,3 +1,10 @@
+/**
+ * 12.14新增 by zrd
+ * 新增updateTeam函数，表示Team改变
+ */
+
+
+
 var Point = {
     createNew: function(_x, _y) {
         var point = {};
@@ -54,6 +61,13 @@ var Cell = {
             //
 
             cell.race = newRace;
+        }
+
+        cell.updateTeam = function(newTeam) {
+            //change color or image
+            //
+
+            cell.team = newTeam;
         }
 
         cell.updateLevel = function(newLevel) {

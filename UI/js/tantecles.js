@@ -1,3 +1,9 @@
+/**
+ * 12.14新增 by zrd
+ * Tantecle和BrokenTantecle构造函数新增_transRate参数，表示触手中能量传输速度
+ * Tantecle新增updateTransRate函数
+ */
+
 var Tantecle = {
     //construction
     createNew = function (id, source, target, _transRate) {
@@ -33,6 +39,13 @@ var Tantecle = {
                                     * (tantecle.endPoint.y - tantecle.startPoint.y));
             
             //draw this tantecle
+        }
+
+        tantecle.updateTransRate = function(newTransRate) {
+            //draw this tantecle
+            //
+            
+            tantecle.transRate = newTransRate;
         }
 
         tantecle.cutOff = function(posX, posY) {
