@@ -33,14 +33,16 @@ var Cell = {
         cell.race = _race;
 
         cell.draw = function() {
-            cell.sprite = game.add.sprite(cell.pos.x, cell.pos.y, cell.level + ".png");
+            cell.sprite = game.add.sprite(cell.pos.x, cell.pos.y, cell.race);
+            cell.sprite.anchor.setTo(0.5, 0.5);
+            cell.sprite.scale.setTo(cell.size / 200, cell.size / 200);
             //change cell's color according to its race
             //
 
             //show cell's resources
         }
 
-        cell.updateSize = function(newSize, newResources, srcTantecles, dstTantecles, dstBrokenTantecles) {
+        cell.updateSize = function(newSize, newResources, srcTantecles, dstTantecles, dstBrokenTantecles, roundNum) {
 
             //animation: expand/shrink to new size
             //
@@ -50,27 +52,31 @@ var Cell = {
 
             cell.size = newSize;
             cell.resources = newResources;
+            setTimeout(function() {
+                game.add.tween(cell.sprite.scale).to( { x: newSize / 200, y: newSize / 200}, 1000 * roundDuration[roundNum], "Sine.easeInOut", true);
+            }, 1000 * totalOffset[roundNum]);
+            //cell.sprite.scale.setTo(newSize.x / 200, newSize.y / 200);
 
             // update cell's resources
             //
             
         }
 
-        cell.updateRace = function(newRace) {
+        cell.updateRace = function(newRace, roundNum) {
             //change color or image
             //
 
             cell.race = newRace;
         }
 
-        cell.updateTeam = function(newTeam) {
+        cell.updateTeam = function(newTeam, roundNum) {
             //change color or image
             //
 
             cell.team = newTeam;
         }
 
-        cell.updateLevel = function(newLevel) {
+        cell.updateLevel = function(newLevel, roundNum) {
             //change size or image
             //
 

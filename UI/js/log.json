@@ -1,0 +1,346 @@
+{
+    "head":
+    {
+        "totalRounds": 10,
+        "totalPlayers": 4,
+        "playerInfo":
+        [
+            {
+                "id":"player1",
+                "race":"DA",
+                "team": 0
+            },
+            {
+                "id":"player2",
+                "race":"DA",
+                "team": 1
+            },
+            {
+                "id":"player3",
+                "race":"DA",
+                "team": 2
+            },
+            {
+                "id":"player4",
+                "race":"DA",
+                "team": 3
+            }
+        ]
+    },
+    "body":
+    [
+        {
+            "currentRound": 0,
+            "runDuration": 1,
+            "cellActions":
+            [
+                {
+                    "type": 1,
+                    "id": 0,
+                    "birthPosition":
+                    {
+                        "x": 100,
+                        "y": 100
+                    },
+                    "size": 100,
+                    "team": 0,
+                    "level": 1,
+                    "race": "DA"
+                },
+                {
+                    "type": 1,
+                    "id": 1,
+                    "birthPosition":
+                    {
+                        "x": 240,
+                        "y": 100
+                    },
+                    "size": 40,
+                    "team": 0,
+                    "level": 1,
+                    "race": "DA"
+                },
+                {
+                    "type": 1,
+                    "id": 2,
+                    "birthPosition":
+                    {
+                        "x": 400,
+                        "y": 100
+                    },
+                    "size": 60,
+                    "team": 1,
+                    "level": 1,
+                    "race": "DA"
+                },
+                {
+                    "type": 1,
+                    "id": 3,
+                    "birthPosition":
+                    {
+                        "x": 600,
+                        "y": 280
+                    },
+                    "size": 80,
+                    "team": 2,
+                    "level": 1,
+                    "race": "DA"
+                },
+                {
+                    "type": 1,
+                    "id": 4,
+                    "birthPosition":
+                    {
+                        "x": 750,
+                        "y": 500
+                    },
+                    "size": 40,
+                    "team": 3,
+                    "level": 1,
+                    "race": "DA"
+                }
+            ],
+            "tentacleActions": [],
+            "cutTentacleActions": [],
+            "barrierActions": []
+        },
+        {
+            "currentRound": 1,
+            "runDuration": 1,
+            "cellActions": [
+                {
+                    "type": 2,
+                    "id": 0,
+                    "newSize": 70,
+                    "newResource": 70,
+                    "srcTentatcles": [],
+                    "dstTentacles": [],
+                    "dstTentaclesCut": []
+                },
+                {
+                    "type": 2,
+                    "id": 1,
+                    "newSize": 45,
+                    "newResource": 45,
+                    "srcTentatcles": [],
+                    "dstTentacles": [],
+                    "dstTentaclesCut": []
+                }
+            ],
+            "tentacleActions": [
+                {
+                    "type": 1,
+                    "id": 0,
+                    "srcCell": 0,
+                    "dstCell": 2,
+                    "transRate": 10
+                },
+                {
+                    "type": 1,
+                    "id": 1,
+                    "srcCell": 0,
+                    "dstCell": 3,
+                    "transRate": 10
+                },
+                {
+                    "type": 2,
+                    "id": 0,
+                    "movement":
+                    {
+                        "dx": 42,
+                        "dy": 0
+                    }
+                },
+                {
+                    "type": 2,
+                    "id": 1,
+                    "movement":
+                    {
+                        "dx": 250,
+                        "dy": 90
+                    }
+                }
+            ],
+            "cutTentacleActions": [],
+            "barrierActions": []
+        },
+        {
+            "currentRound": 2,
+            "runDuration": 1,
+            "cellActions": [
+                {
+                    "type": 2,
+                    "id": 0,
+                    "newSize": 40,
+                    "newResource": 40,
+                    "srcTentatcles": [],
+                    "dstTentacles": [],
+                    "dstTentaclesCut": []
+                }
+            ],
+            "tentacleActions": [
+                {
+                    "type": 2,
+                    "id": 0,
+                    "movement":
+                    {
+                        "dx": 50,
+                        "dy": 0
+                    }
+                },
+                {
+                    "type": 2,
+                    "id": 1,
+                    "movement":
+                    {
+                        "dx": 190,
+                        "dy": 68
+                    }
+                }
+            ],
+            "cutTentacleActions": [],
+            "barrierActions": []
+        },
+        {
+            "currentRound": 3,
+            "runDuration": 1,
+            "cellActions": [
+                {
+                    "type": 2,
+                    "id": 0,
+                    "newSize": 80,
+                    "newResource": 80,
+                    "srcTentatcles": [],
+                    "dstTentacles": [],
+                    "dstTentaclesCut": []
+                }
+            ],
+            "tentacleActions": [
+                {
+                    "type": 3,
+                    "id": 1,
+                    "movement":
+                    {
+                        "dx": -250,
+                        "dy": -90
+                    }
+                }
+            ],
+            "cutTentacleActions": [],
+            "barrierActions": []
+        },
+        {
+            "currentRound": 4,
+            "runDuration": 1,
+            "cellActions": [
+                {
+                    "type": 2,
+                    "id": 0,
+                    "newSize": 40,
+                    "newResource": 40,
+                    "srcTentatcles": [],
+                    "dstTentacles": [],
+                    "dstTentaclesCut": []
+                }
+            ],
+            "tentacleActions": [
+                {
+                    "type": 2,
+                    "id": 1,
+                    "movement":
+                    {
+                        "dx": 250,
+                        "dy": 90
+                    }
+                }
+            ],
+            "cutTentacleActions": [],
+            "barrierActions": []
+        },
+        {
+            "currentRound": 5,
+            "runDuration": 1,
+            "cellActions": [
+                {
+                    "type": 2,
+                    "id": 0,
+                    "newSize": 80,
+                    "newResource": 80,
+                    "srcTentatcles": [],
+                    "dstTentacles": [],
+                    "dstTentaclesCut": []
+                },
+                {
+                    "type": 2,
+                    "id": 3,
+                    "newSize": 40,
+                    "newResource": 40,
+                    "srcTentatcles": [],
+                    "dstTentacles": [],
+                    "dstTentaclesCut": []
+                }
+            ],
+            "tentacleActions": [
+                {
+                    "type": 5,
+                    "id": 1,
+                    "cutPosition":
+                    {
+                        "x": 400,
+                        "y": 208
+                    }
+                },
+                {
+                    "type": 3,
+                    "id": 1,
+                    "movement":
+                    {
+                        "dx": -250,
+                        "dy": -90
+                    }
+                }
+            ],
+            "cutTentacleActions": [
+                {
+                    "type": 1,
+                    "id": 0,
+                    "birthPosition":
+                    {
+                        "x": 400,
+                        "y": 208
+                    },     
+                    "dstCell": 3,
+                    "transRate": 50
+                },
+                {
+                    "type": 2,
+                    "id": 0,
+                    "movement":
+                    {
+                        "dx": 162,
+                        "dy": 58
+                    }
+                }
+            ],
+            "barrierActions": []
+        },
+        {
+            "currentRound": 6,
+            "runDuration": 1,
+            "cellActions": [],
+            "tentacleActions": [
+                {
+                    "type": 6,
+                    "id": 1
+                }
+            ],
+            "cutTentacleActions": [
+                {
+                    "type": 3,
+                    "id": 0
+                }
+            ],
+            "barrierActions": []
+        }
+    ]
+}

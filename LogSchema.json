@@ -12,6 +12,9 @@
 **  2017.12.14更新内容
 **  新建细胞命令需传递细胞位置
 **  细胞的size仅需一个变量表示
+**
+** 2018.02.01更新内容
+** ID为u32整数
 */
 {
     /*
@@ -25,7 +28,7 @@
         "playerInfo":                           //每个玩家的信息
         [
             {
-                "id":"string",                  //玩家ID
+                "id":"uint32_t",                  //玩家ID
                 "race":"string",                //种族
                 "team":"uint32_t"               //派系 
             }
@@ -46,7 +49,7 @@
                 //新增
                 {
                     "type":"uint8_t",           //新增
-                    "id":"string",              //细胞ID
+                    "id":"uint32_t",              //细胞ID
                     "birthPosition":            //出生位置
                     {
                         "x":"uint32_t",
@@ -61,27 +64,27 @@
                 //大小/资源值改变
                 {
                     "type":"uint8_t",           //大小/资源值改变
-                    "id":"string",              //细胞ID
+                    "id":"uint32_t",              //细胞ID
                     "newSize":"uint32_t",        //新大小（半径）
                     "newResource":"uint32_t",   //新资源值
                     "srcTentatcles":            //从此细胞发出的触手ID
                     [
                         {
-                            "id":"string"       //触手ID
+                            "id":"uint32_t"       //触手ID
                         }
                         //...
                     ],
                     "dstTentacles":             //终结于此细胞的触手ID
                     [
                         {
-                            "id":"string"       //触手ID
+                            "id":"uint32_t"       //触手ID
                         }
                         //...
                     ],
                     "dstTentaclesCut":
                     [
                         {
-                            "id":"string"       //触手ID
+                            "id":"uint32_t"       //触手ID
                         }
                         //...
                     ]
@@ -90,14 +93,14 @@
                 //等级改变
                 {
                     "type":"uint8_t",           //等级改变
-                    "id":"string",              //细胞ID
+                    "id":"uint32_t",              //细胞ID
                     "newLevel":"uint32_t"       //新等级
                 },
                 //...
                 //派系改变
                 {
                     "type":"uint8_t",           //派系改变
-                    "id":"string",              //细胞ID
+                    "id":"uint32_t",              //细胞ID
                     "newTeam":"uint32_t"        //新派系
                 }
                 //...
@@ -107,7 +110,7 @@
                 //新增
                 {
                     "type":"uint8_t",           //新增
-                    "id":"string",              //触手ID
+                    "id":"uint32_t",              //触手ID
                     "srcCell":"string",         //源细胞ID
                     "dstCell":"string",         //目标细胞ID
                     "transRate":"uint32_t"      //传输速度
@@ -116,7 +119,7 @@
                 //伸长
                 {
                     "type":"uint8_t",           //伸长
-                    "id":"string",              //触手ID
+                    "id":"uint32_t",              //触手ID
                     "movement":                 //前进距离
                     {
                         "dx":"int32_t",        //dx
@@ -127,7 +130,7 @@
                 //缩短
                 {
                     "type":"uint8_t",           //缩短
-                    "id":"string",              //触手ID
+                    "id":"uint32_t",              //触手ID
                     "movement":                 //前进距离
                     {
                         "dx":"int32_t",        //dx
@@ -138,15 +141,15 @@
                 //传输速度改变
                 {
                     "type":"uint8_t",           //传输速度改变
-                    "id":"string",              //触手ID
+                    "id":"uint32_t",              //触手ID
                     "newTransRate":"uint32_t"   //新传输速度
                 },
                 //...
                 //切断
                 {
                     "type":"uint8_t",           //切断
-                    "id":"string",              //触手ID
-                    "cutPostion":               //切断位置坐标
+                    "id":"uint32_t",              //触手ID
+                    "cutPosition":               //切断位置坐标
                     {
                         "x":"uint32_t",         //x
                         "y":"uint32_t"          //y
@@ -156,7 +159,7 @@
                 //消失
                 {
                     "type":"uint8_t",           //消失
-                    "id":"string"               //触手ID
+                    "id":"uint32_t"               //触手ID
                 }
                 //...
             ],
@@ -165,7 +168,7 @@
                  //新增
                  {
                     "type":"uint8_t",           //新增
-                    "id":"string",              //断触手ID
+                    "id":"uint32_t",              //断触手ID
                     "birthPosition":            //起始位置
                     {
                         "x":"uint32_t",         //x
@@ -178,7 +181,7 @@
                 //缩短
                 {
                     "type":"uint8_t",           //缩短
-                    "id":"string",              //断触手ID
+                    "id":"uint32_t",              //断触手ID
                     "movement":                 //起始位置移动距离
                     {
                         "dx":"int32_t",        //dx
@@ -189,7 +192,7 @@
                 //消失
                 {
                     "type":"uint8_t",           //消失
-                    "id":"string"               //断触手ID
+                    "id":"uint32_t"               //断触手ID
                 }
                 //...
             ],
@@ -198,7 +201,7 @@
                 //新增
                 {
                     "type":"uint8_t",           //新增
-                    "id":"string",              //障碍ID
+                    "id":"uint32_t",              //障碍ID
                     "contour":                  //轮廓点集
                     [
                         {
@@ -213,7 +216,7 @@
                 //消失
                 {
                     "type":"uint8_t",           //消失
-                    "id":"string"               //障碍ID
+                    "id":"uint32_t"               //障碍ID
                 }
                 //...
             ]
