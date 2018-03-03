@@ -18,10 +18,11 @@ var Fragment = {
         fragment.pos = Point.createNew(fragment.parent.startPoint.x + fragmentSize * fragment.fragNum * fragment.parent.pointer.x,
                                        fragment.parent.startPoint.y + fragmentSize * fragment.fragNum * fragment.parent.pointer.y);
         fragment.draw = function () {
-            fragment.sprite = game.add.sprite(fragment.pos.x, fragment.pos.y, "fragment.png");
+            fragment.sprite = game.add.sprite(fragment.pos.x, fragment.pos.y, 'fragment');
             fragment.sprite.scale.setTo(fragment.size / 200, fragment.size / 200);
             fragment.sprite.anchor.setTo(0.5, 0.5);
             fragment.sprite.angle = fragment.parent.angle;
+            fragment.sprite.tint = colors[fragment.parent.team];
         }
 
         fragment.shake = function () {
@@ -37,6 +38,40 @@ var Fragment = {
     }
 }
 
+var Slash = {
+    createNew: function (cutPosition, tentacleAngle) {
+        var slash = {};
+        slash.draw = function() {
+            slash.sprite = game.add.sprite(cutPosition.x, cutPosition.y, 'slash');
+            //console.log(cutPosition);
+            //setTimeout(function() {
+                slash.sprite.anchor.setTo(0.5, 0.5);
+                slash.sprite.scale.setTo(100 / 600);
+                
+            //}, 1000);
+            var slashAngle = tentacleAngle - 90;
+            if (slashAngle <= -360)
+                slashAngle += 360;
+            slash.sprite.angle = slashAngle;
+            //console.log(Math.sin(30));
+            slash.startPoint = Point.createNew(cutPosition.x - 150 * Math.cos(slashAngle * Math.PI / 180.0), cutPosition.y - 150 * Math.sin(slashAngle * Math.PI / 180.0));
+            slash.endPoint = Point.createNew(cutPosition.x + 150 * Math.cos(slashAngle * Math.PI / 180.0), cutPosition.y + 150 * Math.sin(slashAngle * Math.PI / 180.0));
+        }
+        slash.wipe = function() {
+            slash.draw();
+            var mask = game.add.graphics(0, 0);
+            mask.beginFill(0xffffff);
+            var circle = mask.drawCircle(slash.startPoint.x, slash.startPoint.y, 100);
+            console.log(slash.startPoint);
+            console.log(slash.endPoint);
+            slash.sprite.mask = mask;
+            game.add.tween(circle).to({x: slash.endPoint.x - slash.startPoint.x, y: slash.endPoint.y - slash.startPoint.y}, 1500, "Sine.easeInOut", true);
+        }
+
+        return slash;
+    }
+}
+
 var Tentacle = {
     //construction
     createNew: function (id, source, target, _transRate) {
@@ -44,6 +79,7 @@ var Tentacle = {
         tentacles[id] = tentacle;
         tentacle.ID = id;
         tentacle.transRate = _transRate;
+        tentacle.team = cells[source].team;
         tentacle.startCell = cells[source];
         tentacle.endCell = cells[target];
         deltaX = tentacle.endCell.pos.x - tentacle.startCell.pos.x;
@@ -147,11 +183,12 @@ var Tentacle = {
 }
 
 var BrokenTentacle = {
-    createNew: function(_id, _startPoint, endCell, _transRate, roundNum) {
+    createNew: function(_id, _startPoint, endCell, _transRate, _team, roundNum) {
         var brokenTentacle = {};
         brokenTentacles[_id] = brokenTentacle;
         brokenTentacle.endPoint = Point.createNew(_startPoint.x, _startPoint.y);
         brokenTentacle.ID = _id;
+        brokenTentacle.team = _team;
         brokenTentacle.transRate = _transRate;
         var target = cells[endCell];
         deltaX = - target.pos.x + _startPoint.x;
@@ -172,6 +209,11 @@ var BrokenTentacle = {
         brokenTentacle.fragments = [];
         console.log(brokenTentacle);
 
+        setTimeout(function() {
+            var slash = Slash.createNew(_startPoint, brokenTentacle.angle);
+            slash.wipe();
+        }, 1000 * totalOffset[roundNum] - 1000);
+        
         for (var i = 0; i < brokenTentacle.fragmentNum; i += 1) {
             brokenTentacle.fragments[i] = Fragment.createNew(brokenTentacle.ID, i, true);
             setTimeout(brokenTentacle.fragments[i].draw, 1000 * totalOffset[roundNum]);

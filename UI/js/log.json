@@ -310,7 +310,8 @@
                         "y": 208
                     },     
                     "dstCell": 3,
-                    "transRate": 50
+                    "transRate": 50,
+                    "team": 0
                 },
                 {
                     "type": 2,

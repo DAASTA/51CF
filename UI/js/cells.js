@@ -36,6 +36,7 @@ var Cell = {
             cell.sprite = game.add.sprite(cell.pos.x, cell.pos.y, cell.race);
             cell.sprite.anchor.setTo(0.5, 0.5);
             cell.sprite.scale.setTo(cell.size / 200, cell.size / 200);
+            cell.sprite.tint = colors[cell.team];
             //change cell's color according to its race
             //
 
@@ -74,6 +75,7 @@ var Cell = {
             //
 
             cell.team = newTeam;
+            cell.sprite.tint = colors[cell.team];
         }
 
         cell.updateLevel = function(newLevel, roundNum) {

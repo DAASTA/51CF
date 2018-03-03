@@ -13,6 +13,7 @@ var brokenTentacles = [];
 var tentacles = [];
 var totalOffset = [0];
 var roundDuration = [];
+var colors = [0x007fff, 0xFFBF00, 0x66FF00, 0x8B00FF, 0x30D5C8, 0xCCCCFF];
 
 var states = {
     preload: function () {
@@ -30,7 +31,8 @@ var states = {
                 });
             });
 
-            game.load.image('fragment.png', 'img/fragment.png');
+            game.load.image('fragment', 'img/fragment.png');
+            game.load.image('slash', 'img/slash.png');
             //console.log(players.length);
 
             //game.load.image(players[0].race, 'img/' + players[0].race + '.png');
@@ -154,7 +156,7 @@ var states = {
                     
                     //新增
                     if (command.type == 1) {
-                        brokenTentacles[command.id] = BrokenTentacle.createNew(command.id, command.birthPosition, command.dstCell, command.transRate, i);
+                        brokenTentacles[command.id] = BrokenTentacle.createNew(command.id, command.birthPosition, command.dstCell, command.transRate, command.team, i);
                     }
 
                     //缩短

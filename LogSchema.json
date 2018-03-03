@@ -15,6 +15,17 @@
 **
 ** 2018.02.01更新内容
 ** ID为u32整数
+** 
+** 2018.02.26更新内容
+** cutTentacleAction中，新增增加team参数（表示该断触手之前从哪个细胞伸出，用于标示颜色）
+**
+** 2018.03.01更新内容
+** 删除细胞（塔）的“种族”参数和对应操作
+** 细胞新增操作添加“策略”参数
+** 细胞新增操作添加“科技值”参数
+** 细胞“大小、资源改变”动作新增“新科技值”参数
+** 细胞新增“改变策略”动作
+** 障碍定义方式改为起点-终点，并删除障碍类型参数
 */
 {
     /*
@@ -29,7 +40,6 @@
         [
             {
                 "id":"uint32_t",                  //玩家ID
-                "race":"string",                //种族
                 "team":"uint32_t"               //派系 
             }
             //...    
@@ -58,15 +68,17 @@
                     "size":"uint32_t",          //细胞大小（半径）
                     "team":"uint32_t",          //派系信息
                     "level":"uint32_t",         //细胞等级
-                    "race":"string"             //种族
+                    "techVal":"uint32_t",       //细胞（塔）科技值
+                    "strategy": "uint32_t"      //细胞（塔）策略
                 },
                 //...
-                //大小/资源值改变
+                //大小/资源值/科技值改变
                 {
                     "type":"uint8_t",           //大小/资源值改变
-                    "id":"uint32_t",              //细胞ID
-                    "newSize":"uint32_t",        //新大小（半径）
+                    "id":"uint32_t",            //细胞ID
+                    "newSize":"uint32_t",       //新大小（半径）
                     "newResource":"uint32_t",   //新资源值
+                    "newTechVal":"uint32_t",    //新科技值
                     "srcTentatcles":            //从此细胞发出的触手ID
                     [
                         {
@@ -97,11 +109,11 @@
                     "newLevel":"uint32_t"       //新等级
                 },
                 //...
-                //派系改变
+                //策略改变
                 {
-                    "type":"uint8_t",           //派系改变
+                    "type":"uint8_t",           //策略改变
                     "id":"uint32_t",              //细胞ID
-                    "newTeam":"uint32_t"        //新派系
+                    "newTeam":"uint32_t"        //新策略
                 }
                 //...
             ],
@@ -175,7 +187,8 @@
                         "y":"uint32_t"          //y
                     },     
                     "dstCell":"string",         //目标细胞ID
-                    "transRate":"uint32_t"      //传输速度
+                    "transRate":"uint32_t",     //传输速度
+                    "team": "uint32_t"
                 },
                 //...
                 //缩短
@@ -201,16 +214,17 @@
                 //新增
                 {
                     "type":"uint8_t",           //新增
-                    "id":"uint32_t",              //障碍ID
-                    "contour":                  //轮廓点集
-                    [
-                        {
-                            "x":"uint32_t",     //x
-                            "y":"uint32_t"      //y
-                        }
-                            //...
-                    ],
-                    "texture":"uint32_t"        //障碍类型
+                    "id":"uint32_t",            //障碍ID
+                    "startPoint":               //起始点位置
+                    {
+                        "x":"uint32_t",         //x
+                        "y":"uint32_t"          //y
+                    },
+                    "endPoint":                 //终点位置
+                    {
+                        "x":"uint32_t",         //x
+                        "y":"uint32_t"          //y
+                    }
                 },
                 //...
                 //消失
