@@ -70,17 +70,18 @@ var states = {
             });
             title.anchor.setTo(0.5, 0.5);
 
-            var viewButton = game.add.text(game.world.centerX, game.world.height * 0.7, 'View', {
-                fontSize: '40px',
-                fill: '#111',
-                backgroundColor: '#bbb',
+            var startInfo = game.add.text(game.world.centerX, game.world.height * 0.7, 'Press anywhere to continue', {
+                fontSize: '20px',
+                //fontWeight: '2px',
+                fill: '#555',
+                //backgroundColor: '#bbb',
                 //                height: game.world.height * 0.1,
                 //                width: game.world.width * 0.2
             });
-            viewButton.anchor.setTo(0.5, 0.5);
-            viewButton.inputEnabled = true;
-            viewButton.events.onInputDown.add(function () {
-                viewButton.backgroundColor = '#999';
+            startInfo.anchor.setTo(0.5, 0.5);
+            startInfo.inputEnabled = true;
+            game.input.onTap.add(function () {
+                //viewButton.backgroundColor = '#999';
                 game.state.start('view');
             });
         }

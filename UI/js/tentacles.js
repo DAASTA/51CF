@@ -59,13 +59,20 @@ var Slash = {
         }
         slash.wipe = function() {
             slash.draw();
-            var mask = game.add.graphics(0, 0);
-            mask.beginFill(0xffffff);
-            var circle = mask.drawCircle(slash.startPoint.x, slash.startPoint.y, 100);
+            slash.mask = game.add.graphics(0, 0);
+            slash.mask.beginFill(0xffffff);
+            var circle = slash.mask.drawCircle(slash.startPoint.x, slash.startPoint.y, 100);
             console.log(slash.startPoint);
             console.log(slash.endPoint);
-            slash.sprite.mask = mask;
+            slash.sprite.mask = slash.mask;
             game.add.tween(circle).to({x: slash.endPoint.x - slash.startPoint.x, y: slash.endPoint.y - slash.startPoint.y}, 1500, "Sine.easeInOut", true);
+            setTimeout(slash.destroy, 1800);
+        }
+
+        slash.destroy = function() {
+            slash.sprite.destroy();
+            slash.mask.destroy();
+            slash = null;
         }
 
         return slash;
