@@ -26,7 +26,8 @@ var states = {
                 log = data;
                 game.load.crossOrigin = 'anonymous';
                 $.each(players, function(i, player) {
-                    game.load.image(player.race, 'img/' + player.race + '.png');
+                    //game.load.image(player.race, 'img/' + player.race + '.png');
+                    game.load.image('DA', 'img/DA.png');
                     //console.log('./img/' + player.race + '.png');
                 });
             });
@@ -99,7 +100,7 @@ var states = {
                 $.each(round.cellActions, function (j, command) {
                     //新增
                     if (command.type == 1) {
-                        cells[command.id] = Cell.createNew(command.id, command.birthPosition, command.size, command.size/*resources*/, command.team, command.level, command.race);
+                        cells[command.id] = Cell.createNew(command.id, command.birthPosition, command.size, command.size/*resources*/, command.team, command.level);
                         cells[command.id].draw();
                     }
 

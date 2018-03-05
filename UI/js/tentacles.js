@@ -132,7 +132,7 @@ var Tentacle = {
             for (var i = oldFragNum; i < tentacle.fragmentNum; i = i + 1) {
                 tentacle.fragments[i] = Fragment.createNew(tentacle.ID, i, false);
                 //$('body').oneTime(100, tentacle.fragments[i].draw);
-                setTimeout(tentacle.fragments[i].draw, 1000 * totalOffset[roundNum] + 1000 * roundDuration[roundNum] / (tentacle.fragmentNum - oldFragNum) * (i - oldFragNum));
+                setTimeout(tentacle.fragments[i].draw, totalOffset[roundNum] + roundDuration[roundNum] / (tentacle.fragmentNum - oldFragNum) * (i - oldFragNum));
             }
         }
 
@@ -147,7 +147,7 @@ var Tentacle = {
             //draw this tentacle
             tentacle.fragmentNum = Math.round(tentacle.length / fragmentSize);
             for (var i = oldFragNum - 1; i >= tentacle.fragmentNum; i -= 1) {
-                setTimeout(tentacle.fragments[i].destroy, 1000 * totalOffset[roundNum] + 1000 * roundDuration[roundNum] / ( - tentacle.fragmentNum + oldFragNum) * (oldFragNum - 1 - i));
+                setTimeout(tentacle.fragments[i].destroy, totalOffset[roundNum] + roundDuration[roundNum] / ( - tentacle.fragmentNum + oldFragNum) * (oldFragNum - 1 - i));
             }
             tentacle.fragments.splice(tentacle.fragmentNum, oldFragNum - tentacle.fragmentNum);
         }
@@ -168,9 +168,13 @@ var Tentacle = {
                                       * (tentacle.endPoint.y - tentacle.startPoint.y));
             
             tentacle.fragmentNum = Math.round(tentacle.length / fragmentSize);
+            setTimeout(function() {
+                var slash = Slash.createNew(Point.createNew(posX, posY), tentacle.angle);
+                slash.wipe();
+            }, totalOffset[roundNum] + roundDuration[roundNum] - 1000);
             for (var i = oldFragNum - 1; i >= tentacle.fragmentNum; i -= 1) {
                 //console.log(tentacle.fragments[i]);
-                setTimeout(tentacle.fragments[i].destroy, 1000 * totalOffset[roundNum]);
+                setTimeout(tentacle.fragments[i].destroy, totalOffset[roundNum]);
             }
             //tentacle.fragments.splice(tentacle.fragmentNum, oldFragNum - tentacle.fragmentNum);
             
@@ -179,7 +183,7 @@ var Tentacle = {
 
         tentacle.destroy = function(roundNum) {
             $.each(tentacle.fragments, function(i, frag) {
-                setTimeout(frag.destroy, 1000 * totalOffset[roundNum]);
+                setTimeout(frag.destroy, totalOffset[roundNum] + roundDuration[roundNum]);
             });
             tentacle.fragments = [];
             tentacle[id] = null;
@@ -215,15 +219,10 @@ var BrokenTentacle = {
         brokenTentacle.fragmentNum = Math.round(brokenTentacle.length / fragmentSize);
         brokenTentacle.fragments = [];
         console.log(brokenTentacle);
-
-        setTimeout(function() {
-            var slash = Slash.createNew(_startPoint, brokenTentacle.angle);
-            slash.wipe();
-        }, 1000 * totalOffset[roundNum] - 1000);
         
         for (var i = 0; i < brokenTentacle.fragmentNum; i += 1) {
             brokenTentacle.fragments[i] = Fragment.createNew(brokenTentacle.ID, i, true);
-            setTimeout(brokenTentacle.fragments[i].draw, 1000 * totalOffset[roundNum]);
+            setTimeout(brokenTentacle.fragments[i].draw, totalOffset[roundNum]);
         }
         
         brokenTentacle.draw = function() {
@@ -252,7 +251,7 @@ var BrokenTentacle = {
             brokenTentacle.fragmentNum = Math.round(brokenTentacle.length / fragmentSize);
             //console.log(brokenTentacle);
             for (var i = oldFragNum - 1; i >= brokenTentacle.fragmentNum; i -= 1) {
-                setTimeout(brokenTentacle.fragments[i].destroy, 1000 * totalOffset[roundNum] + 1000 * roundDuration[roundNum] / ( - brokenTentacle.fragmentNum + oldFragNum) * (oldFragNum - 1 - i));
+                setTimeout(brokenTentacle.fragments[i].destroy, totalOffset[roundNum] + roundDuration[roundNum] / ( - brokenTentacle.fragmentNum + oldFragNum) * (oldFragNum - 1 - i));
             }
             brokenTentacle.fragments.splice(brokenTentacle.fragmentNum, oldFragNum - brokenTentacle.fragmentNum);
             // for (var i = 0, j = 0; j < oldFragNum - brokenTentacle.fragmentNum; i += 1) {
@@ -268,7 +267,7 @@ var BrokenTentacle = {
         
         brokenTentacle.destroy = function(roundNum) {
             $.each(brokenTentacle.fragments, function(i, frag) {
-                setTimeout(frag.destroy, 1000 * totalOffset[roundNum]);
+                setTimeout(frag.destroy, totalOffset[roundNum] + roundDuration[roundNum]);
             });
             brokenTentacle.fragments = [];
             brokenTentacles[brokenTentacle.ID] = null;

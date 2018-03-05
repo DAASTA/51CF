@@ -31,7 +31,7 @@
     [
         {
             "currentRound": 0,
-            "runDuration": 1,
+            "runDuration": 1000,
             "cellActions":
             [
                 {
@@ -106,7 +106,7 @@
         },
         {
             "currentRound": 1,
-            "runDuration": 1,
+            "runDuration": 1000,
             "cellActions": [
                 {
                     "type": 2,
@@ -166,7 +166,7 @@
         },
         {
             "currentRound": 2,
-            "runDuration": 1,
+            "runDuration": 1000,
             "cellActions": [
                 {
                     "type": 2,
@@ -203,7 +203,7 @@
         },
         {
             "currentRound": 3,
-            "runDuration": 1,
+            "runDuration": 1000,
             "cellActions": [
                 {
                     "type": 2,
@@ -231,7 +231,7 @@
         },
         {
             "currentRound": 4,
-            "runDuration": 1,
+            "runDuration": 1000,
             "cellActions": [
                 {
                     "type": 2,
@@ -259,7 +259,24 @@
         },
         {
             "currentRound": 5,
-            "runDuration": 1,
+            "runDuration": 10,
+            "cellActions": [],
+            "tentacleActions": [
+                {
+                    "type": 5,
+                    "id": 1,
+                    "cutPosition":
+                    {
+                        "x": 400,
+                        "y": 208
+                    }
+                }
+            ],
+            "cutTentacleActions": []
+        },
+        {
+            "currentRound": 6,
+            "runDuration": 1000,
             "cellActions": [
                 {
                     "type": 2,
@@ -281,15 +298,6 @@
                 }
             ],
             "tentacleActions": [
-                {
-                    "type": 5,
-                    "id": 1,
-                    "cutPosition":
-                    {
-                        "x": 400,
-                        "y": 208
-                    }
-                },
                 {
                     "type": 3,
                     "id": 1,
@@ -326,8 +334,8 @@
             "barrierActions": []
         },
         {
-            "currentRound": 6,
-            "runDuration": 1,
+            "currentRound": 7,
+            "runDuration": 1000,
             "cellActions": [],
             "tentacleActions": [
                 {
