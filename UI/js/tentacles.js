@@ -241,11 +241,17 @@ var Tentacle = {
             //var oldFragNum = tentacle.fragmentNum;
             tentacle.endPoint.x += dx;
             tentacle.endPoint.y += dy;
+            if (Math.sqrt((tentacle.endPoint.x - tentacle.startCell.pos.x) * (tentacle.endPoint.x - tentacle.startCell.pos.x)
+                + (tentacle.endPoint.y - tentacle.startCell.pos.y) * (tentacle.endPoint.y - tentacle.startCell.pos.y)) < tentacle.startCell.size / 2) {
+                    tentacle.endPoint.x = tentacle.startCell.pos.x + tentacle.startCell.size * Math.cos(tentacle.angle * Math.PI / 180) / 2;
+                    tentacle.endPoint.y = tentacle.startCell.pos.y + tentacle.startCell.size * Math.sin(tentacle.angle * Math.PI / 180) / 2;
+                }
             tentacle.length = Math.sqrt((tentacle.endPoint.x - tentacle.startPoint.x)
                 * (tentacle.endPoint.x - tentacle.startPoint.x)
                 + (tentacle.endPoint.y - tentacle.startPoint.y)
                 * (tentacle.endPoint.y - tentacle.startPoint.y));
             game.add.tween(tentacle.sprite.scale).to({ x: tentacle.length / 200 }, roundDuration[roundNum], "Sine.easeInOut", true);
+            console.log(tentacle.sprite);
             // tentacle.line.end.x = tentacle.endPoint.x;
             // tentacle.line.end.y = tentacle.endPoint.y;
             // game.debug.geom(tentacle.line, 'rgba(200, 0, 0, 0.5)');
@@ -332,7 +338,7 @@ var BrokenTentacle = {
         deltaY = - brokenTentacle.startCell.pos.y + _startPoint.y;
         l = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
         brokenTentacle.pointer = Point.createNew(deltaX / l, deltaY / l);
-        brokenTentacle.angle = Math.atan2(-deltaY, -deltaX) * 180 / Math.PI;
+        brokenTentacle.angle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
         brokenTentacle.startPoint = Point.createNew(brokenTentacle.startCell.pos.x, brokenTentacle.startCell.pos.y);
         //console.log(brokenTentacle.endPoint);
 
@@ -340,14 +346,21 @@ var BrokenTentacle = {
             * (brokenTentacle.endPoint.x - brokenTentacle.startPoint.x)
             + (brokenTentacle.endPoint.y - brokenTentacle.startPoint.y)
             * (brokenTentacle.endPoint.y - brokenTentacle.startPoint.y));
-        brokenTentacle.fragmentNum = Math.round(brokenTentacle.length / fragmentSize);
-        brokenTentacle.fragments = [];
+        
+        
+        brokenTentacle.sprite = game.add.sprite(brokenTentacle.startPoint.x, brokenTentacle.startPoint.y, 'rect');
+        brokenTentacle.sprite.anchor.setTo(0, 0.5);
+        brokenTentacle.sprite.tint = colors[brokenTentacle.team];
+        brokenTentacle.sprite.angle = brokenTentacle.angle;
+        brokenTentacle.sprite.scale.setTo(brokenTentacle.length / 200, brokenTentacle.transRate / 200);
+            // brokenTentacle.fragmentNum = Math.round(brokenTentacle.length / fragmentSize);
+        // brokenTentacle.fragments = [];
         //console.log(brokenTentacle);
 
-        for (var i = 0; i < brokenTentacle.fragmentNum; i += 1) {
-            brokenTentacle.fragments[i] = Fragment.createNew(brokenTentacle.ID, i, true);
-            brokenTentacle.fragments[i].draw();
-        }
+        // for (var i = 0; i < brokenTentacle.fragmentNum; i += 1) {
+        //     brokenTentacle.fragments[i] = Fragment.createNew(brokenTentacle.ID, i, true);
+        //     brokenTentacle.fragments[i].draw();
+        // }
 
         brokenTentacle.draw = function () {
             // draw this brokenTentacle, nearly same as tentacle
@@ -363,21 +376,27 @@ var BrokenTentacle = {
         brokenTentacle.shrink = function (dx, dy, roundNum) {
             //shrink, reset the startPoint of the brokenTentacle
             //
-            var oldFragNum = brokenTentacle.fragmentNum;
+            //var oldFragNum = brokenTentacle.fragmentNum;
             brokenTentacle.endPoint.x += dx;
             brokenTentacle.endPoint.y += dy;
+            if (Math.sqrt((brokenTentacle.endPoint.x - brokenTentacle.startCell.pos.x) * (brokenTentacle.endPoint.x - brokenTentacle.startCell.pos.x)
+                + (brokenTentacle.endPoint.y - brokenTentacle.startCell.pos.y) * (brokenTentacle.endPoint.y - brokenTentacle.startCell.pos.y)) < brokenTentacle.startCell.size / 2) {
+                    brokenTentacle.endPoint.x = brokenTentacle.startCell.pos.x + brokenTentacle.startCell.size * Math.cos(brokenTentacle.angle * Math.PI / 180) / 2;
+                    brokenTentacle.endPoint.y = brokenTentacle.startCell.pos.y + brokenTentacle.startCell.size * Math.sin(brokenTentacle.angle * Math.PI / 180) / 2;
+                }
             brokenTentacle.length = Math.sqrt((brokenTentacle.endPoint.x - brokenTentacle.startPoint.x)
                 * (brokenTentacle.endPoint.x - brokenTentacle.startPoint.x)
                 + (brokenTentacle.endPoint.y - brokenTentacle.startPoint.y)
                 * (brokenTentacle.endPoint.y - brokenTentacle.startPoint.y));
 
+            game.add.tween(brokenTentacle.sprite.scale).to({ x: brokenTentacle.length / 200 }, roundDuration[roundNum], "Sine.easeInOut", true);
             //draw this tentacle
-            brokenTentacle.fragmentNum = Math.round(brokenTentacle.length / fragmentSize);
+            //brokenTentacle.fragmentNum = Math.round(brokenTentacle.length / fragmentSize);
             //console.log(brokenTentacle);
-            for (var i = oldFragNum - 1; i >= brokenTentacle.fragmentNum; i -= 1) {
-                setTimeout(brokenTentacle.fragments[i].destroy, roundDuration[roundNum] / (- brokenTentacle.fragmentNum + oldFragNum) * (oldFragNum - 1 - i));
-            }
-            brokenTentacle.fragments.splice(brokenTentacle.fragmentNum, oldFragNum - brokenTentacle.fragmentNum);
+            // for (var i = oldFragNum - 1; i >= brokenTentacle.fragmentNum; i -= 1) {
+            //     setTimeout(brokenTentacle.fragments[i].destroy, roundDuration[roundNum] / (- brokenTentacle.fragmentNum + oldFragNum) * (oldFragNum - 1 - i));
+            // }
+            // brokenTentacle.fragments.splice(brokenTentacle.fragmentNum, oldFragNum - brokenTentacle.fragmentNum);
             // for (var i = 0, j = 0; j < oldFragNum - brokenTentacle.fragmentNum; i += 1) {
             //     setTimeout(function() {
             //         if (brokenTentacle.fragments[i] != null) {
@@ -390,10 +409,11 @@ var BrokenTentacle = {
         }
 
         brokenTentacle.destroy = function (roundNum) {
-            $.each(brokenTentacle.fragments, function (i, frag) {
-                setTimeout(frag.destroy, roundDuration[roundNum]);
-            });
-            brokenTentacle.fragments = [];
+            brokenTentacle.sprite.destroy();
+            // $.each(brokenTentacle.fragments, function (i, frag) {
+            //     setTimeout(frag.destroy, roundDuration[roundNum]);
+            // });
+            // brokenTentacle.fragments = [];
             brokenTentacles[brokenTentacle.ID] = null;
         }
 

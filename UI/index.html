@@ -17,27 +17,17 @@
                     alert('没有选择文件');
                     return;
                 }
-                // 获取File引用:
                 var file = logFile.files[0];
-                // 获取File信息:
-                //alert(file.type);
-                if (file.type !== 'application/json') {
-                    alert('请选择正确的json文件!');
+                if (file.size == 0) {
+                    alert('Empty file!');
                     return;
                 }
-                // 读取文件:
                 var reader = new FileReader();
                 reader.onload = function (e) {
-                    //alert(e);
-                    jsonData = JSON.parse(e.target.result); // 'data:image/jpeg;base64,/9j/4AAQSk...(base64编码)...'   
-                    // $.getJSON(jsonData, function(data) {
-                    //     console.log(data);
-                    // });
+                    jsonData = JSON.parse(e.target.result);
                     console.log(jsonData);
                     loadGame();
-                    //preview.style.backgroundImage = 'url(' + data + ')';
                 };
-                // 以DataURL的形式读取文件:
                 reader.readAsText(file);
             });
         }

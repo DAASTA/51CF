@@ -7,7 +7,7 @@ var totalRounds;
 var totalPlayers;
 var players;
 var rounds;
-var timeNum = 1;
+var frameDuration = 300;
 var fragmentSize = 15;
 var log;
 var cells = [];
@@ -95,8 +95,8 @@ function loadGame() {
         view: function () {
             this.create = function () {
                 $.each(log.body, function (i, round) {
-                    roundDuration[i] = (i != 0) * timeNum * 250;//round.runDuration;
-                    totalOffset[i + 1] = (i != 0) * timeNum * 250/*round.runDuration*/ + (i == 0 ? 0 : totalOffset[i]);
+                    roundDuration[i] = (i != 0) * frameDuration;//round.runDuration;
+                    totalOffset[i + 1] = (i != 0) * frameDuration/*round.runDuration*/ + (i == 0 ? 0 : totalOffset[i]);
                     //console.log(totalOffset);
                     var currentRound = round.currentRound;
                     var duration = round.runDuration;
