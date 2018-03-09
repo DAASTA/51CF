@@ -1,20 +1,58 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset = "UTF-8" />
-        <title>Phaser HTML5 Demo</title>
-        <script type = "text/javascript" src = "js/phaser.min.js"></script>
-        <script type = "text/javascript" src = "js/jquery-3.2.1.min.js"></script>
-        <script type = "text/javascript" src = "js/cells.js"></script>
-        <script type = "text/javascript" src = "js/main.js"></script>
-        <script type = "text/javascript" src = "js/tentacles.js"></script>
-    </head>
 
-    <body>
-        <div id = "game"></div>
-    </body>
+<head>
+    <meta charset="UTF-8" />
+    <title>FC15</title>
+    <script type="text/javascript" src="js/phaser.min.js"></script>
+    <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
+    <script>
+        var jsonData;
+        window.onload = function() {
+            
+            var logFile = document.getElementById('json-selector');
+            //var jsonData;
+            logFile.addEventListener('change', function () {
+                if (!logFile.value) {
+                    alert('没有选择文件');
+                    return;
+                }
+                // 获取File引用:
+                var file = logFile.files[0];
+                // 获取File信息:
+                //alert(file.type);
+                if (file.type !== 'application/json') {
+                    alert('请选择正确的json文件!');
+                    return;
+                }
+                // 读取文件:
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    //alert(e);
+                    jsonData = JSON.parse(e.target.result); // 'data:image/jpeg;base64,/9j/4AAQSk...(base64编码)...'   
+                    // $.getJSON(jsonData, function(data) {
+                    //     console.log(data);
+                    // });
+                    console.log(jsonData);
+                    loadGame();
+                    //preview.style.backgroundImage = 'url(' + data + ')';
+                };
+                // 以DataURL的形式读取文件:
+                reader.readAsText(file);
+            });
+        }
+    </script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/cells.js"></script>
+    <script type="text/javascript" src="js/tentacles.js"></script>
+
+</head>
+
+<body>
+    <div>
+        <input id="json-selector" type="file" />
+    </div>
+    <div id="game"></div>
+</body>
+
 </html>
-
-        
-
-

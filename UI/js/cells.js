@@ -3,7 +3,7 @@
  * 新增updateTeam函数，表示Team改变
  */
 
-
+//game.load.image('DA', 'img/DA.png');
 
 var Point = {
     createNew: function(_x, _y) {
@@ -37,8 +37,6 @@ var Cell = {
             cell.sprite.anchor.setTo(0.5, 0.5);
             cell.sprite.scale.setTo(cell.size / 200, cell.size / 200);
             cell.sprite.tint = colors[cell.team];
-            //change cell's color according to its race
-            //
 
             //show cell's resources
         }
@@ -53,15 +51,22 @@ var Cell = {
 
             cell.size = newSize;
             cell.resources = newResources;
-            setTimeout(function() {
-                game.add.tween(cell.sprite.scale).to( { x: newSize / 200, y: newSize / 200}, roundDuration[roundNum], "Sine.easeInOut", true);
-            }, totalOffset[roundNum]);
+            game.add.tween(cell.sprite.scale).to( { x: newSize / 200, y: newSize / 200}, roundDuration[roundNum], "Sine.easeInOut", true);
+
+            $.each(srcTantecles, function(i, tantecleNum) {
+                tentacles[tantecleNum].checkStartPos(newSize, roundNum);
+            });
+            $.each(dstTantecles, function(i, tantecleNum) {
+                tentacles[tantecleNum].checkEndPos(newSize, roundNum);
+            });
             //cell.sprite.scale.setTo(newSize.x / 200, newSize.y / 200);
 
             // update cell's resources
             //
             
         }
+
+        cell.updateStg = function(newStg, roundNum) {}
 
 
         cell.updateTeam = function(newTeam, roundNum) {

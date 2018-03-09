@@ -259,23 +259,6 @@
         },
         {
             "currentRound": 5,
-            "runDuration": 10,
-            "cellActions": [],
-            "tentacleActions": [
-                {
-                    "type": 5,
-                    "id": 1,
-                    "cutPosition":
-                    {
-                        "x": 400,
-                        "y": 208
-                    }
-                }
-            ],
-            "cutTentacleActions": []
-        },
-        {
-            "currentRound": 6,
             "runDuration": 1000,
             "cellActions": [
                 {
@@ -299,12 +282,21 @@
             ],
             "tentacleActions": [
                 {
+                    "type": 5,
+                    "id": 1,
+                    "cutPosition":
+                    {
+                        "x": 400,
+                        "y": 208
+                    }
+                },
+                {
                     "type": 3,
                     "id": 1,
                     "movement":
                     {
-                        "dx": -250,
-                        "dy": -90
+                        "dx": -440,
+                        "dy": -158
                     }
                 }
             ],
@@ -334,7 +326,7 @@
             "barrierActions": []
         },
         {
-            "currentRound": 7,
+            "currentRound": 6,
             "runDuration": 1000,
             "cellActions": [],
             "tentacleActions": [
