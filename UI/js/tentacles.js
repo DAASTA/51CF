@@ -227,7 +227,7 @@ var Tentacle = {
             //     if (i >= oldFragNum) {
             //         frag = Fragment.createNew(tentacle.ID, i, false);
             //         tentacle.fragments[i] = frag;
-            //         setTimeout(() => {
+            //         setTimeout(function() {
             //             //console.log({i, oldFragNum});
             //             //console.log(roundDuration[roundNum] / (tentacle.fragmentNum - oldFragNum) * (i - oldFragNum));
             //             //console.log(tentacle.fragments);
@@ -251,7 +251,7 @@ var Tentacle = {
                 + (tentacle.endPoint.y - tentacle.startPoint.y)
                 * (tentacle.endPoint.y - tentacle.startPoint.y));
             game.add.tween(tentacle.sprite.scale).to({ x: tentacle.length / 200 }, roundDuration[roundNum], "Sine.easeInOut", true);
-            console.log(tentacle.sprite);
+            //console.log(tentacle.sprite);
             // tentacle.line.end.x = tentacle.endPoint.x;
             // tentacle.line.end.y = tentacle.endPoint.y;
             // game.debug.geom(tentacle.line, 'rgba(200, 0, 0, 0.5)');
@@ -262,7 +262,7 @@ var Tentacle = {
 
             // $.each(tentacle.fragments, function(i, frag) {
             //     if (i >= tentacle.fragmentNum) {
-            //         setTimeout(() => {
+            //         setTimeout(function() {
             //             frag.destroy();
             //         }, roundDuration[roundNum] / (- tentacle.fragmentNum + oldFragNum) * (oldFragNum - 1 - i));
             //     }
@@ -286,7 +286,7 @@ var Tentacle = {
             var slash = Slash.createNew(Point.createNew(posX, posY), tentacle.angle);
             slash.wipe();
 
-            setTimeout(() => {
+            setTimeout(function() {
                 tentacle.endPoint = Point.createNew(posX, posY);
                 // tentacle.line.end.x = posX;
                 // tentacle.line.end.x = posY;
@@ -311,7 +311,7 @@ var Tentacle = {
         }
 
         tentacle.destroy = function (roundNum) {
-            setTimeout(() => {
+            setTimeout(function() {
                 tentacle.sprite.destroy();
                 tentacle[id] = null;
             }, roundDuration[roundNum]);
