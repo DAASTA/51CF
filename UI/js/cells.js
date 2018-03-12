@@ -5,23 +5,6 @@
 
 //game.load.image('DA', 'img/DA.png');
 
-function updatePlayerRes() {
-    for (var i = 0; i < playerRes.length; i++)
-        playerRes[i] = 0;
-    $.each(cells, function(i, cell) {
-        playerRes[cell.team] += cell.resources;
-    });
-    $.each(tentacles, function(i, tentacle) {
-        if (tentacle != null && tentacle != undefined)
-            playerRes[tentacle.startCell.team] += tentacle.length / 10;
-    });
-    $.each(brokenTentacles, function(i, tentacle) {
-        if (tentacle != null && tentacle != undefined)
-            playerRes[tentacle.team] += tentacle.length / 10;
-    });
-    drawCircle('chart', playerRes, chartColors, playerNames);
-}
-
 var Point = {
     createNew: function(_x, _y) {
         var point = {};
@@ -39,12 +22,13 @@ var Point = {
 }
 
 var Cell = {
-    createNew: function(_id, _pos, _size, _resources, _team, _level, _stg) {
+    createNew: function(_id, _pos, _size, _resources, _techVal, _team, _level, _stg) {
         var cell = {};
         cell.ID = _id;
         cell.pos = _pos;
         cell.size = _size;
         cell.resources = _resources;
+        cell.techVal = _techVal;
         cell.team = _team;
         cell.level = _level;
         cell.strategy = _stg;
@@ -67,12 +51,16 @@ var Cell = {
             cell.resourceText.anchor.setTo(0.5, 1);
             cell.resourceText.tint = colors[cell.team];
             cell.resourceText.scale.setTo(cell.size / 25);
-            //console.log(cell.sprite);
+            cell.sprite.inputEnabled = true;
+            cell.sprite.events.onInputDown.add(function () {
+                selectedCell = cell.ID;
+                revealInfo();
+            });
 
             //show cell's resources
         }
 
-        cell.updateSize = function(newSize, newResources, srcTantecles, dstTantecles, dstBrokenTantecles, roundNum) {
+        cell.updateSize = function(newSize, newResources, newTechVal, srcTantecles, dstTantecles, dstBrokenTantecles, roundNum) {
 
             //animation: expand/shrink to new size
             //
@@ -82,6 +70,7 @@ var Cell = {
 
             cell.size = newSize;
             cell.resources = newResources;
+            cell.techVal = newTechVal;
             cell.resourceText.text = Math.round(cell.resources);
             game.add.tween(cell.sprite.scale).to( { x: newSize / cellSize, y: newSize / cellSize}, roundDuration[roundNum], "Sine.easeInOut", true);
             game.add.tween(cell.resourceText.scale).to({x: cell.size / 25, y: cell.size / 25}, roundDuration[roundNum], "Sine.easeInOut", true);
@@ -93,7 +82,7 @@ var Cell = {
             $.each(dstTantecles, function(i, tantecleNum) {
                 tentacles[tantecleNum].checkEndPos(newSize, roundNum);
             });
-            updatePlayerRes();
+            
             //cell.sprite.scale.setTo(newSize.x / 200, newSize.y / 200);
 
             // update cell's resources
@@ -104,10 +93,16 @@ var Cell = {
         cell.updateStg = function(newStg, roundNum) {
             cell.strategy = newStg;
             cell.sprite.destroy();
-            cell.sprite = game.add.sprite(cell.pos.x, cell.pos.y, stgs[cell.strategy] + '-' + levels[cell.level]);
+            cell.image = stgs[cell.strategy] + '-' + levels[cell.level];
+            cell.sprite = game.add.sprite(cell.pos.x, cell.pos.y, cell.image);
             cell.sprite.anchor.setTo(0.5, 0.5);
             cell.sprite.scale.setTo(cell.size / cellSize, cell.size / cellSize);
             cell.sprite.tint = colors[cell.team];
+            cell.sprite.inputEnabled = true;
+            cell.sprite.events.onInputDown.add(function () {
+                selectedCell = cell.ID;
+                revealInfo();
+            });
             //cell.sprite.key = stgs[cell.strategy] + '-' + levels[cell.level];
         }
 
@@ -123,20 +118,26 @@ var Cell = {
                 cell.image = 'neutral';
                 cell.sprite = game.add.sprite(cell.pos.x, cell.pos.y, cell.image);
             }
-            updatePlayerRes();
+            cell.sprite.inputEnabled = true;
+            cell.sprite.events.onInputDown.add(function () {
+                selectedCell = cell.ID;
+                revealInfo();
+            });
         }
 
         cell.updateLevel = function(newLevel, roundNum) {
-            //change size or image
-            //
-
             cell.level = newLevel;
+            cell.image = stgs[cell.strategy] + '-' + levels[cell.level];
             cell.sprite.destroy();
-            cell.sprite = game.add.sprite(cell.pos.x, cell.pos.y, stgs[cell.strategy] + '-' + levels[cell.level]);
+            cell.sprite = game.add.sprite(cell.pos.x, cell.pos.y, cell.image);
             cell.sprite.anchor.setTo(0.5, 0.5);
             cell.sprite.scale.setTo(cell.size / cellSize, cell.size / cellSize);
             cell.sprite.tint = colors[cell.team];
-            //cell.sprite.key = stgs[cell.strategy] + '-' + levels[cell.level];
+            cell.sprite.inputEnabled = true;
+            cell.sprite.events.onInputDown.add(function () {
+                selectedCell = cell.ID;
+                revealInfo();
+            });
         }
 
         cell.shake = function() {
