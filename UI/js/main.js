@@ -7,7 +7,7 @@ var totalRounds;
 var totalPlayers;
 var players;
 var rounds;
-var frameDuration = 300;
+var frameDuration = 400;
 var isPlaying = true;
 var currentRound = 0;
 var isReverselyPlaying = false;
@@ -47,23 +47,22 @@ function loadRound(roundNum) {
 
         //大小/资源值改变
         else if (command.type == 2) {
-            cells[command.id].updateSize(command.newSize, command.newResource, command.newTechVal, command.srcTentacles, command.dstTentacles, command.dstTentaclesCut, roundNum);
-
+            cells[command.id].updateSize(command.newSize, command.newResource, command.newTechVal, command.srcTentacles, command.dstTentacles, command.dstTentaclesCut);
         }
 
         //等级改变
         else if (command.type == 3) {
-            cells[command.id].updateLevel(command.newLevel, roundNum);
+            cells[command.id].updateLevel(command.newLevel);
         }
 
         //策略改变
         else if (command.type == 4) {
-            cells[command.id].updateStg(command.newStg, roundNum);
+            cells[command.id].updateStg(command.newStg);
         }
 
         //派系改变
         else if (command.type == 5) {
-            cells[command.id].updateTeam(command.newTeam, roundNum);
+            cells[command.id].updateTeam(command.newTeam);
         }
     });
 
@@ -77,45 +76,47 @@ function loadRound(roundNum) {
         //伸长
         if (command.type == 2) {
             setTimeout(function () {
-                tentacles[command.id].strech(command.movement.dx, command.movement.dy, roundNum);
-            }, 50);
+                tentacles[command.id].strech(command.movement.dx, command.movement.dy);
+            }, 20);
         }
 
         //缩短
         if (command.type == 3) {
             setTimeout(function () {
-                tentacles[command.id].shrink(command.movement.dx, command.movement.dy, roundNum);
-            }, 50);
+                tentacles[command.id].shrink(command.movement.dx, command.movement.dy);
+            }, 20);
         }
 
         //传输速度改变
         if (command.type == 4) {
-            tentacles[command.id].updateTransRate(command.newTransRate, roundNum);
+            tentacles[command.id].updateTransRate(command.newTransRate);
         }
 
         //切断
         if (command.type == 5) {
-            tentacles[command.id].cutOff(command.cutPosition.x, command.cutPosition.y, roundNum);
+            tentacles[command.id].cutOff(command.cutPosition.x, command.cutPosition.y);
         }
 
         //消失
         if (command.type == 6) {
-            tentacles[command.id].destroy(roundNum);
+            tentacles[command.id].destroy();
         }
     });
 
     $.each(round.cutTentacleActions, function (j, command) {
         //新增
         if (command.type == 1) {
-            brokenTentacles[command.id] = BrokenTentacle.createNew(command.id, command.birthPosition, command.dstCell, command.transRate, command.team, roundNum);
+            brokenTentacles[command.id] = BrokenTentacle.createNew(command.id, command.birthPosition, command.dstCell, command.transRate, command.team);
         }
         //缩短
         if (command.type == 2) {
-            brokenTentacles[command.id].shrink(command.movement.dx, command.movement.dy, roundNum);
+            setTimeout(function () {
+                brokenTentacles[command.id].shrink(command.movement.dx, command.movement.dy);
+            }, 20);
         }
         //消失
         if (command.type == 3) {
-            brokenTentacles[command.id].destroy(roundNum);
+            brokenTentacles[command.id].destroy();
         }
     });
 
@@ -223,29 +224,7 @@ function loadGame() {
                 resumeButton.visible = false;
                 //console.log(roundTxt);
 
-
-                $.each(log.body, function (i, round) {
-                    // setTimeout(function () {
-                    //     roundTxt.text = "Round " + i;
-                    //     //game.debug.text(roundTxt);
-                    // }, totalOffset[i]);
-                    roundDuration[i] = (i != 0) * frameDuration;//round.runDuration;
-                    totalOffset[i + 1] = (i != 0) * frameDuration/*round.runDuration*/ + (i == 0 ? 0 : totalOffset[i]);
-                    // setTimeout(function() {
-                    //     loadRound(i);
-                    // }, totalOffset[i]);
-                });
                 loader();
-                //loadRound(0, roundTxt);
-                // for (var i = 0; i < log.body.length; i++) {
-                //     while(isPlaying == false);
-                //     setTimeout(function() {
-                //         loadGame(i);
-                //     }, frameDuration);
-                // }
-                // setTimeout(function () {
-                //     game.state.start('result');
-                // }, totalOffset[totalRounds - 1] + roundDuration[totalRounds - 1] + 5000);
             }
         },
 

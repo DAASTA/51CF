@@ -103,8 +103,8 @@ var Slash = {
             //console.log(slash.startPoint);
             //console.log(slash.endPoint);
             slash.sprite.mask = slash.mask;
-            game.add.tween(circle).to({ x: slash.endPoint.x - slash.startPoint.x, y: slash.endPoint.y - slash.startPoint.y }, 1500, "Sine.easeInOut", true);
-            setTimeout(slash.destroy, 1800);
+            game.add.tween(circle).to({ x: slash.endPoint.x - slash.startPoint.x, y: slash.endPoint.y - slash.startPoint.y }, frameDuration / 2, "Sine.easeInOut", true);
+            setTimeout(slash.destroy, frameDuration / 2 + 20);
         }
 
         slash.destroy = function () {
@@ -146,17 +146,8 @@ var Tentacle = {
         tentacle.sprite.tint = colors[tentacle.startCell.team];
         tentacle.sprite.angle = tentacle.angle;
         tentacle.sprite.scale.setTo(0, tentacle.transRate / 200);
-        //console.log(tentacle.sprite.scale);
-        //tentacle.fragmentNum = tentacle.length / fragmentSize;
-        //tentacle.line = new Phaser.Line(tentacle.startPoint.x, tentacle.startPoint.y, tentacle.endPoint.x, tentacle.endPoint.y);
-        //tentacle.line.angle = tentacle.angle;
-        //game.debug.geom(tentacle.line, 'rgba(200, 0, 0, 0.5)');//colors[tentacle.startCell.team]);
-        //tentacle.line.setTo(tentacle.startPoint.x, tentacle.startPoint.y, tentacle.endPoint.x + 100, tentacle.endPoint.y + 100);
-        //tentacle.line.width = tentacle.transRate;
-        //console.log(tentacle.line);
-        //tentacle.fragments = new Array();
 
-        tentacle.checkStartPos = function (newStartSize, roundNum) {
+        tentacle.checkStartPos = function (newStartSize) {
             deltaX = tentacle.endCell.pos.x - tentacle.startCell.pos.x;
             deltaY = tentacle.endCell.pos.y - tentacle.startCell.pos.y;
             l = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
@@ -171,11 +162,11 @@ var Tentacle = {
                 + (tentacle.endPoint.y - tentacle.startPoint.y)
                 * (tentacle.endPoint.y - tentacle.startPoint.y));
 
-            game.add.tween(tentacle.sprite.pos).to({ x: tentacle.startPoint.x, y:tentacle.startPoint.y }, roundDuration[roundNum], "Sine.easeInOut", true);
-            game.add.tween(tentacle.sprite.scale).to({ x: tentacle.length / 200 }, roundDuration[roundNum], "Sine.easeInOut", true);
+            game.add.tween(tentacle.sprite.pos).to({ x: tentacle.startPoint.x, y:tentacle.startPoint.y }, frameDuration, "Sine.easeInOut", true);
+            game.add.tween(tentacle.sprite.scale).to({ x: tentacle.length / 200 }, frameDuration, "Sine.easeInOut", true);
         }
 
-        tentacle.checkEndPos = function (newEndSize, roundNum) {
+        tentacle.checkEndPos = function (newEndSize) {
             deltaX = - tentacle.endCell.pos.x + tentacle.startCell.pos.x;
             deltaY = - tentacle.endCell.pos.y + tentacle.startCell.pos.y;
             dx = newEndSize * deltaX / l;
@@ -193,11 +184,11 @@ var Tentacle = {
                 + (tentacle.endPoint.y - tentacle.startPoint.y)
                 * (tentacle.endPoint.y - tentacle.startPoint.y));
 
-            //game.add.tween(tentacle.sprite.pos).to({ x: tentacle.startPoint.x, y:tentacle.startPoint.y }, roundDuration[roundNum], "Sine.easeInOut", true);
-            game.add.tween(tentacle.sprite.scale).to({ x: tentacle.length / 200 }, roundDuration[roundNum], "Sine.easeInOut", true);
+            //game.add.tween(tentacle.sprite.pos).to({ x: tentacle.startPoint.x, y:tentacle.startPoint.y }, frameDuration, "Sine.easeInOut", true);
+            game.add.tween(tentacle.sprite.scale).to({ x: tentacle.length / 200 }, frameDuration, "Sine.easeInOut", true);
         }
 
-        tentacle.strech = function (dx, dy, roundNum) {
+        tentacle.strech = function (dx, dy) {
             //var oldFragNum = tentacle.fragmentNum;
             tentacle.endPoint.x += dx;
             tentacle.endPoint.y += dy;
@@ -212,32 +203,11 @@ var Tentacle = {
                 * (tentacle.endPoint.x - tentacle.startPoint.x)
                 + (tentacle.endPoint.y - tentacle.startPoint.y)
                 * (tentacle.endPoint.y - tentacle.startPoint.y));
-            game.add.tween(tentacle.sprite.scale).to({ x: tentacle.length / 200 }, roundDuration[roundNum], "Sine.easeInOut", true);
-            // tentacle.line.end.x = tentacle.endPoint.x;
-            // tentacle.line.end.y = tentacle.endPoint.y;
-            //game.debug.geom(tentacle.line, 'rgba(200, 0, 0, 0.5)');
+            game.add.tween(tentacle.sprite.scale).to({ x: tentacle.length / 200 }, frameDuration - 20, "Sine.easeInOut", true);
 
-
-            //console.log(tentacle.endPoint);
-            //draw this tentacle
-            //tentacle.fragmentNum = Math.round(tentacle.length / fragmentSize);
-            //tentacle.fragments.length = tentacle.fragmentNum;
-            //console.log(tentacle.fragmentNum);
-            // $.each(tentacle.fragments, function(i, frag) {
-            //     if (i >= oldFragNum) {
-            //         frag = Fragment.createNew(tentacle.ID, i, false);
-            //         tentacle.fragments[i] = frag;
-            //         setTimeout(function() {
-            //             //console.log({i, oldFragNum});
-            //             //console.log(roundDuration[roundNum] / (tentacle.fragmentNum - oldFragNum) * (i - oldFragNum));
-            //             //console.log(tentacle.fragments);
-            //             frag.draw();
-            //         }, roundDuration[roundNum] / (tentacle.fragmentNum - oldFragNum) * (i - oldFragNum));
-            //     }
-            // });
         }
 
-        tentacle.shrink = function (dx, dy, roundNum) {
+        tentacle.shrink = function (dx, dy) {
             //var oldFragNum = tentacle.fragmentNum;
             tentacle.endPoint.x += dx;
             tentacle.endPoint.y += dy;
@@ -250,75 +220,41 @@ var Tentacle = {
                 * (tentacle.endPoint.x - tentacle.startPoint.x)
                 + (tentacle.endPoint.y - tentacle.startPoint.y)
                 * (tentacle.endPoint.y - tentacle.startPoint.y));
-            game.add.tween(tentacle.sprite.scale).to({ x: tentacle.length / 200 }, roundDuration[roundNum], "Sine.easeInOut", true);
-            //console.log(tentacle.sprite);
-            // tentacle.line.end.x = tentacle.endPoint.x;
-            // tentacle.line.end.y = tentacle.endPoint.y;
-            // game.debug.geom(tentacle.line, 'rgba(200, 0, 0, 0.5)');
+            game.add.tween(tentacle.sprite.scale).to({ x: tentacle.length / 200 }, frameDuration - 20, "Sine.easeInOut", true);
 
-            //draw this tentacle
-            //tentacle.fragmentNum = Math.round(tentacle.length / fragmentSize);
-            //console.log(tentacle.fragments);
-
-            // $.each(tentacle.fragments, function(i, frag) {
-            //     if (i >= tentacle.fragmentNum) {
-            //         setTimeout(function() {
-            //             frag.destroy();
-            //         }, roundDuration[roundNum] / (- tentacle.fragmentNum + oldFragNum) * (oldFragNum - 1 - i));
-            //     }
-            // });
-
-            // setTimeout(function() {
-            //     //tentacle.fragments.length = tentacle.fragmentNum;
-            //     tentacle.fragments.splice(tentacle.fragmentNum, oldFragNum - tentacle.fragmentNum);
-            // }, roundDuration[roundNum]);
         }
 
-        tentacle.updateTransRate = function (newTransRate, roundNum) {
+        tentacle.updateTransRate = function (newTransRate) {
             //draw this tentacle
             //
 
             tentacle.transRate = newTransRate;
-            game.add.tween(tentacle.sprite.scale).to({ y: tentacle.transRate / 200 }, roundDuration[roundNum], "Sine.easeInOut", true);
+            game.add.tween(tentacle.sprite.scale).to({ y: tentacle.transRate / 200 }, frameDuration, "Sine.easeInOut", true);
         }
 
-        tentacle.cutOff = function (posX, posY, roundNum) {
-            var slash = Slash.createNew(Point.createNew(posX, posY), tentacle.angle);
-            slash.wipe();
+        tentacle.cutOff = function (posX, posY) {
+            setTimeout(function() {
+                var slash = Slash.createNew(Point.createNew(posX, posY), tentacle.angle);
+                slash.wipe();
+            }, frameDuration / 2);
 
             setTimeout(function() {
                 tentacle.endPoint = Point.createNew(posX, posY);
-                // tentacle.line.end.x = posX;
-                // tentacle.line.end.x = posY;
-                // var oldFragNum = tentacle.fragmentNum;
-                // 
                 tentacle.length = Math.sqrt((tentacle.endPoint.x - tentacle.startPoint.x)
                     * (tentacle.endPoint.x - tentacle.startPoint.x)
                     + (tentacle.endPoint.y - tentacle.startPoint.y)
                     * (tentacle.endPoint.y - tentacle.startPoint.y));
                 tentacle.sprite.scale.x = tentacle.length / 200;
-
-                // tentacle.fragmentNum = Math.round(tentacle.length / fragmentSize);
-                // $.each(tentacle.fragments, function(i, frag) {
-                //     if(i >= tentacle.fragmentNum) {
-                //         frag.destroy();
-                //     }
-                // });
-                // tentacle.fragments.splice(tentacle.fragmentNum, oldFragNum - tentacle.fragmentNum);
-            }, 950);
+            }, 20);
 
             //draw this tentacle
         }
 
-        tentacle.destroy = function (roundNum) {
+        tentacle.destroy = function () {
             setTimeout(function() {
                 tentacle.sprite.destroy();
                 tentacle[id] = null;
-            }, roundDuration[roundNum]);
-            // $.each(tentacle.fragments, function (i, frag) {
-            //     setTimeout(frag.destroy, totalOffset[roundNum] + roundDuration[roundNum]);
-            // });
-            //tentacle.fragments = [];
+            }, frameDuration);
         }
 
         return tentacle;
@@ -326,7 +262,7 @@ var Tentacle = {
 }
 
 var BrokenTentacle = {
-    createNew: function (_id, _startPoint, endCell, _transRate, _team, roundNum) {
+    createNew: function (_id, _startPoint, endCell, _transRate, _team) {
         var brokenTentacle = {};
         brokenTentacles[_id] = brokenTentacle;
         brokenTentacle.endPoint = Point.createNew(_startPoint.x, _startPoint.y);
@@ -353,14 +289,6 @@ var BrokenTentacle = {
         brokenTentacle.sprite.tint = colors[brokenTentacle.team];
         brokenTentacle.sprite.angle = brokenTentacle.angle;
         brokenTentacle.sprite.scale.setTo(brokenTentacle.length / 200, brokenTentacle.transRate / 200);
-            // brokenTentacle.fragmentNum = Math.round(brokenTentacle.length / fragmentSize);
-        // brokenTentacle.fragments = [];
-        //console.log(brokenTentacle);
-
-        // for (var i = 0; i < brokenTentacle.fragmentNum; i += 1) {
-        //     brokenTentacle.fragments[i] = Fragment.createNew(brokenTentacle.ID, i, true);
-        //     brokenTentacle.fragments[i].draw();
-        // }
 
         brokenTentacle.draw = function () {
             // draw this brokenTentacle, nearly same as tentacle
@@ -373,10 +301,7 @@ var BrokenTentacle = {
             //
         }
 
-        brokenTentacle.shrink = function (dx, dy, roundNum) {
-            //shrink, reset the startPoint of the brokenTentacle
-            //
-            //var oldFragNum = brokenTentacle.fragmentNum;
+        brokenTentacle.shrink = function (dx, dy) {
             brokenTentacle.endPoint.x += dx;
             brokenTentacle.endPoint.y += dy;
             if (Math.sqrt((brokenTentacle.endPoint.x - brokenTentacle.startCell.pos.x) * (brokenTentacle.endPoint.x - brokenTentacle.startCell.pos.x)
@@ -389,32 +314,14 @@ var BrokenTentacle = {
                 + (brokenTentacle.endPoint.y - brokenTentacle.startPoint.y)
                 * (brokenTentacle.endPoint.y - brokenTentacle.startPoint.y));
 
-            game.add.tween(brokenTentacle.sprite.scale).to({ x: brokenTentacle.length / 200 }, roundDuration[roundNum], "Sine.easeInOut", true);
-            //draw this tentacle
-            //brokenTentacle.fragmentNum = Math.round(brokenTentacle.length / fragmentSize);
-            //console.log(brokenTentacle);
-            // for (var i = oldFragNum - 1; i >= brokenTentacle.fragmentNum; i -= 1) {
-            //     setTimeout(brokenTentacle.fragments[i].destroy, roundDuration[roundNum] / (- brokenTentacle.fragmentNum + oldFragNum) * (oldFragNum - 1 - i));
-            // }
-            // brokenTentacle.fragments.splice(brokenTentacle.fragmentNum, oldFragNum - brokenTentacle.fragmentNum);
-            // for (var i = 0, j = 0; j < oldFragNum - brokenTentacle.fragmentNum; i += 1) {
-            //     setTimeout(function() {
-            //         if (brokenTentacle.fragments[i] != null) {
-            //             j += 1;
-            //             brokenTentacle.fragments[i].destroy();
-            //         }
-            //     }, 1000 * totalOffset[roundNum] + 1000 * roundDuration[roundNum] / ( - brokenTentacle.fragmentNum + oldFragNum) * (oldFragNum - 1 - j));
-            // }
-            // brokenTentacle.fragments.splice(brokenTentacle.fragmentNum, oldFragNum - brokenTentacle.fragmentNum);
+            game.add.tween(brokenTentacle.sprite.scale).to({ x: brokenTentacle.length / 200 }, frameDuration - 20, "Sine.easeInOut", true);
         }
 
-        brokenTentacle.destroy = function (roundNum) {
-            brokenTentacle.sprite.destroy();
-            // $.each(brokenTentacle.fragments, function (i, frag) {
-            //     setTimeout(frag.destroy, roundDuration[roundNum]);
-            // });
-            // brokenTentacle.fragments = [];
-            brokenTentacles[brokenTentacle.ID] = null;
+        brokenTentacle.destroy = function () {
+            setTimeout(function() {
+                brokenTentacle.sprite.destroy();
+                brokenTentacles[brokenTentacle.ID] = null;
+            }, frameDuration);
         }
 
         return brokenTentacle;
