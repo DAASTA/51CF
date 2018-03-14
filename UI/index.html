@@ -8,30 +8,54 @@
     <script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
     <script>
         var jsonData;
-        window.onload = function () {
+        function getParameter(param) {
+            var query = window.location.search;
+            var iLen = param.length;
+            var iStart = query.indexOf(param);
+            if (iStart == -1)
+                return "";
+            iStart += iLen + 1;
+            var iEnd = query.indexOf("&", iStart);
+            if (iEnd == -1)
+                return query.substring(iStart);
 
-            var logFile = document.getElementById('json-selector');
-            //var jsonData;
-            logFile.addEventListener('change', function () {
-                $('canvas').show();
-                if (!logFile.value) {
-                    alert('没有选择文件');
-                    return;
-                }
-                var file = logFile.files[0];
-                if (file.size == 0) {
-                    alert('Empty file!');
-                    return;
-                }
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    jsonData = JSON.parse(e.target.result);
-                    //console.log(jsonData);
+            return query.substring(iStart, iEnd);
+        }
+        window.onload = function () {
+            var path_to_json = getParameter('json');
+            if (path_to_json.length > 0) {
+                $('#json-selector').hide();
+                $('#info-board').show();
+                $.getJSON(path_to_json, function (data) {
+                    jsonData = data;
                     loadGame();
-                };
-                reader.readAsText(file);
-            });
-            $('#info-board').hide();
+                });
+            }
+            else {
+                var logFile = document.getElementById('json-selector');
+                //var jsonData;
+                logFile.addEventListener('change', function () {
+                    $('canvas').show();
+                    if (!logFile.value) {
+                        alert('没有选择文件');
+                        return;
+                    }
+                    var file = logFile.files[0];
+                    if (file.size == 0) {
+                        alert('Empty file!');
+                        return;
+                    }
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        jsonData = JSON.parse(e.target.result);
+                        //console.log(jsonData);
+                        loadGame();
+                    };
+                    reader.readAsText(file);
+                });
+                $('#info-board').hide();
+            }
+            //alert(getParameter('json'));
         }
     </script>
     <script type="text/javascript" src="js/main.js"></script>
@@ -52,7 +76,7 @@
         <input id="json-selector" type="file" />
     </div>
     <div id="game"></div>
-    <canvas id="info-board" width="500" height="800"></canvas>
+    <canvas id="info-board" width="600" height="800"></canvas>
 </body>
 
 </html>

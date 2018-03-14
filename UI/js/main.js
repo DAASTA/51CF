@@ -5,7 +5,8 @@ var height = 800;
 var game;// = new Phaser.Game(width, height, Phaser.AUTO, '#game');
 var totalRounds;
 var totalPlayers;
-var players;
+var players = [];
+var playerStages = [];
 var rounds;
 var frameDuration = 400;
 var isPlaying = true;
@@ -17,8 +18,6 @@ var log;
 var cells = [];
 var brokenTentacles = [];
 var tentacles = [];
-var totalOffset = [0];
-var roundDuration = [];
 var playerNames = ['Neutral', 'Player 1', 'Player 2', 'Player 3', 'Player 4'];
 var stgs = ['normal', 'attack', 'defence', 'grow'];
 var levels = ['lv1', 'lv1', 'lv2', 'lv3', 'lv4', 'lv4'];
@@ -37,7 +36,16 @@ function loader() {
 function loadRound(roundNum) {
     var round = log.body[roundNum];
     roundTxt.text = "Round " + roundNum;
-    revealInfo();
+    $.each(round.playerAction, function (j, command) {
+        console.log(command);
+        if (command.type == 1) {
+            playerStages[command.id] = {};
+            playerStages[command.id].defenceStage = command.dS;
+            playerStages[command.id].extraControlStage = command.eCS;
+            playerStages[command.id].regenerationSpeedStage = command.rSS;
+            playerStages[command.id].speedStage = command.sS;
+        }
+    });
     $.each(round.cellActions, function (j, command) {
         //新增
         if (command.type == 1) {
@@ -120,11 +128,18 @@ function loadRound(roundNum) {
         }
     });
 
+    revealInfo();
     currentRound = roundNum + 1;
 
 }
 
 function loadGame() {
+    if (game != undefined && game != null)
+        game.destroy();
+    cells = [];
+    brokenTentacles = [];
+    tentacles = [];
+    currentRound = 0;
     game = new Phaser.Game(width, height, Phaser.AUTO, '#game');
     var states = {
         welcome: function () {
@@ -139,18 +154,12 @@ function loadGame() {
         loading: function () {
             this.preload = function () {
                 var welc = game.add.sprite(0, 0, 'welcome');
-                //welc.scale.setTo(800 / 933);
-                //game.stage.backgroundColor = '#ddd';
-                totalRounds = jsonData.head.totalRounds;
-                totalPlayers = jsonData.head.totalPlayers;
                 log = jsonData;
-                // game.load.crossOrigin = 'anonymous';
-                // $.each(players, function(i, player) {
-                //     //game.load.image(player.race, 'img/' + player.race + '.png');
-                //     ;
-                //     //console.log('./img/' + player.race + '.png');
-                // });
-
+                totalRounds = log.head.totalRounds;
+                totalPlayers = log.head.totalPlayers;
+                $.each(log.head.playerInfo, function (i, thisPlayer) {
+                    playerNames[thisPlayer.team] = thisPlayer.name;
+                });
                 game.load.image('bg', prefix + 'img/bg1.jpg');
 
                 game.load.image('over', prefix + 'img/over.png');
@@ -276,27 +285,33 @@ function revealInfo() {
         players[i].res = 0;
         players[i].name = playerNames[i];
         players[i].color = chartColors[i];
+        if (i > 0) {
+            players[i].defenceStage = playerStages[i].defenceStage;
+            players[i].extraControlStage = playerStages[i].extraControlStage;
+            players[i].regenerationSpeedStage = playerStages[i].regenerationSpeedStage;
+            players[i].speedStage = playerStages[i].speedStage;
+        }
     }
-    $.each(cells, function(i, cell) {
+    $.each(cells, function (i, cell) {
         players[cell.team].res += cell.resources;
-        players[cell.team].cellNum ++;
+        players[cell.team].cellNum++;
         sumRes += cell.resources;
-        sumCells ++;
+        sumCells++;
     });
-    $.each(tentacles, function(i, tentacle) {
+    $.each(tentacles, function (i, tentacle) {
         if (tentacle != null && tentacle != undefined) {
-            players[tentacle.startCell.team].tentacleNum ++;
+            players[tentacle.startCell.team].tentacleNum++;
             players[tentacle.startCell.team].res += tentacle.length / 10;
             sumRes += tentacle.length / 10;
-            sumTentacles ++;
+            sumTentacles++;
         }
     });
-    $.each(brokenTentacles, function(i, tentacle) {
+    $.each(brokenTentacles, function (i, tentacle) {
         if (tentacle != null && tentacle != undefined) {
-            players[tentacle.team].tentacleNum ++;
+            players[tentacle.team].tentacleNum++;
             players[tentacle.team].res += tentacle.length / 10;
             sumRes += tentacle.length / 10;
-            sumTentacles ++;
+            sumTentacles++;
         }
     });
     var data_arr = new Array(players.length);
@@ -308,9 +323,9 @@ function revealInfo() {
     c.height = c.height;
 
     var radius = 130; //半径  
-    var ox = radius + 20, oy = radius + 20 + 50; //圆心  
+    var ox = radius + 20 + 50, oy = radius + 20 + 50; //圆心  
 
-    var width = 30, height = 10; //图例宽和高  
+    var width = 50, height = 10; //图例宽和高  
     var posX = ox * 2 + 20, posY = 80;   //  
     var textX = posX + width + 5, textY = posY + 10;
 
@@ -341,29 +356,29 @@ function revealInfo() {
         var cell = cells[selectedCell];
         var cellImg = new Image();
         cellImg.src = prefix + 'img/' + cell.image + '.png';
-        var col1Offset = 70;
-        var col2Offset = 220;
-        var col3Offset = 360;
+        var col1Offset = 100;
+        var col2Offset = 280;
+        var col3Offset = 460;
         var rowOffset2 = 650;
         ctx.drawImage(cellImg, col1Offset, rowOffset2 - 20);
 
         ctx.fillStyle = "#000000";
         ctx.font = 'bold 20px sans';
-        ctx.fillText('Details of Selected Tower', 110, rowOffset2 - 40);
+        ctx.fillText('Details of Selected Tower', 210, rowOffset2 - 40);
         ctx.font = 'normal 15px sans';
-        ctx.fillText("Team:", col2Offset, rowOffset2);                   ctx.fillText(cell.team, col3Offset + 40, rowOffset2);
-        ctx.fillText("Player:", col2Offset, rowOffset2 + 25);            ctx.fillText(playerNames[cell.team], col3Offset, rowOffset2 + 25);
-        ctx.fillText("Resources:", col2Offset, rowOffset2 + 25 * 2);     ctx.fillText(Math.round(cell.resources), col3Offset, rowOffset2 + 25 * 2);
-        ctx.fillText("Tech Value:", col2Offset, rowOffset2 + 25 * 3);    ctx.fillText(Math.round(cell.techVal * 1000) / 1000, col3Offset, rowOffset2 + 25 * 3);
-        ctx.fillText("Level:", col2Offset, rowOffset2 + 25 * 4);         ctx.fillText(cell.level, col3Offset, rowOffset2 + 25 * 4);
-        ctx.fillText("Strategy:", col2Offset, rowOffset2 + 25 * 5);      ctx.fillText(stgs[cell.strategy], col3Offset, rowOffset2 + 25 * 5);
+        ctx.fillText("Team:", col2Offset, rowOffset2); ctx.fillText(cell.team, col3Offset + 40, rowOffset2);
+        ctx.fillText("Player:", col2Offset, rowOffset2 + 25); ctx.fillText(playerNames[cell.team], col3Offset, rowOffset2 + 25);
+        ctx.fillText("Resources:", col2Offset, rowOffset2 + 25 * 2); ctx.fillText(Math.round(cell.resources), col3Offset, rowOffset2 + 25 * 2);
+        ctx.fillText("Tech Value:", col2Offset, rowOffset2 + 25 * 3); ctx.fillText(Math.round(cell.techVal * 1000) / 1000, col3Offset, rowOffset2 + 25 * 3);
+        ctx.fillText("Level:", col2Offset, rowOffset2 + 25 * 4); ctx.fillText(cell.level, col3Offset, rowOffset2 + 25 * 4);
+        ctx.fillText("Strategy:", col2Offset, rowOffset2 + 25 * 5); ctx.fillText(stgs[cell.strategy], col3Offset, rowOffset2 + 25 * 5);
         ctx.fillText("Tower ID: " + cell.ID, col1Offset, rowOffset2 + 90);
         ctx.fillText("Position: (" + cell.pos.x + ", " + cell.pos.y + ")", col1Offset - 25, rowOffset2 + 25 * 5);
         ctx.fillStyle = chartColors[cell.team];
         ctx.fillRect(col3Offset, rowOffset2 - 15, 30, 18);
     }
     else {
-        var noticeTextX = 100;
+        var noticeTextX = 150;
         var noticeTextY = 685;
         ctx.fillStyle = "#000000";
         ctx.font = 'normal 20px sans';
@@ -375,33 +390,37 @@ function revealInfo() {
         for (var j = i + 1; j < players.length; j++) {
             if (players[i].res < players[j].res) {
                 var tmp = Object.assign({}, players[i]);
-                players[i] =  Object.assign({}, players[j]);
-                players[j] =  Object.assign({}, tmp);
+                players[i] = Object.assign({}, players[j]);
+                players[j] = Object.assign({}, tmp);
             }
         }
-    
+
     var rowOffset1 = 340;
-    var colOffset1 = 40;
-    var colOffset2 = 130;
+    var colOffset1 = 20;
+    var colOffset2 = 110;
     var colOffset3 = 220;
-    var colOffset4 = 310;
-    var colOffset5 = 390;
+    var colOffset4 = 290;
+    var colOffset5 = 350;
+    var colOffset6 = 490;
     ctx.fillStyle = "#000000";
     ctx.font = 'bold 25px sans';
-    ctx.fillText('Real-time Ranking', 140, 40);
+    ctx.fillText('Real-time Ranking', 190, 40);
     ctx.font = 'bold 15px sans';
     ctx.fillText('Rank', colOffset1, rowOffset1 + 40);
     ctx.fillText('Player', colOffset2, rowOffset1 + 40);
     ctx.fillText('Towers', colOffset3, rowOffset1 + 40);
     ctx.fillText('Lines', colOffset4, rowOffset1 + 40);
-    ctx.fillText('Resources', colOffset5, rowOffset1 + 40);
+    ctx.fillText('RSS/SS/DS/ECS', colOffset5, rowOffset1 + 40);
+    ctx.fillText('Resources', colOffset6, rowOffset1 + 40);
     ctx.font = 'normal 15px sans';
     for (var i = 0; i < players.length; i++) {
         ctx.fillText(i + 1, colOffset1 + 10, rowOffset1 + 70 + 30 * i);
         ctx.fillText(players[i].name, colOffset2 + 15, rowOffset1 + 70 + 30 * i);
         ctx.fillText(players[i].cellNum, colOffset3 + 20, rowOffset1 + 70 + 30 * i);
         ctx.fillText(players[i].tentacleNum, colOffset4 + 15, rowOffset1 + 70 + 30 * i);
-        ctx.fillText(Math.round(players[i].res), colOffset5 + 20, rowOffset1 + 70 + 30 * i);
+        if (players[i].regenerationSpeedStage != null && players[i].regenerationSpeedStage != undefined)
+            ctx.fillText(players[i].regenerationSpeedStage + '/' + players[i].speedStage + '/' + players[i].defenceStage + '/' + players[i].extraControlStage, colOffset5 + 20, rowOffset1 + 70 + 30 * i);
+        ctx.fillText(Math.round(players[i].res), colOffset6 + 20, rowOffset1 + 70 + 30 * i);
         ctx.fillStyle = players[i].color;
         ctx.fillRect(colOffset2 - 35, rowOffset1 + 55 + 30 * i, 30, 18);
         ctx.fillStyle = "#000000";
@@ -410,6 +429,6 @@ function revealInfo() {
     ctx.fillText('Total', colOffset2 + 5, rowOffset1 + 70 + 30 * players.length);
     ctx.fillText(sumCells, colOffset3 + 20, rowOffset1 + 70 + 30 * players.length);
     ctx.fillText(sumTentacles, colOffset4 + 15, rowOffset1 + 70 + 30 * players.length);
-    ctx.fillText(Math.round(sumRes), colOffset5 + 20, rowOffset1 + 70 + 30 * players.length);
+    ctx.fillText(Math.round(sumRes), colOffset6 + 20, rowOffset1 + 70 + 30 * players.length);
     //console.log(players);
 } 
