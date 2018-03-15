@@ -285,7 +285,7 @@ function revealInfo() {
         players[i].res = 0;
         players[i].name = playerNames[i];
         players[i].color = chartColors[i];
-        if (i > 0) {
+        if (playerStages[i] != null && playerStages[i] != undefined && playerStages[i].defenceStage != null && playerStages[i].defenceStage != undefined) {
             players[i].defenceStage = playerStages[i].defenceStage;
             players[i].extraControlStage = playerStages[i].extraControlStage;
             players[i].regenerationSpeedStage = playerStages[i].regenerationSpeedStage;
