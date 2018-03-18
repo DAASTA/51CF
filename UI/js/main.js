@@ -37,7 +37,7 @@ function loadRound(roundNum) {
     var round = log.body[roundNum];
     roundTxt.text = "Round " + roundNum;
     $.each(round.playerAction, function (j, command) {
-        console.log(command);
+        //console.log(command);
         if (command.type == 1) {
             playerStages[command.id] = {};
             playerStages[command.id].defenceStage = command.dS;
@@ -54,22 +54,22 @@ function loadRound(roundNum) {
         }
 
         //大小/资源值改变
-        else if (command.type == 2) {
+        else if (command.type == 2 && cells[command.id] != null && cells[command.id] != undefined) {
             cells[command.id].updateSize(command.newSize, command.newResource, command.newTechVal, command.srcTentacles, command.dstTentacles, command.dstTentaclesCut);
         }
 
         //等级改变
-        else if (command.type == 3) {
+        else if (command.type == 3 && cells[command.id] != null && cells[command.id] != undefined) {
             cells[command.id].updateLevel(command.newLevel);
         }
 
         //策略改变
-        else if (command.type == 4) {
+        else if (command.type == 4 && cells[command.id] != null && cells[command.id] != undefined) {
             cells[command.id].updateStg(command.newStg);
         }
 
         //派系改变
-        else if (command.type == 5) {
+        else if (command.type == 5 && cells[command.id] != null && cells[command.id] != undefined) {
             cells[command.id].updateTeam(command.newTeam);
         }
     });
@@ -82,31 +82,31 @@ function loadRound(roundNum) {
         }
 
         //伸长
-        if (command.type == 2) {
+        if (command.type == 2 && tentacles[command.id] != null && tentacles[command.id] != undefined) {
             setTimeout(function () {
                 tentacles[command.id].strech(command.movement.dx, command.movement.dy);
             }, 20);
         }
 
         //缩短
-        if (command.type == 3) {
+        if (command.type == 3 && tentacles[command.id] != null && tentacles[command.id] != undefined) {
             setTimeout(function () {
                 tentacles[command.id].shrink(command.movement.dx, command.movement.dy);
             }, 20);
         }
 
         //传输速度改变
-        if (command.type == 4) {
+        if (command.type == 4 && tentacles[command.id] != null && tentacles[command.id] != undefined) {
             tentacles[command.id].updateTransRate(command.newTransRate);
         }
 
         //切断
-        if (command.type == 5) {
+        if (command.type == 5 && tentacles[command.id] != null && tentacles[command.id] != undefined) {
             tentacles[command.id].cutOff(command.cutPosition.x, command.cutPosition.y);
         }
 
         //消失
-        if (command.type == 6) {
+        if (command.type == 6 && tentacles[command.id] != null && tentacles[command.id] != undefined) {
             tentacles[command.id].destroy();
         }
     });
@@ -119,11 +119,12 @@ function loadRound(roundNum) {
         //缩短
         if (command.type == 2) {
             setTimeout(function () {
-                brokenTentacles[command.id].shrink(command.movement.dx, command.movement.dy);
+                if (brokenTentacles[command.id] != null && brokenTentacles[command.id] != undefined)
+                    brokenTentacles[command.id].shrink(command.movement.dx, command.movement.dy);
             }, 20);
         }
         //消失
-        if (command.type == 3) {
+        if (command.type == 3 && brokenTentacles[command.id] != null && brokenTentacles[command.id] != undefined) {
             brokenTentacles[command.id].destroy();
         }
     });
@@ -299,21 +300,22 @@ function revealInfo() {
         sumCells++;
     });
     $.each(tentacles, function (i, tentacle) {
-        if (tentacle != null && tentacle != undefined) {
-            players[tentacle.startCell.team].tentacleNum++;
+        if (tentacle != null && tentacle != undefined && tentacle.length > 1) {
             players[tentacle.startCell.team].res += tentacle.length / 10;
             sumRes += tentacle.length / 10;
+            players[tentacle.startCell.team].tentacleNum++;
             sumTentacles++;
         }
     });
     $.each(brokenTentacles, function (i, tentacle) {
-        if (tentacle != null && tentacle != undefined) {
-            players[tentacle.team].tentacleNum++;
+        if (tentacle != null && tentacle != undefined && tentacle.length > 1) {
             players[tentacle.team].res += tentacle.length / 10;
             sumRes += tentacle.length / 10;
+            players[tentacle.team].tentacleNum++;
             sumTentacles++;
         }
     });
+    //console.log({ "sum": sumTentacles, "length": tentacles.length + brokenTentacles.length });
     var data_arr = new Array(players.length);
     $.each(data_arr, function (i, num) {
         data_arr[i] = players[i].res / sumRes;

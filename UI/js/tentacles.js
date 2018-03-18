@@ -238,20 +238,21 @@ var Tentacle = {
                 slash.wipe();
             }, frameDuration / 2);
 
-            setTimeout(function() {
-                tentacle.endPoint = Point.createNew(posX, posY);
-                tentacle.length = Math.sqrt((tentacle.endPoint.x - tentacle.startPoint.x)
-                    * (tentacle.endPoint.x - tentacle.startPoint.x)
-                    + (tentacle.endPoint.y - tentacle.startPoint.y)
-                    * (tentacle.endPoint.y - tentacle.startPoint.y));
-                tentacle.sprite.scale.x = tentacle.length / 200;
-            }, 20);
+            // setTimeout(function() {
+            //     tentacle.endPoint = Point.createNew(posX, posY);
+            //     tentacle.length = Math.sqrt((tentacle.endPoint.x - tentacle.startPoint.x)
+            //         * (tentacle.endPoint.x - tentacle.startPoint.x)
+            //         + (tentacle.endPoint.y - tentacle.startPoint.y)
+            //         * (tentacle.endPoint.y - tentacle.startPoint.y));
+            //     tentacle.sprite.scale.x = tentacle.length / 200;
+            // }, 20);
 
             //draw this tentacle
         }
 
         tentacle.destroy = function () {
             setTimeout(function() {
+                tentacle.length = 0;
                 tentacle.sprite.destroy();
                 tentacle[id] = null;
             }, frameDuration);
@@ -319,6 +320,7 @@ var BrokenTentacle = {
 
         brokenTentacle.destroy = function () {
             setTimeout(function() {
+                brokenTentacle.length = 0;
                 brokenTentacle.sprite.destroy();
                 brokenTentacles[brokenTentacle.ID] = null;
             }, frameDuration);
