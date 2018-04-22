@@ -8,34 +8,51 @@ var totalPlayers;
 var players = [];
 var playerStages = [];
 var rounds;
-var frameDuration = 400;
+var frameDuration = 200;
 var isPlaying = true;
 var currentRound = 0;
 var isReverselyPlaying = false;
 var fragmentSize = 15;
-var cellSize = 50;
+var cellSize = 250;
 var log;
 var cells = [];
 var brokenTentacles = [];
 var tentacles = [];
 var playerNames = ['Neutral', 'Player 1', 'Player 2', 'Player 3', 'Player 4'];
 var stgs = ['normal', 'attack', 'defence', 'grow'];
-var levels = ['lv1', 'lv1', 'lv2', 'lv3', 'lv4', 'lv4'];
-var colors = [0x888888, 0x007fff, 0x66FF00, 0x8B00FF, 0x30D5C8, 0xCCCCFF];
-var chartColors = ['#888888', '#007fff', '#66FF00', '#8B00FF', '#30D5C8', '#CCCCFF'];
+var shiftX = [1.85, 1.95, 1.90, 1.90];
+var shiftY = [0.91, 1.12, 0.91, 0.84];
+var shiftXNeutral = 3.20;
+var shiftYNeutral = 1.10;
+var sizeScale = 10.0;
+var levels = ['lv1', 'lv1', 'lv2', 'lv3', 'lv4', 'lv5'];
+var colors = [0x888888, 0x007fff, 0xDC143C, 0x8B00FF, 0x7CFC00, 0xCCCCFF];
+var chartColors = ['#888888', '#173f70', '#DC143C', '#9b466e', '#7CFC00', '#CCCCFF'];
+var dstTentacles = [];
+var finalScreenshot;
 var roundTxt;
 var selectedCell = -1;
 var prefix = '';
 
 function loader() {
-    if (isPlaying)
+    if (isPlaying) {
         loadRound(currentRound);
-    setTimeout(loader, frameDuration);
+        currentRound ++;
+    }
+    if (currentRound <= totalRounds)
+        setTimeout(loader, frameDuration);
+    else {
+        finalScreenshot = new Image();
+        finalScreenshot.src = game.canvas.toDataURL();
+        game.state.start("result");
+    }
 }
 
 function loadRound(roundNum) {
     var round = log.body[roundNum];
     roundTxt.text = "Round " + roundNum;
+    if (round == null || round == undefined)
+        return;
     $.each(round.playerAction, function (j, command) {
         //console.log(command);
         if (command.type == 1) {
@@ -44,33 +61,6 @@ function loadRound(roundNum) {
             playerStages[command.id].extraControlStage = command.eCS;
             playerStages[command.id].regenerationSpeedStage = command.rSS;
             playerStages[command.id].speedStage = command.sS;
-        }
-    });
-    $.each(round.cellActions, function (j, command) {
-        //新增
-        if (command.type == 1) {
-            cells[command.id] = Cell.createNew(command.id, command.birthPosition, command.size, command.resources, command.techVal, command.team, command.level, command.strategy);
-            cells[command.id].draw();
-        }
-
-        //大小/资源值改变
-        else if (command.type == 2 && cells[command.id] != null && cells[command.id] != undefined) {
-            cells[command.id].updateSize(command.newSize, command.newResource, command.newTechVal, command.srcTentacles, command.dstTentacles, command.dstTentaclesCut);
-        }
-
-        //等级改变
-        else if (command.type == 3 && cells[command.id] != null && cells[command.id] != undefined) {
-            cells[command.id].updateLevel(command.newLevel);
-        }
-
-        //策略改变
-        else if (command.type == 4 && cells[command.id] != null && cells[command.id] != undefined) {
-            cells[command.id].updateStg(command.newStg);
-        }
-
-        //派系改变
-        else if (command.type == 5 && cells[command.id] != null && cells[command.id] != undefined) {
-            cells[command.id].updateTeam(command.newTeam);
         }
     });
 
@@ -129,9 +119,42 @@ function loadRound(roundNum) {
         }
     });
 
-    revealInfo();
-    currentRound = roundNum + 1;
+    setTimeout(function () {
+        $.each(round.cellActions, function (j, command) {
+            //新增
+            if (command.type == 1) {
+                cells[command.id] = Cell.createNew(command.id, command.birthPosition, command.size, command.resources, command.techVal, command.team, command.level, command.strategy);
+                cells[command.id].draw();
+            }
 
+            //大小/资源值改变
+            else if (command.type == 2 && cells[command.id] != null && cells[command.id] != undefined) {
+                cells[command.id].updateSize(command.newSize, command.newResource, command.newTechVal, command.srcTentatcles, command.dstTentaclesCut);
+            }
+
+            //等级改变
+            else if (command.type == 3 && cells[command.id] != null && cells[command.id] != undefined) {
+                cells[command.id].updateLevel(command.newLevel);
+            }
+
+            //策略改变
+            else if (command.type == 4 && cells[command.id] != null && cells[command.id] != undefined) {
+                cells[command.id].updateStg(command.newStg);
+            }
+
+            //派系改变
+            else if (command.type == 5 && cells[command.id] != null && cells[command.id] != undefined) {
+                cells[command.id].updateTeam(command.newTeam);
+            }
+        });
+    }, 10);
+
+    for (var i = 0; i < cells.length; i++) {
+        game.world.bringToTop(cells[i].sprite);
+        game.world.bringToTop(cells[i].resourceText);
+    }
+
+    revealInfo();
 }
 
 function loadGame() {
@@ -141,12 +164,12 @@ function loadGame() {
     brokenTentacles = [];
     tentacles = [];
     currentRound = 0;
-    game = new Phaser.Game(width, height, Phaser.AUTO, '#game');
+    game = new Phaser.Game(width, height, Phaser.CANVAS, '#game');
     var states = {
         welcome: function () {
             this.preload = function () {
-                game.load.image('welcome', prefix + 'img/welcome.png');
-                game.load.image('rect', prefix + 'img/rect.png');
+                game.load.image('loading', prefix + 'img/loading.png');
+                game.load.image('bird', prefix + 'img/bird.png');
                 game.load.onLoadComplete.add(function () {
                     game.state.start('loading');
                 });
@@ -154,47 +177,58 @@ function loadGame() {
         },
         loading: function () {
             this.preload = function () {
-                var welc = game.add.sprite(0, 0, 'welcome');
+                var welc = game.add.sprite(0, 0, 'loading');
                 log = jsonData;
-                totalRounds = log.head.totalRounds;
+                totalRounds = log.head.totalRounds + 1;
                 totalPlayers = log.head.totalPlayers;
                 $.each(log.head.playerInfo, function (i, thisPlayer) {
                     playerNames[thisPlayer.team] = thisPlayer.name;
                 });
-                game.load.image('bg', prefix + 'img/bg1.jpg');
+                game.load.image('bg', prefix + 'img/notree.png');
 
-                game.load.image('over', prefix + 'img/over.png');
-                game.load.image('rank', prefix + 'img/rank.png');
+                //game.load.image('over', prefix + 'img/over.png');
+                //game.load.image('rank', prefix + 'img/rank.png');
                 game.load.image('pause', prefix + 'img/pause.png');
                 game.load.image('resume', prefix + 'img/resume.png');
-                game.load.image('pre', prefix + 'img/pre.png');
                 game.load.image('next', prefix + 'img/next.png');
+                game.load.image('welcome', prefix + 'img/welcome.png');
+                game.load.image('line', prefix + 'img/line.png');
+                game.load.image('over', prefix + 'img/over.png');
 
                 game.load.image('neutral', prefix + 'img/neutral.png');
-                game.load.image('official', prefix + 'img/official.png');
+                //game.load.image('official', prefix + 'img/official.png');
                 for (var i = 0; i < 4; i += 1)
                     for (var j = 0; j < 6; j += 1)
                         game.load.image(stgs[i] + '-' + levels[j], prefix + 'img/' + stgs[i] + '-' + levels[j] + '.png');
 
-
-                game.load.image('circle', prefix + 'img/circle.png');
                 game.load.image('slash', prefix + 'img/slash.png');
-                game.load.image('DA', prefix + 'img/DA.png');
 
-                var progressBar = game.add.sprite(275, 620, 'rect');
-                progressBar.scale.y = 50 / 200;
-                progressBar.tint = 0x996600;
+                //var progressBar = game.add.sprite(275, 620, 'rect');
+                // progressBar.scale.y = 50 / 200;
+                // progressBar.tint = 0x996600;
                 //game.debug.geom(progressBar, 'rgba(153, 102, 0, 0.9)');
+                var progressBar = game.add.sprite(400, 340, 'bird');
+                progressBar.anchor.setTo(0.5);
+                var mask = game.add.graphics(233.5, 292.5);
+                mask.beginFill(0xffffff);
+                mask.drawRect(0, 0, 333, 95);
+                progressBar.mask = mask;
                 game.load.onFileComplete.add(function (progress) {
+                    progressBar.position.x = 400 + 333 * progress / 100
                     //progressText.text = progress + '%';
-                    progressBar.scale.x = progress / 100 * 250 / 200;
+                    //    progressBar.scale.x = progress / 100 * 250 / 200;
                 });
-                welc.inputEnabled = true;
                 game.load.onLoadComplete.add(function () {
-                    var startInfo = game.add.text(game.world.centerX, game.world.height * 0.7, 'Press anywhere to continue', {
-                        fontSize: '30px',
+                    console.log("Comp");
+                    welc.destroy();
+                    progressBar.destroy();
+                    mask.destroy();
+                    welc = game.add.sprite(0, 0, 'welcome');
+                    welc.inputEnabled = true;
+                    var startInfo = game.add.text(game.world.centerX, game.world.height * 0.76, 'Press anywhere to continue', {
+                        font: '18px Arial',
                         //fontWeight: 'light',
-                        fill: '#bbb',
+                        fill: '#666',
                     });
                     startInfo.anchor.setTo(0.5);
 
@@ -207,6 +241,7 @@ function loadGame() {
 
         view: function () {
             this.create = function () {
+                rounds = log.head.totalRounds;
                 game.add.image(0, 0, 'bg');
                 roundTxt = game.add.text(20, 20, 'Round ', {
                     fontSize: '10px',
@@ -214,26 +249,25 @@ function loadGame() {
                     fill: '#222'
                 });
                 var pauseButton, resumeButton;
-                var nextButton = game.add.button(740, 20, 'next', function () {
+                var nextButton = game.add.button(440, 20, 'next', function () {
                     isPlaying = true;
                     setTimeout(function () {
                         isPlaying = false;
                     }, frameDuration);
                 });
-                pauseButton = game.add.button(680, 20, 'pause', function () {
+                pauseButton = game.add.button(380, 20, 'pause', function () {
                     isPlaying = false;
                     pauseButton.visible = false;
                     resumeButton.visible = true;
                 });
                 //console.log(pauseButton);
-                resumeButton = game.add.button(680, 20, 'resume', function () {
+                resumeButton = game.add.button(380, 20, 'resume', function () {
                     isPlaying = true;
                     pauseButton.visible = true;
                     resumeButton.visible = false;
                 });
                 resumeButton.visible = false;
                 //console.log(roundTxt);
-
                 loader();
             }
         },
@@ -251,19 +285,11 @@ function loadGame() {
 
         result: function () {
             this.create = function () {
-                var okButton = game.add.text(game.world.centerX, game.world.height * 0.8, 'OK', {
-                    fontSize: '30px',
-                    fontWeight: '2px',
-                    fill: '#333',
-                    backgroundColor: '#999',
-                    //                height: game.world.height * 0.05,
-                    //                width: game.world.width * 0.1
-                });
-
-                okButton.anchor.setTo(0.5, 0.5);
-                okButton.input.onTap.add(function () {
-                    game.state.start('empty');
-                });
+                //game.load.spritesheet('final', finalScreenshot, 800, 800);
+                game.cache.addImage('final', finalScreenshot.src, finalScreenshot);
+                game.add.sprite(0, 0, 'final');
+                var overSprite = game.add.sprite(400, 400, 'over');
+                overSprite.anchor.setTo(0.5);
             }
         }
     };
@@ -362,7 +388,7 @@ function revealInfo() {
         var col2Offset = 280;
         var col3Offset = 460;
         var rowOffset2 = 650;
-        ctx.drawImage(cellImg, col1Offset, rowOffset2 - 20);
+        ctx.drawImage(cellImg, col1Offset - 50, rowOffset2 - 70, 150, 150);
 
         ctx.fillStyle = "#000000";
         ctx.font = 'bold 20px sans';

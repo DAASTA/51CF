@@ -33,6 +33,7 @@ var Cell = {
         cell.level = _level;
         cell.strategy = _stg;
         cell.image = stgs[cell.strategy] + '-' + levels[cell.level];
+        dstTentacles[cell.ID] = new Array();
         if (cell.team == 0)
             cell.image = 'neutral';
 
@@ -41,15 +42,20 @@ var Cell = {
             cell.sprite.anchor.setTo(0.5, 0.5);
             cell.sprite.scale.setTo(cell.size / cellSize, cell.size / cellSize);
             cell.sprite.tint = colors[cell.team];
-            cell.resourceText = game.add.text(cell.pos.x, cell.pos.y - cell.size / 2, '', {
-                fontSize: '50px',
-                fontWeight: 'light',
-                fill: '#444'
+            cell.resourceText = game.add.text(cell.pos.x + cell.size / shiftX[cell.strategy], cell.pos.y + cell.size / shiftY[cell.strategy], '', {
+                font: '50px bold',
+                //fontWeight: 'light',
+                fill: '#888'//chartColors[cell.team]
             });
+            if (cell.team == 0) {
+                cell.resourceText.x = cell.pos.x + cell.size / shiftXNeutral;
+                cell.resourceText.y = cell.pos.y + cell.size / shiftYNeutral;
+            }
             cell.resourceText.text = Math.round(cell.resources);
             cell.resourceText.anchor.setTo(0.5, 1);
             cell.resourceText.tint = colors[cell.team];
-            cell.resourceText.scale.setTo(cell.size / 25);
+            cell.resourceText.scale.setTo(cell.size / 100 / (1 + 0.15 * (cell.resources >= 100)));
+            //cell.resourceText.
             cell.sprite.inputEnabled = true;
             cell.sprite.events.onInputDown.add(function () {
                 selectedCell = cell.ID;
@@ -57,7 +63,7 @@ var Cell = {
             });
         }
 
-        cell.updateSize = function (newSize, newResources, newTechVal, srcTantecles, dstTantecles, dstBrokenTantecles) {
+        cell.updateSize = function (newSize, newResources, newTechVal, srcTantecles, dstBrokenTantecles) {
             if (newSize < 10)
                 newSize = 10;
             if (newResources < 0)
@@ -67,14 +73,19 @@ var Cell = {
             cell.techVal = newTechVal;
             cell.resourceText.text = Math.round(cell.resources);
             game.add.tween(cell.sprite.scale).to({ x: newSize / cellSize, y: newSize / cellSize }, frameDuration, "Sine.easeInOut", true);
-            game.add.tween(cell.resourceText.scale).to({ x: cell.size / 25, y: cell.size / 25 }, frameDuration, "Sine.easeInOut", true);
-            game.add.tween(cell.resourceText).to({ y: cell.pos.y - cell.size / 2 }, frameDuration, "Sine.easeInOut", true);
+            game.add.tween(cell.resourceText.scale).to({ x: cell.size / 100 / (1 + 0.15 * (cell.resources >= 100)), y: cell.size / 100 / (1 + 0.15 * (cell.resources >= 100)) }, frameDuration, "Sine.easeInOut", true);
+            // cell.resourceText.position.setTo(cell.pos.x + cell.size / shiftX[cell.strategy],
+            //     cell.pos.y + cell.size / shiftY[cell.strategy]);
+            cell.tweenHandle = game.add.tween(cell.resourceText).to({ x: cell.pos.x + cell.size / shiftX[cell.strategy], y: cell.pos.y + cell.size / shiftY[cell.strategy] }, frameDuration, "Sine.easeInOut", true);
 
             $.each(srcTantecles, function (i, tantecleNum) {
-                tentacles[tantecleNum].checkStartPos(newSize);
+                // console.log(tantecleNum);
+                // console.log(tentacles);
+                //tentacles[tantecleNum].checkStartPos(newSize);
             });
-            $.each(dstTantecles, function (i, tantecleNum) {
-                tentacles[tantecleNum].checkEndPos(newSize);
+            $.each(dstTentacles[cell.ID], function (i, tantecleNum) {
+                // if (tentacles[tantecleNum] != null && tentacles[tantecleNum] != undefined)
+                //     tentacles[tantecleNum].checkEndPos(newSize);
             });
         }
 
@@ -85,6 +96,9 @@ var Cell = {
             cell.sprite = game.add.sprite(cell.pos.x, cell.pos.y, cell.image);
             cell.sprite.anchor.setTo(0.5, 0.5);
             cell.sprite.scale.setTo(cell.size / cellSize, cell.size / cellSize);
+            if (cell.tweenHandle != undefined)cell.tweenHandle.pause();
+            cell.resourceText.position.setTo(cell.pos.x + cell.size / shiftX[cell.strategy],
+                cell.pos.y + cell.size / shiftY[cell.strategy]);
             cell.sprite.tint = colors[cell.team];
             cell.sprite.inputEnabled = true;
             cell.sprite.events.onInputDown.add(function () {
@@ -96,16 +110,20 @@ var Cell = {
 
         cell.updateTeam = function (newTeam) {
             cell.team = newTeam;
-            cell.sprite.tint = colors[cell.team];
             cell.image = stgs[cell.strategy] + '-' + levels[cell.level];
+            cell.resourceText.position.setTo(cell.pos.x + cell.size / shiftX[cell.strategy],
+                cell.pos.y + cell.size / shiftY[cell.strategy]);
+            cell.resourceText.tint = colors[cell.team];
             if (cell.team == 0) {
                 cell.image = 'neutral';
-                cell.sprite.destroy();
-                cell.sprite = game.add.sprite(cell.pos.x, cell.pos.y, cell.image);
-                cell.sprite.anchor.setTo(0.5, 0.5);
-                cell.sprite.scale.setTo(cell.size / cellSize, cell.size / cellSize);
-                cell.sprite.tint = colors[cell.team];
+                cell.resourceText.x = cell.pos.x + cell.size / shiftXNeutral;
+                cell.resourceText.y = cell.pos.y + cell.size / shiftYNeutral;
             }
+            cell.sprite.destroy();
+            cell.sprite = game.add.sprite(cell.pos.x, cell.pos.y, cell.image);
+            cell.sprite.anchor.setTo(0.5, 0.5);
+            cell.sprite.scale.setTo(cell.size / cellSize, cell.size / cellSize);
+            cell.sprite.tint = colors[cell.team];
             cell.sprite.inputEnabled = true;
             cell.sprite.events.onInputDown.add(function () {
                 selectedCell = cell.ID;
@@ -116,6 +134,8 @@ var Cell = {
         cell.updateLevel = function (newLevel) {
             cell.level = newLevel;
             cell.image = stgs[cell.strategy] + '-' + levels[cell.level];
+            cell.resourceText.position.setTo(cell.pos.x + cell.size / shiftX[cell.strategy],
+                cell.pos.y + cell.size / shiftY[cell.strategy]);
             cell.sprite.destroy();
             cell.sprite = game.add.sprite(cell.pos.x, cell.pos.y, cell.image);
             cell.sprite.anchor.setTo(0.5, 0.5);

@@ -42,7 +42,7 @@ var Fragment = {
                 if (fragment.isBroken) {
                     posDist2 = Math.sqrt((fragment.pos.x - fragment.parent.startCell.pos.x) * (fragment.pos.x - fragment.parent.startCell.pos.x)
                         + (fragment.pos.y - fragment.parent.startCell.pos.y) * (fragment.pos.y - fragment.parent.startCell.pos.y));
-                    if (posDist2 < fragment.parent.startCell.size / 2)
+                    if (posDist2 < fragment.parent.startCell.size / sizeScale)
                         return false;
                     else
                         return true;
@@ -54,7 +54,7 @@ var Fragment = {
                     posDist1 = Math.sqrt((fragment.pos.x - fragment.parent.startCell.pos.x) * (fragment.pos.x - fragment.parent.startCell.pos.x)
                         + (fragment.pos.y - fragment.parent.startCell.pos.y) * (fragment.pos.y - fragment.parent.startCell.pos.y));
                     //console.log({posDist1, posDist2});
-                    if ((posDist2 < fragment.parent.endCell.size / 2) || (posDist1 < fragment.parent.startCell.size / 2))
+                    if ((posDist2 < fragment.parent.endCell.size / sizeScale) || (posDist1 < fragment.parent.startCell.size / sizeScale))
                         return false;
                     else
                         return true;
@@ -103,7 +103,7 @@ var Slash = {
             //console.log(slash.startPoint);
             //console.log(slash.endPoint);
             slash.sprite.mask = slash.mask;
-            game.add.tween(circle).to({ x: slash.endPoint.x - slash.startPoint.x, y: slash.endPoint.y - slash.startPoint.y }, frameDuration / 2, "Sine.easeInOut", true);
+            game.add.tween(circle).to({ x: slash.endPoint.x - slash.startPoint.x, y: slash.endPoint.y - slash.startPoint.y }, frameDuration / 2, Phaser.Easing.Linear.Out, true);
             setTimeout(slash.destroy, frameDuration / 2 + 20);
         }
 
@@ -127,6 +127,7 @@ var Tentacle = {
         tentacle.team = cells[source].team;
         tentacle.startCell = cells[source];
         tentacle.endCell = cells[target];
+        dstTentacles[tentacle.endCell.ID].push(tentacle.ID);
 
         deltaX = tentacle.endCell.pos.x - tentacle.startCell.pos.x;
         deltaY = tentacle.endCell.pos.y - tentacle.startCell.pos.y;
@@ -135,17 +136,17 @@ var Tentacle = {
         tentacle.angle = Math.atan2(deltaY, deltaX) * 180 / Math.PI;
 
         tentacle.startPoint = Point.createNew(tentacle.startCell.pos.x, tentacle.startCell.pos.y);
-        tentacle.startPoint.x += tentacle.startCell.size * Math.cos(tentacle.angle * Math.PI / 180) / 2;
-        tentacle.startPoint.y += tentacle.startCell.size * Math.sin(tentacle.angle * Math.PI / 180) / 2;
+        // tentacle.startPoint.x += tentacle.startCell.size * Math.cos(tentacle.angle * Math.PI / 180) / 2;
+        // tentacle.startPoint.y += tentacle.startCell.size * Math.sin(tentacle.angle * Math.PI / 180) / 2;
         tentacle.endPoint = Point.createNew(tentacle.startPoint.x, tentacle.startPoint.y);
 
         //tentacle.endPoint = tentacle.startPoint;
         tentacle.length = 0;
-        tentacle.sprite = game.add.sprite(tentacle.startPoint.x, tentacle.startPoint.y, 'rect');
+        tentacle.sprite = game.add.sprite(tentacle.startPoint.x, tentacle.startPoint.y, 'line');
         tentacle.sprite.anchor.setTo(0, 0.5);
         tentacle.sprite.tint = colors[tentacle.startCell.team];
         tentacle.sprite.angle = tentacle.angle;
-        tentacle.sprite.scale.setTo(0, tentacle.transRate / 200);
+        tentacle.sprite.scale.setTo(0, 4 / 37);
 
         tentacle.checkStartPos = function (newStartSize) {
             deltaX = tentacle.endCell.pos.x - tentacle.startCell.pos.x;
@@ -154,16 +155,23 @@ var Tentacle = {
             dx = newStartSize * deltaX / l;
             dy = newStartSize * deltaY / l;
 
-            tentacle.startPoint.x = tentacle.startCell.pos.x + dx / 2;
-            tentacle.startPoint.y = tentacle.startCell.pos.y + dy / 2;
+            tentacle.startPoint.x = tentacle.startCell.pos.x + dx / sizeScale;
+            tentacle.startPoint.y = tentacle.startCell.pos.y + dy / sizeScale;
 
             tentacle.length = Math.sqrt((tentacle.endPoint.x - tentacle.startPoint.x)
                 * (tentacle.endPoint.x - tentacle.startPoint.x)
                 + (tentacle.endPoint.y - tentacle.startPoint.y)
                 * (tentacle.endPoint.y - tentacle.startPoint.y));
+            
+            tentacle.sprite.position.x = tentacle.startPoint.x;
+            tentacle.sprite.position.y = tentacle.startPoint.y;
+            tentacle.sprite.scale.setTo(tentacle.length / 626, 4 / 37);
 
-            game.add.tween(tentacle.sprite.pos).to({ x: tentacle.startPoint.x, y:tentacle.startPoint.y }, frameDuration, "Sine.easeInOut", true);
-            game.add.tween(tentacle.sprite.scale).to({ x: tentacle.length / 200 }, frameDuration, "Sine.easeInOut", true);
+            // console.log(newStartSize);
+            // console.log({ dx, dy });
+
+            // game.add.tween(tentacle.sprite.position).to({ x: tentacle.startPoint.x, y: tentacle.startPoint.y }, frameDuration, Phaser.Easing.Linear.Out, true);
+            // game.add.tween(tentacle.sprite.scale).to({ x: tentacle.length / 626 }, frameDuration, Phaser.Easing.Linear.Out, true);
         }
 
         tentacle.checkEndPos = function (newEndSize) {
@@ -174,18 +182,23 @@ var Tentacle = {
 
             var endDist = Math.sqrt((tentacle.endCell.pos.x - tentacle.endPoint.x) * (tentacle.endCell.pos.x - tentacle.endPoint.x)
                 + (tentacle.endCell.pos.y - tentacle.endPoint.y) * (tentacle.endCell.pos.y - tentacle.endPoint.y));
-            if (endDist < tentacle.endCell.size / 2) {
-                tentacle.endPoint.x = tentacle.endCell.pos.x + dx / 2;
-                tentacle.endPoint.y = tentacle.endCell.pos.y + dy / 2;
+            if (endDist < newEndSize / sizeScale) {
+                tentacle.endPoint.x = tentacle.endCell.pos.x + dx / sizeScale;
+                tentacle.endPoint.y = tentacle.endCell.pos.y + dy / sizeScale;
             }
+            console.log(tentacle.length);
 
             tentacle.length = Math.sqrt((tentacle.endPoint.x - tentacle.startPoint.x)
                 * (tentacle.endPoint.x - tentacle.startPoint.x)
                 + (tentacle.endPoint.y - tentacle.startPoint.y)
                 * (tentacle.endPoint.y - tentacle.startPoint.y));
+            //166 文件服务器
+            //阿里云 wiki 
+            //console.log(tentacle.length);
 
-            //game.add.tween(tentacle.sprite.pos).to({ x: tentacle.startPoint.x, y:tentacle.startPoint.y }, frameDuration, "Sine.easeInOut", true);
-            game.add.tween(tentacle.sprite.scale).to({ x: tentacle.length / 200 }, frameDuration, "Sine.easeInOut", true);
+            tentacle.sprite.scale.setTo(tentacle.length / 626, 4 / 37);
+            //game.add.tween(tentacle.sprite.position).to({ x: tentacle.startPoint.x, y:tentacle.startPoint.y }, frameDuration, Phaser.Easing.Linear.Out, true);
+            //game.add.tween(tentacle.sprite.scale).to({ x: tentacle.length / 626 }, frameDuration, Phaser.Easing.Linear.Out, true);
         }
 
         tentacle.strech = function (dx, dy) {
@@ -195,15 +208,15 @@ var Tentacle = {
             //tentacle.checkEndPos();
 
             if (Math.sqrt((tentacle.endPoint.x - tentacle.endCell.pos.x) * (tentacle.endPoint.x - tentacle.endCell.pos.x)
-                + (tentacle.endPoint.y - tentacle.endCell.pos.y) * (tentacle.endPoint.y - tentacle.endCell.pos.y)) < tentacle.endCell.size / 2) {
-                    tentacle.endPoint.x = tentacle.endCell.pos.x - tentacle.endCell.size * Math.cos(tentacle.angle * Math.PI / 180) / 2;
-                    tentacle.endPoint.y = tentacle.endCell.pos.y - tentacle.endCell.size * Math.sin(tentacle.angle * Math.PI / 180) / 2;
-                }
+                + (tentacle.endPoint.y - tentacle.endCell.pos.y) * (tentacle.endPoint.y - tentacle.endCell.pos.y)) < tentacle.endCell.size / sizeScale) {
+                tentacle.endPoint.x = tentacle.endCell.pos.x - tentacle.endCell.size * Math.cos(tentacle.angle * Math.PI / 180) / 2;
+                tentacle.endPoint.y = tentacle.endCell.pos.y - tentacle.endCell.size * Math.sin(tentacle.angle * Math.PI / 180) / 2;
+            }
             tentacle.length = Math.sqrt((tentacle.endPoint.x - tentacle.startPoint.x)
                 * (tentacle.endPoint.x - tentacle.startPoint.x)
                 + (tentacle.endPoint.y - tentacle.startPoint.y)
                 * (tentacle.endPoint.y - tentacle.startPoint.y));
-            game.add.tween(tentacle.sprite.scale).to({ x: tentacle.length / 200 }, frameDuration - 20, "Sine.easeInOut", true);
+            game.add.tween(tentacle.sprite.scale).to({ x: tentacle.length / 626 }, frameDuration - 20, Phaser.Easing.Linear.Out, true);
 
         }
 
@@ -212,15 +225,15 @@ var Tentacle = {
             tentacle.endPoint.x += dx;
             tentacle.endPoint.y += dy;
             if (Math.sqrt((tentacle.endPoint.x - tentacle.startCell.pos.x) * (tentacle.endPoint.x - tentacle.startCell.pos.x)
-                + (tentacle.endPoint.y - tentacle.startCell.pos.y) * (tentacle.endPoint.y - tentacle.startCell.pos.y)) < tentacle.startCell.size / 2) {
-                    tentacle.endPoint.x = tentacle.startCell.pos.x + tentacle.startCell.size * Math.cos(tentacle.angle * Math.PI / 180) / 2;
-                    tentacle.endPoint.y = tentacle.startCell.pos.y + tentacle.startCell.size * Math.sin(tentacle.angle * Math.PI / 180) / 2;
-                }
+                + (tentacle.endPoint.y - tentacle.startCell.pos.y) * (tentacle.endPoint.y - tentacle.startCell.pos.y)) < tentacle.startCell.size / sizeScale) {
+                tentacle.endPoint.x = tentacle.startCell.pos.x + tentacle.startCell.size * Math.cos(tentacle.angle * Math.PI / 180) / 2;
+                tentacle.endPoint.y = tentacle.startCell.pos.y + tentacle.startCell.size * Math.sin(tentacle.angle * Math.PI / 180) / 2;
+            }
             tentacle.length = Math.sqrt((tentacle.endPoint.x - tentacle.startPoint.x)
                 * (tentacle.endPoint.x - tentacle.startPoint.x)
                 + (tentacle.endPoint.y - tentacle.startPoint.y)
                 * (tentacle.endPoint.y - tentacle.startPoint.y));
-            game.add.tween(tentacle.sprite.scale).to({ x: tentacle.length / 200 }, frameDuration - 20, "Sine.easeInOut", true);
+            game.add.tween(tentacle.sprite.scale).to({ x: tentacle.length / 626 }, frameDuration - 20, Phaser.Easing.Linear.Out, true);
 
         }
 
@@ -229,14 +242,14 @@ var Tentacle = {
             //
 
             tentacle.transRate = newTransRate;
-            game.add.tween(tentacle.sprite.scale).to({ y: tentacle.transRate / 200 }, frameDuration, "Sine.easeInOut", true);
+            game.add.tween(tentacle.sprite.scale).to({ y: 4 / 37 }, frameDuration, Phaser.Easing.Linear.Out, true);
         }
 
         tentacle.cutOff = function (posX, posY) {
-            setTimeout(function() {
-                var slash = Slash.createNew(Point.createNew(posX, posY), tentacle.angle);
-                slash.wipe();
-            }, frameDuration / 2);
+            // setTimeout(function() {
+            //     var slash = Slash.createNew(Point.createNew(posX, posY), tentacle.angle);
+            //     slash.wipe();
+            // }, frameDuration / 2);
 
             // setTimeout(function() {
             //     tentacle.endPoint = Point.createNew(posX, posY);
@@ -244,14 +257,14 @@ var Tentacle = {
             //         * (tentacle.endPoint.x - tentacle.startPoint.x)
             //         + (tentacle.endPoint.y - tentacle.startPoint.y)
             //         * (tentacle.endPoint.y - tentacle.startPoint.y));
-            //     tentacle.sprite.scale.x = tentacle.length / 200;
+            //     tentacle.sprite.scale.x = tentacle.length / 626;
             // }, 20);
 
             //draw this tentacle
         }
 
         tentacle.destroy = function () {
-            setTimeout(function() {
+            setTimeout(function () {
                 tentacle.length = 0;
                 tentacle.sprite.destroy();
                 tentacle[id] = null;
@@ -283,13 +296,13 @@ var BrokenTentacle = {
             * (brokenTentacle.endPoint.x - brokenTentacle.startPoint.x)
             + (brokenTentacle.endPoint.y - brokenTentacle.startPoint.y)
             * (brokenTentacle.endPoint.y - brokenTentacle.startPoint.y));
-        
-        
-        brokenTentacle.sprite = game.add.sprite(brokenTentacle.startPoint.x, brokenTentacle.startPoint.y, 'rect');
+
+
+        brokenTentacle.sprite = game.add.sprite(brokenTentacle.startPoint.x, brokenTentacle.startPoint.y, 'line');
         brokenTentacle.sprite.anchor.setTo(0, 0.5);
         brokenTentacle.sprite.tint = colors[brokenTentacle.team];
         brokenTentacle.sprite.angle = brokenTentacle.angle;
-        brokenTentacle.sprite.scale.setTo(brokenTentacle.length / 200, brokenTentacle.transRate / 200);
+        brokenTentacle.sprite.scale.setTo(brokenTentacle.length / 626, 5.2 / 37);
 
         brokenTentacle.draw = function () {
             // draw this brokenTentacle, nearly same as tentacle
@@ -306,20 +319,20 @@ var BrokenTentacle = {
             brokenTentacle.endPoint.x += dx;
             brokenTentacle.endPoint.y += dy;
             if (Math.sqrt((brokenTentacle.endPoint.x - brokenTentacle.startCell.pos.x) * (brokenTentacle.endPoint.x - brokenTentacle.startCell.pos.x)
-                + (brokenTentacle.endPoint.y - brokenTentacle.startCell.pos.y) * (brokenTentacle.endPoint.y - brokenTentacle.startCell.pos.y)) < brokenTentacle.startCell.size / 2) {
-                    brokenTentacle.endPoint.x = brokenTentacle.startCell.pos.x + brokenTentacle.startCell.size * Math.cos(brokenTentacle.angle * Math.PI / 180) / 2;
-                    brokenTentacle.endPoint.y = brokenTentacle.startCell.pos.y + brokenTentacle.startCell.size * Math.sin(brokenTentacle.angle * Math.PI / 180) / 2;
-                }
+                + (brokenTentacle.endPoint.y - brokenTentacle.startCell.pos.y) * (brokenTentacle.endPoint.y - brokenTentacle.startCell.pos.y)) < brokenTentacle.startCell.size / sizeScale) {
+                brokenTentacle.endPoint.x = brokenTentacle.startCell.pos.x + brokenTentacle.startCell.size * Math.cos(brokenTentacle.angle * Math.PI / 180) / 2;
+                brokenTentacle.endPoint.y = brokenTentacle.startCell.pos.y + brokenTentacle.startCell.size * Math.sin(brokenTentacle.angle * Math.PI / 180) / 2;
+            }
             brokenTentacle.length = Math.sqrt((brokenTentacle.endPoint.x - brokenTentacle.startPoint.x)
                 * (brokenTentacle.endPoint.x - brokenTentacle.startPoint.x)
                 + (brokenTentacle.endPoint.y - brokenTentacle.startPoint.y)
                 * (brokenTentacle.endPoint.y - brokenTentacle.startPoint.y));
 
-            game.add.tween(brokenTentacle.sprite.scale).to({ x: brokenTentacle.length / 200 }, frameDuration - 20, "Sine.easeInOut", true);
+            game.add.tween(brokenTentacle.sprite.scale).to({ x: brokenTentacle.length / 626 }, frameDuration - 20, Phaser.Easing.Linear.Out, true);
         }
 
         brokenTentacle.destroy = function () {
-            setTimeout(function() {
+            setTimeout(function () {
                 brokenTentacle.length = 0;
                 brokenTentacle.sprite.destroy();
                 brokenTentacles[brokenTentacle.ID] = null;
