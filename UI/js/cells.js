@@ -43,7 +43,7 @@ var Cell = {
             cell.sprite.scale.setTo(cell.size / cellSize, cell.size / cellSize);
             cell.sprite.tint = colors[cell.team];
             cell.resourceText = game.add.text(cell.pos.x + cell.size / shiftX[cell.strategy], cell.pos.y + cell.size / shiftY[cell.strategy], '', {
-                font: '50px bold',
+                font: '40px Comic Sans MS',
                 //fontWeight: 'light',
                 fill: '#888'//chartColors[cell.team]
             });
@@ -64,29 +64,31 @@ var Cell = {
         }
 
         cell.updateSize = function (newSize, newResources, newTechVal, srcTantecles, dstBrokenTantecles) {
-            if (newSize < 10)
-                newSize = 10;
-            if (newResources < 0)
-                newResources = 0;
-            cell.size = newSize;
-            cell.resources = newResources;
-            cell.techVal = newTechVal;
-            cell.resourceText.text = Math.round(cell.resources);
-            game.add.tween(cell.sprite.scale).to({ x: newSize / cellSize, y: newSize / cellSize }, frameDuration, "Sine.easeInOut", true);
-            game.add.tween(cell.resourceText.scale).to({ x: cell.size / 100 / (1 + 0.15 * (cell.resources >= 100)), y: cell.size / 100 / (1 + 0.15 * (cell.resources >= 100)) }, frameDuration, "Sine.easeInOut", true);
-            // cell.resourceText.position.setTo(cell.pos.x + cell.size / shiftX[cell.strategy],
-            //     cell.pos.y + cell.size / shiftY[cell.strategy]);
-            cell.tweenHandle = game.add.tween(cell.resourceText).to({ x: cell.pos.x + cell.size / shiftX[cell.strategy], y: cell.pos.y + cell.size / shiftY[cell.strategy] }, frameDuration, "Sine.easeInOut", true);
+            setTimeout(function() {
+                if (newSize < 10)
+                    newSize = 10;
+                if (newResources < 0)
+                    newResources = 0;
+                cell.size = newSize;
+                cell.resources = newResources;
+                cell.techVal = newTechVal;
+                cell.resourceText.text = Math.round(cell.resources);
+                game.add.tween(cell.sprite.scale).to({ x: newSize / cellSize, y: newSize / cellSize }, frameDuration, "Sine.easeInOut", true);
+                game.add.tween(cell.resourceText.scale).to({ x: cell.size / 100 / (1 + 0.15 * (cell.resources >= 100)), y: cell.size / 100 / (1 + 0.15 * (cell.resources >= 100)) }, frameDuration, "Sine.easeInOut", true);
+                // cell.resourceText.position.setTo(cell.pos.x + cell.size / shiftX[cell.strategy],
+                //     cell.pos.y + cell.size / shiftY[cell.strategy]);
+                cell.tweenHandle = game.add.tween(cell.resourceText).to({ x: cell.pos.x + cell.size / shiftX[cell.strategy], y: cell.pos.y + cell.size / shiftY[cell.strategy] }, frameDuration, "Sine.easeInOut", true);
 
-            $.each(srcTantecles, function (i, tantecleNum) {
-                // console.log(tantecleNum);
-                // console.log(tentacles);
-                //tentacles[tantecleNum].checkStartPos(newSize);
-            });
-            $.each(dstTentacles[cell.ID], function (i, tantecleNum) {
-                // if (tentacles[tantecleNum] != null && tentacles[tantecleNum] != undefined)
-                //     tentacles[tantecleNum].checkEndPos(newSize);
-            });
+                $.each(srcTantecles, function (i, tantecleNum) {
+                    // console.log(tantecleNum);
+                    // console.log(tentacles);
+                    //tentacles[tantecleNum].checkStartPos(newSize);
+                });
+                $.each(dstTentacles[cell.ID], function (i, tantecleNum) {
+                    // if (tentacles[tantecleNum] != null && tentacles[tantecleNum] != undefined)
+                    //     tentacles[tantecleNum].checkEndPos(newSize);
+                });
+            }, 10);
         }
 
         cell.updateStg = function (newStg) {
@@ -96,7 +98,7 @@ var Cell = {
             cell.sprite = game.add.sprite(cell.pos.x, cell.pos.y, cell.image);
             cell.sprite.anchor.setTo(0.5, 0.5);
             cell.sprite.scale.setTo(cell.size / cellSize, cell.size / cellSize);
-            if (cell.tweenHandle != undefined)cell.tweenHandle.pause();
+            //if (cell.tweenHandle != undefined)cell.tweenHandle.pause();
             cell.resourceText.position.setTo(cell.pos.x + cell.size / shiftX[cell.strategy],
                 cell.pos.y + cell.size / shiftY[cell.strategy]);
             cell.sprite.tint = colors[cell.team];

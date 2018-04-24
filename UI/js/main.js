@@ -1,4 +1,3 @@
-
 var width = 800;
 var height = 800;
 
@@ -8,7 +7,7 @@ var totalPlayers;
 var players = [];
 var playerStages = [];
 var rounds;
-var frameDuration = 200;
+var frameDuration = 300;
 var isPlaying = true;
 var currentRound = 0;
 var isReverselyPlaying = false;
@@ -21,7 +20,7 @@ var tentacles = [];
 var playerNames = ['Neutral', 'Player 1', 'Player 2', 'Player 3', 'Player 4'];
 var stgs = ['normal', 'attack', 'defence', 'grow'];
 var shiftX = [1.85, 1.95, 1.90, 1.90];
-var shiftY = [0.91, 1.12, 0.91, 0.84];
+var shiftY = [0.91, 1.14, 0.93, 0.87];
 var shiftXNeutral = 3.20;
 var shiftYNeutral = 1.10;
 var sizeScale = 10.0;
@@ -42,9 +41,12 @@ function loader() {
     if (currentRound <= totalRounds)
         setTimeout(loader, frameDuration);
     else {
-        finalScreenshot = new Image();
-        finalScreenshot.src = game.canvas.toDataURL();
-        game.state.start("result");
+        // finalScreenshot = new Image();
+        // finalScreenshot.src = game.canvas.toDataURL();
+        // game.state.start("result");
+        var overSprite = game.add.sprite(400, 400, 'over');
+        overSprite.anchor.setTo(0.5);
+        revealInfo();
     }
 }
 
@@ -119,7 +121,7 @@ function loadRound(roundNum) {
         }
     });
 
-    setTimeout(function () {
+    // setTimeout(function () {
         $.each(round.cellActions, function (j, command) {
             //新增
             if (command.type == 1) {
@@ -147,7 +149,7 @@ function loadRound(roundNum) {
                 cells[command.id].updateTeam(command.newTeam);
             }
         });
-    }, 10);
+    // }, 10);
 
     for (var i = 0; i < cells.length; i++) {
         game.world.bringToTop(cells[i].sprite);
@@ -164,7 +166,7 @@ function loadGame() {
     brokenTentacles = [];
     tentacles = [];
     currentRound = 0;
-    game = new Phaser.Game(width, height, Phaser.CANVAS, '#game');
+    game = new Phaser.Game(width, height, Phaser.AUTO, '#game');
     var states = {
         welcome: function () {
             this.preload = function () {
