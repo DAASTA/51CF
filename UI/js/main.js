@@ -27,7 +27,7 @@ var sizeScale = 10.0;
 var levels = ['lv1', 'lv1', 'lv2', 'lv3', 'lv4', 'lv5'];
 var colors = [0x888888, 0x007fff, 0xDC143C, 0x8B00FF, 0x7CFC00, 0xCCCCFF];
 var chartColors = ['#888888', '#173f70', '#DC143C', '#9b466e', '#7CFC00', '#CCCCFF'];
-var dstTentacles = [];
+var srcTentacles = [];
 var finalScreenshot;
 var roundTxt;
 var selectedCell = -1;
@@ -187,18 +187,16 @@ function loadGame() {
                     playerNames[thisPlayer.team] = thisPlayer.name;
                 });
                 game.load.image('bg', prefix + 'img/notree.png');
-
-                //game.load.image('over', prefix + 'img/over.png');
-                //game.load.image('rank', prefix + 'img/rank.png');
                 game.load.image('pause', prefix + 'img/pause.png');
                 game.load.image('resume', prefix + 'img/resume.png');
                 game.load.image('next', prefix + 'img/next.png');
+                game.load.image('add', prefix + 'img/add.png');
+                game.load.image('sub', prefix + 'img/sub.png');
                 game.load.image('welcome', prefix + 'img/welcome.png');
                 game.load.image('line', prefix + 'img/line.png');
                 game.load.image('over', prefix + 'img/over.png');
 
                 game.load.image('neutral', prefix + 'img/neutral.png');
-                //game.load.image('official', prefix + 'img/official.png');
                 for (var i = 0; i < 4; i += 1)
                     for (var j = 0; j < 6; j += 1)
                         game.load.image(stgs[i] + '-' + levels[j], prefix + 'img/' + stgs[i] + '-' + levels[j] + '.png');
@@ -251,19 +249,25 @@ function loadGame() {
                     fill: '#222'
                 });
                 var pauseButton, resumeButton;
-                var nextButton = game.add.button(440, 20, 'next', function () {
+                var nextButton = game.add.button(410, 20, 'next', function () {
                     isPlaying = true;
                     setTimeout(function () {
                         isPlaying = false;
                     }, frameDuration);
                 });
-                pauseButton = game.add.button(380, 20, 'pause', function () {
+                var addButton = game.add.button(470, 20, 'add', function () {
+                    frameDuration *= 0.9;
+                });
+                var subButton = game.add.button(290, 20, 'sub', function () {
+                    frameDuration *= 1.1;
+                });
+                pauseButton = game.add.button(350, 20, 'pause', function () {
                     isPlaying = false;
                     pauseButton.visible = false;
                     resumeButton.visible = true;
                 });
                 //console.log(pauseButton);
-                resumeButton = game.add.button(380, 20, 'resume', function () {
+                resumeButton = game.add.button(350, 20, 'resume', function () {
                     isPlaying = true;
                     pauseButton.visible = true;
                     resumeButton.visible = false;
@@ -321,28 +325,69 @@ function revealInfo() {
             players[i].speedStage = playerStages[i].speedStage;
         }
     }
-    $.each(cells, function (i, cell) {
-        players[cell.team].res += cell.resources;
-        players[cell.team].cellNum++;
-        sumRes += cell.resources;
-        sumCells++;
-    });
-    $.each(tentacles, function (i, tentacle) {
-        if (tentacle != null && tentacle != undefined && tentacle.length > 1) {
-            players[tentacle.startCell.team].res += tentacle.length / 10;
-            sumRes += tentacle.length / 10;
-            players[tentacle.startCell.team].tentacleNum++;
-            sumTentacles++;
+    var playersSorted = new Array(players.length);
+    if (currentRound <= totalRounds && log.body[currentRound].rankInfo != null && log.body[currentRound].rankInfo) {
+        roundRank = log.body[currentRound].rankInfo;
+        $.each(roundRank.rank, function(i, playerNum) {
+            playersSorted[i] = players[playerNum];
+        });
+        $.each(roundRank.resources, function(i, playerRes) {
+            playersSorted[i].res = playerRes;
+            players[roundRank.rank[i]].res = playerRes;
+            sumRes += playerRes;
+        });
+        $.each(cells, function (i, cell) {
+            players[cell.team].cellNum++;
+            sumCells++;
+        });
+        $.each(tentacles, function (i, tentacle) {
+            if (tentacle != null && tentacle != undefined && tentacle.length > 1) {
+                players[tentacle.startCell.team].tentacleNum++;
+                sumTentacles++;
+            }
+        });
+        $.each(brokenTentacles, function (i, tentacle) {
+            if (tentacle != null && tentacle != undefined && tentacle.length > 1) {
+                players[tentacle.team].tentacleNum++;
+                sumTentacles++;
+            }
+        });
+    }
+    else {
+        $.each(cells, function (i, cell) {
+            players[cell.team].res += cell.resources;
+            players[cell.team].cellNum++;
+            sumRes += cell.resources;
+            sumCells++;
+        });
+        $.each(tentacles, function (i, tentacle) {
+            if (tentacle != null && tentacle != undefined && tentacle.length > 1) {
+                players[tentacle.startCell.team].res += tentacle.length / 10;
+                sumRes += tentacle.length / 10;
+                players[tentacle.startCell.team].tentacleNum++;
+                sumTentacles++;
+            }
+        });
+        $.each(brokenTentacles, function (i, tentacle) {
+            if (tentacle != null && tentacle != undefined && tentacle.length > 1) {
+                players[tentacle.team].res += tentacle.length / 10;
+                sumRes += tentacle.length / 10;
+                players[tentacle.team].tentacleNum++;
+                sumTentacles++;
+            }
+        });
+        for (var i = 0; i < players.length; i++)
+            playersSorted[i] = Object.assign({}, players[i]);
+        for (var i = 0; i < playersSorted.length; i++) {
+            for (var j = i + 1; j < playersSorted.length; j++) {
+                if (playersSorted[i].res < playersSorted[j].res) {
+                    var tmp = Object.assign({}, playersSorted[i]);
+                    playersSorted[i] = Object.assign({}, playersSorted[j]);
+                    playersSorted[j] = Object.assign({}, tmp);
+                }
+            }
         }
-    });
-    $.each(brokenTentacles, function (i, tentacle) {
-        if (tentacle != null && tentacle != undefined && tentacle.length > 1) {
-            players[tentacle.team].res += tentacle.length / 10;
-            sumRes += tentacle.length / 10;
-            players[tentacle.team].tentacleNum++;
-            sumTentacles++;
-        }
-    });
+    }
     //console.log({ "sum": sumTentacles, "length": tentacles.length + brokenTentacles.length });
     var data_arr = new Array(players.length);
     $.each(data_arr, function (i, num) {
@@ -396,7 +441,7 @@ function revealInfo() {
         ctx.font = 'bold 20px sans';
         ctx.fillText('Details of Selected Tower', 210, rowOffset2 - 40);
         ctx.font = 'normal 15px sans';
-        ctx.fillText("Team:", col2Offset, rowOffset2); ctx.fillText(cell.team, col3Offset + 40, rowOffset2);
+        ctx.fillText("Team:", col2Offset, rowOffset2); ctx.fillText(playerNames[cell.team], col3Offset + 40, rowOffset2);
         ctx.fillText("Player:", col2Offset, rowOffset2 + 25); ctx.fillText(playerNames[cell.team], col3Offset, rowOffset2 + 25);
         ctx.fillText("Resources:", col2Offset, rowOffset2 + 25 * 2); ctx.fillText(Math.round(cell.resources), col3Offset, rowOffset2 + 25 * 2);
         ctx.fillText("Tech Value:", col2Offset, rowOffset2 + 25 * 3); ctx.fillText(Math.round(cell.techVal * 1000) / 1000, col3Offset, rowOffset2 + 25 * 3);
@@ -414,16 +459,6 @@ function revealInfo() {
         ctx.font = 'normal 20px sans';
         ctx.fillText("Press a tower to reveal its details...", noticeTextX, noticeTextY);
     }
-
-    var playersSorted = new Array(players.length);
-    for (var i = 0; i < players.length; i++)
-        for (var j = i + 1; j < players.length; j++) {
-            if (players[i].res < players[j].res) {
-                var tmp = Object.assign({}, players[i]);
-                players[i] = Object.assign({}, players[j]);
-                players[j] = Object.assign({}, tmp);
-            }
-        }
 
     var rowOffset1 = 340;
     var colOffset1 = 20;
@@ -443,22 +478,22 @@ function revealInfo() {
     ctx.fillText('RSS/SS/DS/ECS', colOffset5, rowOffset1 + 40);
     ctx.fillText('Resources', colOffset6, rowOffset1 + 40);
     ctx.font = 'normal 15px sans';
-    for (var i = 0; i < players.length; i++) {
+    for (var i = 0; i < playersSorted.length; i++) {
         ctx.fillText(i + 1, colOffset1 + 10, rowOffset1 + 70 + 30 * i);
-        ctx.fillText(players[i].name, colOffset2 + 15, rowOffset1 + 70 + 30 * i);
-        ctx.fillText(players[i].cellNum, colOffset3 + 20, rowOffset1 + 70 + 30 * i);
-        ctx.fillText(players[i].tentacleNum, colOffset4 + 15, rowOffset1 + 70 + 30 * i);
-        if (players[i].regenerationSpeedStage != null && players[i].regenerationSpeedStage != undefined)
-            ctx.fillText(players[i].regenerationSpeedStage + '/' + players[i].speedStage + '/' + players[i].defenceStage + '/' + players[i].extraControlStage, colOffset5 + 20, rowOffset1 + 70 + 30 * i);
-        ctx.fillText(Math.round(players[i].res), colOffset6 + 20, rowOffset1 + 70 + 30 * i);
-        ctx.fillStyle = players[i].color;
+        ctx.fillText(playersSorted[i].name, colOffset2 + 15, rowOffset1 + 70 + 30 * i);
+        ctx.fillText(playersSorted[i].cellNum, colOffset3 + 20, rowOffset1 + 70 + 30 * i);
+        ctx.fillText(playersSorted[i].tentacleNum, colOffset4 + 15, rowOffset1 + 70 + 30 * i);
+        if (playersSorted[i].regenerationSpeedStage != null && playersSorted[i].regenerationSpeedStage != undefined)
+            ctx.fillText(playersSorted[i].regenerationSpeedStage + '/' + playersSorted[i].speedStage + '/' + playersSorted[i].defenceStage + '/' + playersSorted[i].extraControlStage, colOffset5 + 20, rowOffset1 + 70 + 30 * i);
+        ctx.fillText(Math.round(playersSorted[i].res), colOffset6 + 20, rowOffset1 + 70 + 30 * i);
+        ctx.fillStyle = playersSorted[i].color;
         ctx.fillRect(colOffset2 - 35, rowOffset1 + 55 + 30 * i, 30, 18);
         ctx.fillStyle = "#000000";
     }
     ctx.font = 'bold 15px sans';
-    ctx.fillText('Total', colOffset2 + 5, rowOffset1 + 70 + 30 * players.length);
-    ctx.fillText(sumCells, colOffset3 + 20, rowOffset1 + 70 + 30 * players.length);
-    ctx.fillText(sumTentacles, colOffset4 + 15, rowOffset1 + 70 + 30 * players.length);
-    ctx.fillText(Math.round(sumRes), colOffset6 + 20, rowOffset1 + 70 + 30 * players.length);
-    //console.log(players);
+    ctx.fillText('Total', colOffset2 + 5, rowOffset1 + 70 + 30 * playersSorted.length);
+    ctx.fillText(sumCells, colOffset3 + 20, rowOffset1 + 70 + 30 * playersSorted.length);
+    ctx.fillText(sumTentacles, colOffset4 + 15, rowOffset1 + 70 + 30 * playersSorted.length);
+    ctx.fillText(Math.round(sumRes), colOffset6 + 20, rowOffset1 + 70 + 30 * playersSorted.length);
+    //console.log(playersSorted);
 } 

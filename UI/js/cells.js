@@ -33,7 +33,7 @@ var Cell = {
         cell.level = _level;
         cell.strategy = _stg;
         cell.image = stgs[cell.strategy] + '-' + levels[cell.level];
-        dstTentacles[cell.ID] = new Array();
+        srcTentacles[cell.ID] = new Array();
         if (cell.team == 0)
             cell.image = 'neutral';
 
@@ -79,15 +79,15 @@ var Cell = {
                 //     cell.pos.y + cell.size / shiftY[cell.strategy]);
                 cell.tweenHandle = game.add.tween(cell.resourceText).to({ x: cell.pos.x + cell.size / shiftX[cell.strategy], y: cell.pos.y + cell.size / shiftY[cell.strategy] }, frameDuration, "Sine.easeInOut", true);
 
-                $.each(srcTantecles, function (i, tantecleNum) {
-                    // console.log(tantecleNum);
-                    // console.log(tentacles);
-                    //tentacles[tantecleNum].checkStartPos(newSize);
-                });
-                $.each(dstTentacles[cell.ID], function (i, tantecleNum) {
-                    // if (tentacles[tantecleNum] != null && tentacles[tantecleNum] != undefined)
-                    //     tentacles[tantecleNum].checkEndPos(newSize);
-                });
+                // $.each(srcTantecles, function (i, tantecleNum) {
+                //     // console.log(tantecleNum);
+                //     // console.log(tentacles);
+                //     //tentacles[tantecleNum].checkStartPos(newSize);
+                // });
+                // $.each(dstTentacles[cell.ID], function (i, tantecleNum) {
+                //     // if (tentacles[tantecleNum] != null && tentacles[tantecleNum] != undefined)
+                //     //     tentacles[tantecleNum].checkEndPos(newSize);
+                // });
             }, 10);
         }
 
@@ -111,6 +111,11 @@ var Cell = {
 
 
         cell.updateTeam = function (newTeam) {
+            $.each(srcTentacles[cell.ID], function(i, orphan) {
+                if (tentacles[orphan] != null && tentacles[orphan] != undefined) {
+                    tentacles[orphan].sprite.tint = colors[newTeam];
+                }
+            });
             cell.team = newTeam;
             cell.image = stgs[cell.strategy] + '-' + levels[cell.level];
             cell.resourceText.position.setTo(cell.pos.x + cell.size / shiftX[cell.strategy],

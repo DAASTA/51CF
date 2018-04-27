@@ -127,7 +127,7 @@ var Tentacle = {
         tentacle.team = cells[source].team;
         tentacle.startCell = cells[source];
         tentacle.endCell = cells[target];
-        dstTentacles[tentacle.endCell.ID].push(tentacle.ID);
+        srcTentacles[tentacle.startCell.ID].push(tentacle.ID);
 
         deltaX = tentacle.endCell.pos.x - tentacle.startCell.pos.x;
         deltaY = tentacle.endCell.pos.y - tentacle.startCell.pos.y;

@@ -32,6 +32,10 @@
         {
             "currentRound": 0,
             "runDuration": 1000,
+            "rankInfo": {
+                "rank": [4, 2, 1, 3, 0],
+                "resources": [992, 234, 110, 0, 0]
+            },
             "cellActions":
             [
                 {
