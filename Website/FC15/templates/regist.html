@@ -1,0 +1,172 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+
+
+<div class="bg" style="width: 100%; background: url('/static/images/regist-bg.jpg') fixed center center no-repeat; background-size: cover; height: 1000px; margin: 0px 0px 0px 0px;">
+    <div style="height: 1%; background-color: rgba(0, 0, 0, 0);"></div>
+    <div class="fi" style="margin-left: 30%; width: 40%; margin: auto; text-align: center;">
+        <font size="100" color="white" face="微软雅黑">Welcome to FC15!</font>
+        <p style="font: bold 18px 微软雅黑;">Please fill in the forms and create your own account here.</p>
+        <hr />
+    </div>
+    <div style="background-color: rgba(0, 0, 0, 0);">
+        <div class="contact-input" style="margin-left: 30%; width: 40%; margin: auto; color: white; background-color: rgba(0, 0, 0, 0);">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form_input">
+                    <label for="username" id="username" style="margin-left: 10%; font: 16px 微软雅黑;">Username</label>
+                    <input type="text" name="username" class="contact-input"
+                           style="color: rgba(255, 255, 255, 1.0); margin-left: 10%; width: 80%; overflow: hidden;margin-bottom: 20px;  padding: 5px;  background: rgba(255, 255, 255, 0.3);  border-radius: 2px;  display: block; height: 29px;  padding: 0 9px;  border: 1px solid #cfdfe3;  border-bottom-color: #d2e2e7;  border-radius: 2px;  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);"/>
+                </div>
+                <div class="form_input">
+                    <label for="realname" id="realname" style="margin-left: 10%; font: 16px 微软雅黑;">Real name</label>
+                    <input type="text" name="realname" class="contact-input"
+                           style="color: rgba(255, 255, 255, 1.0); margin-left: 10%; width: 80%; overflow: hidden;margin-bottom: 20px;  padding: 5px;  background: rgba(255, 255, 255, 0.3);  border-radius: 2px;  display: block; height: 29px;  padding: 0 9px;  border: 1px solid #cfdfe3;  border-bottom-color: #d2e2e7;  border-radius: 2px;  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);"/>
+                </div>
+                <div class="form_input">
+                    <label for="email" id="email" style="margin-left: 10%; font: 16px 微软雅黑;">Email</label>
+                    <input type="email" name="email" class="contact-input"
+                           style="color: rgba(255, 255, 255, 1.0); margin-left: 10%; width: 80%; overflow: hidden;margin-bottom: 20px;  padding: 5px;  background: rgba(255, 255, 255, 0.3);  border-radius: 2px;  display: block; height: 29px;  padding: 0 9px;  border: 1px solid #cfdfe3;  border-bottom-color: #d2e2e7;  border-radius: 2px;  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);"/>
+                </div>
+                <div class="form_input">
+                    <label for="stu_number" id="stu_number" style="margin-left: 10%; font: 16px 微软雅黑;">Student number</label>
+                    <input type="text" name="stu_number" class="contact-input"
+                           style="color: rgba(255, 255, 255, 1.0); margin-left: 10%; width: 80%; overflow: hidden;margin-bottom: 20px;  padding: 5px;  background: rgba(255, 255, 255, 0.3);  border-radius: 2px;  display: block; height: 29px;  padding: 0 9px;  border: 1px solid #cfdfe3;  border-bottom-color: #d2e2e7;  border-radius: 2px;  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);"/>
+                </div>
+                <div class="form_input">
+                    <label for="password" id="password" style="margin-left: 10%; font: 16px 微软雅黑;">Password</label>
+                    <input type="password" name="password" class="contact-input"
+                           style="color: rgba(255, 255, 255, 1.0); margin-left: 10%; width: 80%; overflow: hidden;margin-bottom: 20px;  padding: 5px;  background: rgba(255, 255, 255, 0.3);  border-radius: 2px;  display: block; height: 29px;  padding: 0 9px;  border: 1px solid #cfdfe3;  border-bottom-color: #d2e2e7;  border-radius: 2px;  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);"/>
+                </div>
+                <div class="form_input">
+                    <label for="password_confirm" id="password_confirm" style="margin-left: 10%; font: 16px 微软雅黑;">Confirm password</label>
+                    <input type="password" name="password_confirm" class="contact-input"
+                           style="color: rgba(255, 255, 255, 1.0); margin-left: 10%; width: 80%; overflow: hidden;margin-bottom: 20px;  padding: 5px;  background: rgba(255, 255, 255, 0.3);  border-radius: 2px;  display: block; height: 29px;  padding: 0 9px;  border: 1px solid #cfdfe3;  border-bottom-color: #d2e2e7;  border-radius: 2px;  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);"/>
+                </div>
+                <input type="submit" value="Register" class="el-button" style="width: 30%; margin-left: 35%;" />
+            </form>
+        </div>
+        <div style="margin: auto; text-align: center; margin-left: 30%; width: 40%;">
+            <hr />
+            <p style="color: white; font: 16px 微软雅黑;">Already have had an account?</p>
+            <a href="/login/"><el-button type="success" plain>Login now</el-button></a>
+        </div>
+    </div>
+</div>
+
+<!--
+<div class="banner" style="text-align: center;">
+    <h3>Welcom to FC15 Website!</h3>
+    <p>Please enter your information to create a new account.</p>
+    <div class="messages">
+        {% if err_msg %}
+            <template>
+                {% for msg in err_msg %}
+                    <el-alert title="{{ msg }}" type="error" center show-icon></el-alert>
+                {% endfor %}
+            </template>
+        {% else %}
+        <template>
+            <el-alert title="Alert" type="success" center show-icon></el-alert>
+        </template>
+        {% endif %}
+    </div>
+</div>
+
+<el-container>
+    <el-aside width="20%" style="background-color: #ffffff">
+
+    </el-aside>
+    <el-main>
+        <div class="contact-input" style="margin: 0px;">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form_input">
+                    <label for="username" id="username">Username</label>
+                    <input type="text" name="username" class="contact-input"
+                           style="width: 80%; overflow: hidden;margin-bottom: 20px;  padding: 5px;  background: #eef7f9;  border-radius: 2px;  display: block; height: 29px;  padding: 0 9px;  color: #4d5a5e;  background: white;  border: 1px solid #cfdfe3;  border-bottom-color: #d2e2e7;  border-radius: 2px;  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);"/>
+                </div>
+                <div class="form_input">
+                    <label for="realname" id="realname">Real name</label>
+                    <input type="text" name="realname" class="contact-input"
+                           style="width: 80%; overflow: hidden;margin-bottom: 20px;  padding: 5px;  background: #eef7f9;  border-radius: 2px;  display: block; height: 29px;  padding: 0 9px;  color: #4d5a5e;  background: white;  border: 1px solid #cfdfe3;  border-bottom-color: #d2e2e7;  border-radius: 2px;  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);"/>
+                </div>
+                <div class="form_input">
+                    <label for="email" id="email">Email</label>
+                    <input type="email" name="email" class="contact-input"
+                           style="width: 80%; overflow: hidden;margin-bottom: 20px;  padding: 5px;  background: #eef7f9;  border-radius: 2px;  display: block; height: 29px;  padding: 0 9px;  color: #4d5a5e;  background: white;  border: 1px solid #cfdfe3;  border-bottom-color: #d2e2e7;  border-radius: 2px;  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);"/>
+                </div>
+                <div class="form_input">
+                    <label for="stu_number" id="stu_number">Student number</label>
+                    <input type="text" name="stu_number" class="contact-input"
+                           style="width: 80%; overflow: hidden;margin-bottom: 20px;  padding: 5px;  background: #eef7f9;  border-radius: 2px;  display: block; height: 29px;  padding: 0 9px;  color: #4d5a5e;  background: white;  border: 1px solid #cfdfe3;  border-bottom-color: #d2e2e7;  border-radius: 2px;  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);"/>
+                </div>
+                <div class="form_input">
+                    <label for="password" id="password">Password</label>
+                    <input type="password" name="password" class="contact-input"
+                           style="width: 80%; overflow: hidden;margin-bottom: 20px;  padding: 5px;  background: #eef7f9;  border-radius: 2px;  display: block; height: 29px;  padding: 0 9px;  color: #4d5a5e;  background: white;  border: 1px solid #cfdfe3;  border-bottom-color: #d2e2e7;  border-radius: 2px;  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);"/>
+                </div>
+                <div class="form_input">
+                    <label for="password_confirm" id="password_confirm">Confirm password</label>
+                    <input type="password" name="password_confirm" class="contact-input"
+                           style="width: 80%; overflow: hidden;margin-bottom: 20px;  padding: 5px;  background: #eef7f9;  border-radius: 2px;  display: block; height: 29px;  padding: 0 9px;  color: #4d5a5e;  background: white;  border: 1px solid #cfdfe3;  border-bottom-color: #d2e2e7;  border-radius: 2px;  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);"/>
+                </div>
+                <input type="submit" value="Register" class="el-button" />
+                <a href="/login/"><el-button type="success" plain>Login</el-button></a>
+            </form>
+        </div>
+    </el-main>
+</el-container>
+
+<!--
+<section id="banner">
+	<div class="inner">
+		<h2>Welcome to FC15!</h2>
+		<p>Please login here.</p>
+	</div>
+</section>
+
+<section id="wrapper">
+    <section id="one" class="wrapper spotlight style1">
+		<div class="inner">
+		    <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <h1>Enter your information to create a new account.</h1>
+                <br />
+                <div class="field">
+                    <label for="id_username" class="field">Username</label>
+                    {{ form.username }}
+                </div>
+                <div class="field">
+                    <label for="id_realname" class="field">Realname</label>
+                    {{ form.realname }}
+                </div>
+                <div class="field">
+                    <label for="id_email" class="field">Email</label>
+                    {{ form.email }}
+                </div>
+                <div class="field">
+                    <label for="id_email" class="field">Student ID</label>
+                    {{ form.stu_number }}
+                </div>
+                <div class="field">
+                    <label for="id_password" class="field">Password</label>
+                    {{ form.password }}
+                </div>
+                <div class="field">
+                    <label for="id_passwordconfirm">Confirm password</label>
+                    {{ form.password_confirm }}
+                </div>
+                <div class="actions">
+                    <input type="submit" value="Register" class="button" />
+                </div>
+                <br />
+                <h3>Already have an account? <a href="/login/">Login here</a></h3>
+            </form>
+		</div>
+	</section>
+</section>
+    -->
+{% endblock %}

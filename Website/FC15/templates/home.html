@@ -1,0 +1,344 @@
+﻿{% extends "base.html" %}
+
+<!-- 
+<div class="swiper-container">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide" style="background-color: #409EFF;">
+            <button class="btn">Button</button>
+            <div class="container">
+                <div class="leaderboard">
+                    <h1 style="font-family: Arial; font: 40px arial;">
+                        Welcome to FC15 Website!
+                    </h1>
+                    <p style="font: 18px arial;">
+                        Join FC15 now and have fun!
+                    </p>
+                </div>
+                <div class="row" style="height: 50%;">
+                    
+                </div>
+            </div>
+        </div>
+
+        <div class="swiper-slide">
+        Slide 2
+        </div>
+                    
+        <div class="swiper-slide">
+        Slide 3
+        </div>
+                    
+        <div class="swiper-slide">
+        Slide 4
+        </div>
+                    
+        <div class="swiper-slide">
+        Slide 5
+        </div>
+    </div>
+
+    <!-- Add Pagination --
+    <div class="swiper-pagination"></div>
+</div>
+
+<!-- Scripts for swiper --
+<script src="/static/app/scripts/swiper.min.js"></script>
+<script>
+    var swiper = new Swiper('.swiper-container', {
+        direction: 'vertical',
+        slidesPerView: 1,
+        spaceBetween: 30,
+        mousewheel: true,
+        pagination: {
+          el: '.swiper-pagination',
+          clickable: true,
+        },
+    });
+</script>-->
+{% block content %}
+
+<!--
+<template>
+  	<el-carousel :interval="4000" arrow="always" height="500px">
+    	<el-carousel-item>
+      		<img src="/static/images/pic01.jpg" style="width: 100%;"/>
+    	</el-carousel-item>
+        <el-carousel-item>
+      		<img src="/static/images/pic01-hj.jpg" style="width: 100%;"/>
+    	</el-carousel-item>
+         <el-carousel-item>
+      		<img src="/static/images/pic02.jpg" style="width: 100%;"/>
+    	</el-carousel-item>
+        <el-carousel-item>
+      		<img src="/static/images/pic03.jpg" style="width: 100%;"/>
+    	</el-carousel-item>
+  	</el-carousel>
+</template>-->
+
+<!--<div class="banner" style="width: 100%; background: url('/static/images/banner1.jpg') fixed center center no-repeat; background-size: cover; height: 90%; margin: 0px 0px 0px 0px;">-->
+<div class="banner" style="width: 100%; background: url('/static/images/banner1.jpg') fixed center center no-repeat; background-size: cover; height: 850px; margin: 0px 0px 0px 0px;">
+    <div style="height: 30%; background-color: rgba(0, 0, 0, 0);"></div>
+    <div class="fi" style="margin-left: 30%; width: 40%; margin-top: 20%; height: 50%; margin: auto; text-align: center;">
+        <font size="150" color="white" face="微软雅黑">Welcome to FC15 Website!</font>
+        <p style="font: bold 16px 微软雅黑">Join us and have fun!</p>
+        <hr />
+        <a href="/about_fc15/">
+            <el-button type="primary">Learn more</el-button>
+        </a>
+        <a href="/document/">
+            <el-button type="success">Quick start</el-button>
+        </a>
+        <br /><br />
+        <a href="/sdkdownload/">
+            <el-button type="warning">Download SDK (Version 1.6 for VS2012)</el-button>
+        </a>
+        <br /><br />
+        <a href="/download_dll/">
+            <el-button type="info">Download AI (.dll for Windows, Updated at 4.10)</el-button>
+        </a>
+    </div>
+</div>
+
+<!--
+<el-container style="width: 80%; margin-left: 10%;">
+    <el-aside width="0%">
+    </el-aside>
+    <el-main>
+        <div style="margin-left: 5%;">
+            <h3 style="text-align: center;">Latest information</h3>
+            <br />
+            <div style="width: 90%; margin-left: 5%;">
+                <el-collapse v-model="activeNames" @change="handleChange">
+                    <el-collapse-item title="Notifications" name="0">
+                        <p>Here should be the latest notifications.</p>
+                        <el-button type="primary" plain>Details</el-button>
+                    </el-collapse-item>
+                    <el-collapse-item title="Game ranking" name="1">
+                        {% if ranking %}
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Rank</th>
+                                        <th>Username</th>
+                                        <th>File Name</th>
+                                        <th>Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in ranking %}
+                                        <tr>
+                                            <td>{{ item.rank }}</td>
+                                            <td>{{ item.username }}</td>
+                                            <td>{{ item.filename }}</td>
+                                            <td>{{ item.description }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <p>The ranking list has not been prepared yet.</p>
+                        {% endif %}
+                    </el-collapse-item>
+                    <el-collapse-item title="SDK updates" name="2">
+                        <p>Here should be a brief description about the current version of SDK.</p>
+                        <el-button type="success" plain>More details</el-button>
+                        <el-button type="primary" plain>Download</el-button>
+                    </el-collapse-item>
+                </el-collapse>
+            </div>
+        </div>
+    </el-main>
+</el-container>-->
+<div style="width: 80%; margin-left: 10%; margin: auto;">
+    <img src="/static/images/QRcode.jpg" width="100%" style="margin: auto;"/>
+</div>
+
+<br />
+
+<el-container style="width: 100%; background-color: #E6A23C;">
+    <div class="row-container" style="margin: auto; width: 80%; margin-top: 80px; margin-bottom: 80px;">
+        <div class="col1" style="float:left; margin-left: 10%; width: 20%;">
+            <img src="/static/images/intro-pic-01.jpg" />
+            <h3>Game</h3>
+            <p>Here should be an brief introduction on the game.</p>
+            <a href="/about_rule/">
+                <el-button type="success">Learn more</el-button>
+            </a>
+        </div>
+        <div class="col2" style="float:left; margin-left: 10%; width: 20%;">
+            <img src="/static/images/intro-pic-02.jpg" />
+            <h3>Play game</h3>
+            <p>Here should be an brief introduction about the SDK.</p>
+            <a href="/document/">
+                <el-button type="success">Learn more</el-button>
+            </a>
+            <a href="/sdkdownload/"> <!-- This link should be completed. -->
+                <el-button type="primary">Download SDK</el-button>
+            </a>
+        </div>
+        <div class="col2" style="float:left; margin-left: 10%; width: 20%;">
+            <img src="/static/images/intro-pic-03.jpg" />
+            <h3>THU AI</h3>
+            <p>Here should be an brief introduction about THU AI competition.</p>
+            <a href="http://daasta.cn/">
+                <el-button type="success">Learn more</el-button>
+            </a>
+        </div>
+    </div>
+</el-container>
+
+<br />
+
+<el-container>
+    <el-header>
+        <h2 style="text-align: center;">Discussion</h2>
+        <p style="text-align: center">This zone is designed to post blogs from players.  <a href="/viewblogs/"><el-button type="primary" plain>View more</el-button></a></p>
+        <hr />
+    </el-header>
+    <el-main style="height: 200px;" height="200px">
+
+    </el-main>
+</el-container>
+<br /><br />
+<el-container style="width: 80%; margin-left: 10%;">
+    <div class="row-container" style="margin: auto; width: 100%;">
+        <div class="col1" style="float: left; margin-left: 0px; width: 45%;">
+            {% for post in posts1 %}
+            <el-container>
+                <el-aside>
+                    {% if forloop.counter == 1 %}
+                        <img src="/static/images/blog-pic-01.jpg" />
+                    {% else %}
+                        <img src="/static/images/blog-pic-02.jpg" />
+                    {% endif %}
+                </el-aside>
+                <el-main>
+                    <h2>{{ post.title }}</h2>
+                    <hr />
+                    <p>Posted by <el-tag>{{ post.username }}</el-tag> at <el-tag type="success">{{ post.timestamp }}</el-tag></p>
+                    <a href="{% url 'blogdetail' pk=post.pk %}">
+                        <el-button type="success">Details</el-button>
+                    </a>
+                </el-main>
+            </el-container>
+            <br />
+            {% endfor %}
+        </div>
+        <div class="col1" style="float: right; margin-left: 0px; width: 45%;">
+            {% for post in posts2 %}
+            <el-container>
+                <el-aside>
+                    {% if forloop.counter == 1 %}
+                        <img src="/static/images/blog-pic-03.jpg" />
+                    {% else %}
+                        <img src="/static/images/blog-pic-04.jpg" />
+                    {% endif %}
+                </el-aside>
+                <el-main>
+                    <h2>{{ post.title }}</h2>
+                    <hr />
+                    <p>Posted by <el-tag>{{ post.username }}</el-tag> at <el-tag type="success">{{ post.timestamp }}</el-tag></p>
+                    <a href="{% url 'blogdetail' pk=post.pk %}">
+                        <el-button type="success">Details</el-button>
+                    </a>
+                </el-main>
+            </el-container>
+            <br />
+            {% endfor %}
+        </div>
+    </div>
+</el-container>
+
+<br />
+
+<el-container style="background-color: #E4E7ED;">
+    <el-aside style="width: 80%; text-align: center;">
+        <h4>Contact us</h4>
+        <p>Copyright DAASTA 2018</p>
+        <hr />
+        <div class="row-container" style="margin-left: 10%; width: 80%;">
+            <div class="col1" style="float: left; width: 20%;">
+                <p>For more information, please send email to contact us.</p>
+                <p>Email: ******</p>
+                <a href="">
+                    <el-button type="success" plain>Send Email</el-button>
+                </a>
+            </div>
+            <div class="col2" style="float: left; width: 20%; margin-left: 10%;">
+                <p>You can alse subscribe to the Wechat Official Accounts of DAASTA.</p>
+                <a href="">
+                    <el-button type="success" plain>Learn more</el-button>
+                </a>
+            </div>
+            <div class="col3" style="float: left; width: 20%; margin-left: 10%;">
+                <p>If you want to join us, welcome to the website of DAASTA to learn more, or contact the DALAOs here.</p>
+                <a href="">
+                    <el-button type="success" plain>Contact us</el-button>
+                </a>
+            </div>
+        </div>
+    </el-aside>
+    <el-main>
+        <img src="/static/images/pic01-hj.jpg" />
+    </el-main>
+</el-container>
+<!--
+<el-container>
+    <el-header>
+        <h3>Play game</h3>
+    </el-header>
+    <el-main>
+        <el-collapse v-model="activeNames">
+            <el-collapse-item title="Download SDK">
+                <p>Here should be a brief introduction of the SDK</p>
+                <el-button type="info" plain>Learn more</el-button>
+                <el-button type="success" plain>Download now</el-button>
+            </el-collapse-item>
+            <el-collapse-item title="Current ranking">
+                <p>The game has not been started yet.</p>
+            </el-collapse-item>
+            <el-collapse-item title="Teams">
+                <p>Here should be a list of all teams.</p>
+            </el-collapse-item>
+            <el-collapse-item title="Blogs">
+                <p>Here should be a list of all blogs.</p>
+            </el-collapse-item>
+        </el-collapse>
+    </el-main>
+</el-container>
+
+<el-container>
+    <el-aside width="25%">
+        <img src="/static/images/pic01-hj.jpg" style="width: 100%;"/>
+    </el-aside>
+    <el-main>
+        <h3>Something about FC and DAASTA</h3>
+        <p>Here should be a brief introduction about DAASTA and FC</p>
+        <el-button type="info" plain>Learn more</el-button>
+        <el-button type="primary" plain>Link to more articles</el-button>
+    </el-main>
+</el-container>
+
+<el-container>
+    <el-aside width="75%">
+        <h3>Something about the sponsor</h3>
+        <p>Here shouold be a brief introduction about the sponsor</p>
+        <el-button type="info" plain>Learn more</el-button>
+    </el-aside>
+    <el-main>
+        <img src="/static/images/pic02.jpg" />
+    </el-main>
+</el-container>
+
+<el-container>
+    <el-aside width="25%">
+        <img src="/static/images/pic01.jpg" />
+    </el-aside>
+    <el-main>
+        <h3>Contact us</h3>
+        <p>Email: ******</p>
+        <el-button type="primary">Send Email</el-button>
+    </el-main>
+</el-container>-->
+
+{% endblock %}

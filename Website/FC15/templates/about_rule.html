@@ -1,0 +1,459 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Here should be the introduction for FC15 -->
+<el-row class="tac">
+    <el-col :span="6">
+        <el-menu
+            default-active="2"
+            class="el-menu-vertical-demo"
+            @open="handleOpen"
+            @close="handleClose">
+            <el-menu-item index="1">
+                <a href="#GameIntro">
+                    <i class="el-icon-info"></i>
+                    <span slot="title">游戏简介</span>
+                </a>
+            </el-menu-item>
+            <el-submenu index="2">
+                <template slot="title">
+                    <i class="el-icon-menu"></i>
+                    <span>
+                        <a href="#GameRule">规则简介</a>
+                    </span>
+                </template>
+                <el-menu-item index="2-1">
+                    <i class="el-icon-edit-outline"></i>
+                    <a href="#GameRuleTower">兵塔</a>
+                </el-menu-item>
+                <el-menu-item index="2-2">
+                    <i class="el-icon-edit-outline"></i>
+                    <a href="#GameRuleLine">兵线</a>
+                </el-menu-item>
+                <el-menu-item index="2-3">
+                    <i class="el-icon-edit-outline"></i>
+                    <a href="#GameRuleConsume">兵力消耗速率</a>
+                </el-menu-item>
+                <el-menu-item index="2-4">
+                    <i class="el-icon-edit-outline"></i>
+                    <a href="#GameRuleCutLine">兵线切断</a>
+                </el-menu-item>
+                <el-menu-item index="2-5">
+                    <i class="el-icon-edit-outline"></i>
+                    <a href="#GameRuleStrategy">策略&势力属性</a>
+                </el-menu-item>
+                <el-menu-item index="2-6">
+                    <i class="el-icon-edit-outline"></i>
+                    <a href="#GameRuleCommand">操作数</a>
+                </el-menu-item>
+                <el-menu-item index="2-6">
+                    <i class="el-icon-edit-outline"></i>
+                    <a href="#GameRuleRound">回合阶段流程</a>
+                </el-menu-item>
+                <el-submenu index="2-7">
+                    <template slot="title"><a href="#GameRuleOther"><i class="el-icon-edit-outline"></i>其他</a></template>
+                    <el-menu-item index="2-7-1">
+                        <i class="el-icon-edit"></i>
+                        <a href="#GameRuleOccupy">占领判定</a>
+                    </el-menu-item>
+                    <el-menu-item index="2-7-2">
+                        <i class="el-icon-edit"></i>
+                        <a href="#GameRuleOtherElements">地图其他元素</a>
+                    </el-menu-item>
+                </el-submenu>
+            </el-submenu>
+        </el-menu>
+    </el-col>
+
+    <el-col :span="18"><div class="contents" style="width: 90%; margin-left: 3%;">
+    <!-- Here should be the contents -->
+        <br />
+        <a id="GameIntro" style="font: bold 24px arial;">游戏简介</a>
+        <p style="text-indent: 2em;">
+            本届自动化系新生C赛题为塔阵兵锋，属于平面策略类回合制游戏。
+        </p>
+        <p style="text-indent: 2em;">
+            参赛选手编写AI代码作为一方势力参加争夺塔位的攻防混战，率先占有所有塔位的势力将获得胜利。
+        </p>
+        <p style="text-indent: 2em;">
+            本次大赛采用多AI（4个）同图竞技的赛制，各势力间处于永战状态。各势力将操控己方控制下的兵塔构筑兵线扩张自身势力、防御敌人的进攻、攻占敌人的兵塔。
+        </p>
+        <br /><a href="#top"><el-button type="primary" plain>Back to top</el-button></a>
+        <hr />
+
+        <a id="GameRule" style="font: bold 24px arial;">规则简介</a>
+        <br /><br />
+        <a id="GameRuleTower" style="font: bold 18px arial;">兵塔</a>
+        <br />
+        <p style="text-indent: 2em;">
+            兵塔为各势力唯一的战略资源，于地图上不等距分布。开局阶段，各势力将拥有相同数量兵塔以开始游戏。每个塔都有自己的兵力值，并随着回合数的推移进行回复，直至到达上限。该上限由每局游戏开始时给出，每个塔的上限值由开始时给出。（默认最大为 200）
+        </p>
+
+        <table class="table" border="0" style="width: 60%;">
+            <tr>
+                <th>种类</th>
+                <th>兵力</th>
+                <th>最大兵线</th>
+                <th>基础回复速度</th>
+            </tr>
+            <tr>
+                <td>Lv1</td>
+                <td>N < 10</td>
+                <td>1</td>
+                <td>1/回合</td>
+            </tr>
+            <tr>
+                <td>Lv2</td>
+                <td>10 <= N < 40</td>
+                <td>2</td>
+                <td>1.5/回合</td>
+            </tr>
+            <tr>
+                <td>Lv3</td>
+                <td>40 <= N < 80</td>
+                <td>2</td>
+                <td>2/回合</td>
+            </tr>
+            <tr>
+                <td>Lv4</td>
+                <td>80 <= N < 150</td>
+                <td>3</td>
+                <td>2.5/回合</td>
+            </tr>
+            <tr>
+                <td>Lv5</td>
+                <td>150 <= N <= 200</td>
+                <td>3</td>
+                <td>3/回合</td>
+            </tr>
+        </table>
+        <p style="text-indent: 2em;">
+            当塔的兵力值（不包括伸出去的兵线的兵力）增加或减少到一定程度时，塔的等级将发生变化。兵力值越高，越高级的塔能够伸出的兵线数量越多，基础兵力回复速率也越快。
+        </p>
+        <p style="text-indent: 2em;">
+            实际兵力回复速率为 [基础恢复速度*策略影响回复倍率*势力再生属性倍率] 。（见【策略&势力属性】部分）
+        </p>
+        <p style="text-indent: 2em;">
+            当塔的兵力值被消耗降至 0 时，该塔被其他势力所攻占。（严格占领判定见【其他】部分）
+        </p>
+        <p style="text-indent: 2em;">
+            当一个势力的所有失去其所掌控的所有兵塔时，该势力即宣告灭亡。
+        </p>
+        <br /><a href="#top"><el-button type="primary" plain>Back to top</el-button></a>
+        <hr />
+
+        <br />
+        <a id="GameRuleLine" style="font: bold 18px arial;">兵线</a>
+        <br />
+        <p style="text-indent: 2em;">
+            兵塔不可移动，玩家可对兵塔进行的操作为控制“兵线”的发出与切断，作为兵塔的攻击与防守手段。
+        </p>
+        <p style="text-indent: 2em;">
+            兵线可由各兵塔投入兵力值向其他兵塔发出，建立所需时间与兵力投入量同发出塔与目标塔间距离成正比。塔的种类决定了其能伸出的兵线数量（见上）。如果某个塔的当前兵线数小于其最大值，则该塔可以选择某个其他塔（己势力、他势力或中立均可）为目标伸出兵线，伸出速率为 3 兵力 / 回合。最终根据兵线建立后的长度，源塔需要在兵线上共投入兵力量 = 距离 / 10。若在伸出兵线的途中源塔的兵力值降至 0， 无法为该兵线继续提供兵力，则该兵线强制返回（前提是此时源塔没有被其他势力攻下）。并还原为源塔兵力值。
+        </p>
+        <p style="text-indent: 2em;">
+            兵线建立后，当目标兵塔为敌方兵塔则作为攻击手段，将持续消耗目标兵塔兵力；而若目标势力为其他势力，并也向该源塔伸出兵线，则两根兵线将形成“对峙”局面。如果兵线其他兵线形成“对峙”，则两条兵线的交界点将移动到两个塔的中间点，对峙双方兵塔将持续于兵线消耗兵力。
+        </p>
+        <p style="text-indent: 2em;">
+            当目标兵塔为己方兵塔时则作为支援手段，将持续补充目标塔兵力。无论进行攻击或支援，兵线发出塔均需以特定比例每回合消耗兵力值以维持兵线效果。
+        </p>
+        <br /><a href="#top"><el-button type="primary" plain>Back to top</el-button></a>
+        <hr />
+
+        <br />
+        <a id="GameRuleConsume" style="font: bold 18px arial;">兵力消耗速率</a>
+        <br />
+        <p style="text-indent: 2em;">
+            基础速率：当只有一条兵线时，基础速率为基础再生速率；2 条每条为 0.8*基础再生；3 条每条为 0.6*基础再生。
+        </p>
+        <p style="text-indent: 2em;">
+            实际消耗速率分为下面三种情况：
+        </p>
+        <p>
+            a) 支援：目标为己方塔，兵线消耗速率和目标资源增加速率均为基础速率。
+            <br />
+            b) 对抗：目标为对方兵线，两个兵线的消耗速率依据两者 (基础速率*对抗伤害倍率（见 【策略】部分)中的较大值来结算。
+            <br />
+            c) 压制：目标为对方塔。兵线消耗速率为基础速率，对方塔的减少速率为(基础速率*压制伤害倍率（见 【策略】部分)
+        </p>
+        <br /><a href="#top"><el-button type="primary" plain>Back to top</el-button></a>
+        <hr />
+
+        <br />
+        <a id="GameRuleCutLine" style="font: bold 18px arial;">兵线切断</a>
+        <br />
+        <p style="text-indent: 2em;">
+            兵线发出方可在任意回合切断兵线实现兵力的快速回防或突击。
+        </p>
+        <p style="text-indent: 2em;">
+            若兵线还未到达目标或者为对峙局面，则判定为该兵线的回收，兵线迅速回退并为源塔增加这条兵线的兵力，传输速度：3 兵力/回合。对峙局面时对方的兵线将继续完成对源塔的伸出动作。
+        </p>
+        <p style="text-indent: 2em;">
+            若兵线已经到达目标，进行切断时需要指定其切断位置。处于切断位置前方的兵力将迅速传输至目标塔形成攻击，而处于切断位置后方的兵力退回至源塔。前方传输速度：20 个/回合。后方传输速度：12 个/回合。
+        </p>
+        <br /><a href="#top"><el-button type="primary" plain>Back to top</el-button></a>
+        <hr />
+
+        <br />
+        <a id="GameRuleStrategy" style="font: bold 18px arial;">策略&势力属性</a>
+        <br />
+        <p style="text-indent: 2em;">
+            受势力控制的兵塔将产出科技值。玩家可消耗科技值为己方控制的塔切换策略，以增强兵塔的属性。兵塔初始为Normal策略，消耗科技值后可升级为Attack型兵塔、Defence型兵塔或Grow型兵塔，升级后的兵塔亦可消耗科技值切换兵塔类型。
+        </p>
+        <p style="text-indent: 2em;">
+            策略简介：<br />
+            - Normal：初始策略，各项属性均较差，应尽快升级成进阶状态。<br />
+            - Attack：攻击策略，攻击相关属性较强，对 N 和 G 造成的伤害巨大，但是害怕D 策略对手。<br />
+            - Defence：防守策略，主要用于抵抗 A 策略的进攻，再生速率降低，不适合进行攻击。<br />
+            - Grow：发展策略，再生速率增加，但是很害怕 A 的进攻。
+        </p>
+        <table class="table" style="width: 50%;">
+            <tr>
+                <th>从↓到→</th>
+                <th>N</th>
+                <th>A</th>
+                <th>D</th>
+                <th>G</th>
+            </tr>
+            <tr>
+                <td>N</td>
+                <td>0</td>
+                <td>3</td>
+                <td>3</td>
+                <td>3</td>
+            </tr>
+            <tr>
+                <td>A</td>
+                <td>2</td>
+                <td>0</td>
+                <td>5</td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>D</td>
+                <td>2</td>
+                <td>5</td>
+                <td>0</td>
+                <td>5</td>
+            </tr>
+            <tr>
+                <td>G</td>
+                <td>2</td>
+                <td>5</td>
+                <td>5</td>
+                <td>0</td>
+            </tr>
+        </table>
+        <p style="text-indent: 2em;">
+            策略增/减益：<br />
+            回复倍率（不影响兵线传输）：
+        </p>
+        <table class="table">
+            <tr>
+                <th>N</th>
+                <th>A</th>
+                <th>D</th>
+                <th>G</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>1</td>
+                <td>0.5</td>
+                <td>1.5</td>
+            </tr>
+        </table>
+        <p style="text-indent: 2em;">
+            对抗伤害倍率：
+        </p>
+        <table class="table">
+            <tr>
+                <th>从↓到→</th>
+                <th>N</th>
+                <th>A</th>
+                <th>D</th>
+                <th>G</th>
+            </tr>
+            <tr>
+                <td>N</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>A</td>
+                <td>2</td>
+                <td>1</td>
+                <td>1</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>D</td>
+                <td>1</td>
+                <td>3</td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>G</td>
+                <td>2</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+        </table>
+        <p style="text-indent: 2em;">
+            压制伤害倍率（除 D 进攻和防守外均为上表1.5 倍）
+        </p>
+        <table class="table">
+            <tr>
+                <th>从↓到→</th>
+                <th>N</th>
+                <th>A</th>
+                <th>D</th>
+                <th>G</th>
+            </tr>
+            <tr>
+                <td>N</td>
+                <td>1.5</td>
+                <td>1.5</td>
+                <td>1.5</td>
+                <td>1.5</td>
+            </tr>
+            <tr>
+                <td>A</td>
+                <td>3</td>
+                <td>1.5</td>
+                <td>1.5</td>
+                <td>6</td>
+            </tr>
+            <tr>
+                <td>D</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td>G</td>
+                <td>3</td>
+                <td>1.5</td>
+                <td>1.5</td>
+                <td>1.5</td>
+            </tr>
+        </table>
+        <p style="text-indent: 2em;">
+            另一利用科技值方式为升级[势力属性]。势力属性可提升势力所拥有所有兵塔属性，升级后无法撤销。
+            <br />势力属性提升：
+        </p>
+        <table class="table">
+            <tr>
+                <th>名字</th>
+                <th>消耗点数</th>
+                <th>描述</th>
+            </tr>
+            <tr>
+                <td>征兵（参与兵线结算）</td>
+                <td>2/4/6/8/10</td>
+                <td>自动回复倍率变为1.05/1.1/1.15/1.2/1.25</td>
+            </tr>
+            <tr>
+                <td>行军</td>
+                <td>2/4/6/8/10</td>
+                <td>兵线延伸速度倍率变为1.1/1.2/1.3/1.4/1.5</td>
+            </tr>
+            <tr>
+                <td>灵巧</td>
+                <td>3/5/7</td>
+                <td>操作数上限+0.5/+1/+1.5</td>
+            </tr>
+            <tr>
+                <td>城墙</td>
+                <td>2/4/6</td>
+                <td>己方被压制结算时压制伤害倍率降为对抗伤害倍率的1.4/1.3/1.2</td>
+            </tr>
+        </table>
+        <br /><a href="#top"><el-button type="primary" plain>Back to top</el-button></a>
+        <hr />
+
+        <br />
+        <a id="GameRuleCommand" style="font: bold 18px arial;">操作数</a>
+        <br />
+        <p style="text-indent: 2em;">
+            再运筹千里的将军也无法兼顾到战场上的每一位士兵。各势力每回合所能够进行的操作数是有限的，兵线的控制与兵塔政策的切换均会占用操作数。每次进行伸出兵线/切断兵线/切换策略/升级能力时，记为操作数+1。每个回合的操作数不能超过（1+所拥有的塔数/2，向下取整）。操作数之外的指令将被无视。
+        </p>
+        <p style="text-indent: 2em;">
+            斟酌局势，合纵兼顾，最高效地利用操作机会的玩家方能取得优势。
+        </p>
+        <br /><a href="#top"><el-button type="primary" plain>Back to top</el-button></a>
+        <hr />
+
+        <br />
+        <a id="GameRuleRound" style="font: bold 18px arial;">回合阶段流程</a>
+        <br />
+        <p style="text-indent: 2em;">
+            每个回合包括五个阶段：再生阶段、指令阶段、移动阶段、传输阶段、结束阶段。
+        </p>
+        <p style="text-indent: 2em;">
+            再生阶段：每个兵塔回复相应的兵力，每个势力回复科技点数。
+        </p>
+        <p style="text-indent: 2em;">
+            指令阶段：根据当前场上情况生成信息，传给选手。选手根据信息添加指令，传给主函数。主函数完成选手合法的操作。
+        </p>
+        <p style="text-indent: 2em;">
+            移动阶段：兵线进行移动（包括切断的结算）。
+        </p>
+        <p style="text-indent: 2em;">
+            传输阶段：兵线向目标传递兵力。
+        </p>
+        <p style="text-indent: 2em;">
+            结束阶段：处理无效触手、处理灭亡势力、递增回合数等回合常规操作。
+        </p>
+        <br /><a href="#top"><el-button type="primary" plain>Back to top</el-button></a>
+        <hr />
+
+        <br />
+        <a id="GameRuleOther" style="font: bold 18px arial;">其他</a>
+        <br />
+        <br />
+        <a id="GameRuleOccupy" style="font: bold 16px arial;">占领判定</a>
+        <br />
+        <p style="text-indent: 2em;">
+            当一个塔的兵力因为自身兵线的移动/传输或其他兵线的攻击的归零或变负时，若其正在遭受其他兵线的攻击（直接攻击或者对峙），则该塔归攻击方所有。被占领的塔初始兵力值为 10 ，策略变为 N，其所属的兵线也归攻击方所有，并全部判定为在最前方切断。
+        </p>
+        <p style="text-indent: 2em;">
+            若一个塔被攻下时有多个势力正在对其进行攻击，具体占领规则如下：
+        </p>
+        <p style="text-indent: 2em;">
+            I.如果有且仅有一个势力是在压制而不是对抗局面，则该塔归该直接攻击势力所有。
+        </p>
+        <p style="text-indent: 2em;">
+            II.若不满足以上条件，则该塔判定为中立，兵力数为 (10 + 其被攻下之前的兵线总兵力数 )。
+        </p>
+        <p style="text-indent: 2em;">
+            无论什么情况，攻击势力的兵线不进行自动切断。
+        </p>
+
+        <br /><br />
+        <a id="GameRuleOtherElements" style="font: bold 16px arial;">地图其他元素</a>
+        <br />
+        <p style="text-indent: 2em;">
+            地图大小暂定为 800 * 800。
+        </p>
+        <p style="text-indent: 2em;">
+            <b>中立塔</b>中立塔可能出现在开局时的地图设定，或者多个势力攻下同一个塔是。中立塔也有其对应的兵力值，被其他势力占领后成为其初始兵力值。除此之外，中立塔存在“占有值”属性。若占有值不属于 A 势力，则 A 势力传输至其的兵力将首先减少其占有值，减为 0 之后再增加属于 A 的占有值。当占有值达到某个阈值（为其兵力值的 1/3），该中立塔则归属于占有值的所属势力。
+        </p>
+        <p style="text-indent: 2em;">
+            <b>野蛮势力</b>野蛮势力可能出现在开局时的地图设定，由官方随机代码进行控制，并在各项属性上进行削弱（增长速率为普通的  * 0.5），
+        </p>
+        <p style="text-indent: 2em;">
+            <b>栅栏</b>栅栏可能出现在开局时的地图设定，兵线不能穿过栅栏。
+        </p><br />
+        <p><i>比赛规则解释权终归FC15“塔阵兵锋”赛事主办方所有</i></p>
+        <br /><a href="#top"><el-button type="primary" plain>Back to top</el-button></a>
+        <hr />
+    </div></el-col>
+</el-row>
+
+{% endblock %}

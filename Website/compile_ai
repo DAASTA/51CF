@@ -1,0 +1,5 @@
+#！ /bin/bash
+cd /home/songjh/AI_SDK
+g++ -std=c++11 definition.cpp ai.cpp -fPIC -shared -o ai.so
+cd /home/songjh
+echo 'AI compiled'

@@ -1,0 +1,68 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<div class="bg" style="width: 100%; background: url('/static/images/blogpost-bg.jpg') fixed center center no-repeat; background-size: cover; height: 1300px; margin: 0px 0px 0px 0px;">
+    <div style="height: 1%; background-color: rgba(0, 0, 0, 0);"></div>
+    <div class="fi" style="margin-left: 30%; width: 40%; margin: auto; text-align: center;">
+        <font size="100" color="white" face="微软雅黑">Welcome, {{ username }}</font>
+        <p style="font: 18px 微软雅黑;">You can post you blog here, write down you ideas or feelings.</p>
+        <hr />
+        <p style="font: 16px 微软雅黑;">Currently only plain text is supported.</p>
+    </div>
+    <div style="background-color: rgba(0, 0, 0, 0);">
+        <div class="contact-input" style="margin-left: 20%; width: 60%; margin: auto; color: white; background-color: rgba(0, 0, 0, 0);">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form_input">
+                    <label for="title" id="title" style="margin-left: 10%; font: 16px 微软雅黑;">Title</label>
+                    <input type="text" name="title" class="contact-input" value="{{ title }}"
+                         style="color: rgba(255, 255, 255, 1.0); margin-left: 10%; width: 80%; overflow: hidden;margin-bottom: 20px;  padding: 5px;  background: rgba(255, 255, 255, 0.3);  border-radius: 2px;  display: block; height: 29px;  padding: 0 9px; border: 1px solid #cfdfe3;  border-bottom-color: #d2e2e7;  border-radius: 2px;  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);"/>
+                </div>
+                <div class="form_input">
+                    <label for="content" id="content" style="margin-left: 10%; font: 16px 微软雅黑;">Content</label><br />
+                    <textarea name="content" wrap="soft"  rows="20"
+                         style="height: 60%; color: rgba(255, 255, 255, 1.0); margin-left: 10%; width: 80%; margin-bottom: 20px;  padding: 5px;  background: rgba(255, 255, 255, 0.3);  border-radius: 2px;  display: block;  padding: 0 9px;  border: 1px solid #cfdfe3;  border-bottom-color: #d2e2e7;  border-radius: 2px;  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);">{{ content }}</textarea>
+                </div>
+                <input type="submit" value="Submit" class="el-button" style="width: 30%; margin-left: 35%;" />
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--
+<section id="banner">
+	<div class="inner">
+	    <h2>Welcome {{ username }}!</h2>
+	    <p>You can post your blog here</p>
+	</div>
+</section>
+    
+<form method="post" enctype="multipart/form-data" style="left: 20px;">
+    {% csrf_token %}
+
+<section id="wrapper">
+    <section id="one" class="wrapper spotlight style1">
+		<div class="inner"><div class="content">
+            <h4>You can edit and post your blog here</h4>
+            <hr />
+            <div class="field">
+                <label for="id_title" class="col-md-2 control-label">Title</label>
+                {{ form.title }}
+            </div>
+            <div class="field">
+                <label for="id_content" class="col-md-2 control-label">Content</label>
+                {{ form.content }}
+            </div>
+            <br />
+            <div class="actions">
+                <input type="submit" value="Submit" onclick="return confirm('Are you sure to post the blog?')" />
+            </div>
+
+        </div></div>
+    </section>
+</section>
+
+</form>
+-->
+{% endblock %}

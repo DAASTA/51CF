@@ -1,0 +1,84 @@
+﻿{% extends "base.html" %}
+
+{% block heading %}
+
+    <script type="text/javascript" src="/static/app/ui_old/js/phaser.min.js"></script>
+    <script type="text/javascript" src="/static/app/ui_old/js/jquery-3.2.1.min.js"></script>
+    <script>
+        var jsonData;
+        function getParameter(param) {
+            var query = window.location.search;
+            var iLen = param.length;
+            var iStart = query.indexOf(param);
+            if (iStart == -1)
+                return "";
+            iStart += iLen + 1;
+            var iEnd = query.indexOf("&", iStart);
+            if (iEnd == -1)
+                return query.substring(iStart);
+
+            return query.substring(iStart, iEnd);
+        }
+        window.onload = function () {
+            var path_to_json = getParameter('json');
+            if (path_to_json.length > 0) {
+                $('#json-selector').hide();
+                $('#info-board').show();
+                $.getJSON(path_to_json, function (data) {
+                    jsonData = data;
+                    loadGame();
+                });
+            }
+            else {
+                var logFile = document.getElementById('json-selector');
+                //var jsonData;
+                logFile.addEventListener('change', function () {
+                    $('canvas').show();
+                    if (!logFile.value) {
+                        alert('没有选择文件');
+                        return;
+                    }
+                    var file = logFile.files[0];
+                    if (file.size == 0) {
+                        alert('Empty file!');
+                        return;
+                    }
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        jsonData = JSON.parse(e.target.result);
+                        //console.log(jsonData);
+                        loadGame();
+                    };
+                    reader.readAsText(file);
+                });
+                $('#info-board').hide();
+            }
+            //alert(getParameter('json'));
+        }
+    </script>
+    <script type="text/javascript" src="/static/app/ui_old/js/main.js"></script>
+    <script type="text/javascript" src="/static/app/ui_old/js/cells.js"></script>
+    <script type="text/javascript" src="/static/app/ui_old/js/tentacles.js"></script>
+    <style>
+        #info-board {
+            position: absolute;
+            left: 820px;
+            border: 2px solid #0026ff;
+        }
+    </style>
+
+{% endblock %}
+
+{% block content %}
+
+<!-- 
+    If you want to keep the basic elements, such as the navbar and footing, just delete the <p> tag add you code here, between 'block' and 'endblock'.
+    If not, just delete all the code and add yours :)
+-->
+    <div>
+        <input id="json-selector" type="file" />
+    </div>
+    <div id="game"></div>
+    <canvas id="info-board" width="600" height="800"></canvas>
+
+{% endblock %}

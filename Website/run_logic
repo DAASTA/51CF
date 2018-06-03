@@ -1,0 +1,5 @@
+#！ /bin/bash
+cd /home/songjh/playgame/bin
+./main_logic
+cd /home/songjh
+echo 'Logic exited'

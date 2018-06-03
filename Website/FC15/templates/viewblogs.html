@@ -1,0 +1,43 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<div class="bg" style="width: 100%; background: url('/static/images/team-bg.jpg') fixed center center no-repeat; background-size: cover; height: 300px; margin: 0px 0px 0px 0px;">
+    <div style="height: 5%; background-color: rgba(0, 0, 0, 0);"></div>
+    <div class="fi" style="margin-left: 30%; width: 40%; margin: auto; text-align: center;">
+        <font size="100" color="white" face="微软雅黑">Welcome, {{ username }}</font>
+        <p style="font: bold 18px 微软雅黑;">You can view all the blogs here.</p>
+        <hr />
+    </div>
+    <br />
+</div>
+
+<el-container style="margin-left: 10%; width: 80%; margin-top: 100px;">
+    <el-aside>
+        <img src="/static/images/viewblog-bg.jpg" width="100%" />
+    </el-aside>
+    <el-main style="margin: auto; text-align: center;">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Timestamp</th>
+                    <th>   </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for blog in blogs %}
+                    <tr>
+                        <td>{{ blog.title }}</td>
+                        <td>{{ blog.username }}</td>
+                        <td>{{ blog.timestamp }}</td>
+                        <td><a href="{% url 'blogdetail' pk=blog.pk %}"><el-button type="primary">View Details</el-button></a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </el-main>
+</el-container>
+
+{% endblock %}

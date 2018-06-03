@@ -1,0 +1,108 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<div class="bg" style="width: 100%; background: url('/static/images/team-bg.jpg') fixed center center no-repeat; background-size: cover; height: 300px; margin: 0px 0px 0px 0px;">
+    <div style="height: 5%; background-color: rgba(0, 0, 0, 0);"></div>
+    <div class="fi" style="margin-left: 30%; width: 40%; margin: auto; text-align: center;">
+        <font size="100" color="white" face="微软雅黑">Welcome, {{ username }}</font>
+        <p style="font: bold 18px 微软雅黑;">You can select AIs and start playing the game!</p>
+        <hr />
+    </div>
+    <br />
+</div>
+
+<br />
+
+<div style="width: 70%; margin-left: 15%; margin-top: 5%; margin: auto;">
+<form method="post" enctype="multipart/form-data" action="">
+    {% csrf_token %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Index</th>
+                <th>Name</th>
+                <th>Author</th>
+                <th>Last update</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in ailist %}
+                <tr>
+                    <td>
+                        <input type="checkbox" value="  {{ item.pk }}" name="check_box_list" />  {{ item.pk }}
+                    </td>
+                    <td>{{ item.filename }}</td>
+                    <td>{{ item.username }}</td>
+                    <td>{{ item.timestamp }}</td>
+                    <td>{{ item.description }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <input type="submit" value="Start Game" class="el-button" style="width: 16%; margin-left: 42%;" />
+</form>
+</div>
+
+<div style="height: 5%;"></div>
+
+<div class="gamerecord">
+    <el-container style="width: 80%; margin-left: 10%;">
+        <el-aside width="70%" style="text-align: center; margin: auto;">
+            <h3>Game records</h3>
+            <hr />
+            {% if records %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>State</th>
+                            <th>    </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in records %}
+                            <tr>
+                                <td>{{ item.timestamp }}</td>
+                                <td>
+                                    {% if item.state == 'Success' %}
+                                        <el-tag type="success">Success</el-tag>
+                                    {% else %}
+                                        {% if item.state == 'Failure' %}
+                                            <el-tag type="warining">Failure</el-tag>
+                                        {% else %}
+                                            {% if item.state == 'Unstarted' %}
+                                                <el-tag type="info">Unstarted</el-tag>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if item.state == 'Success' %}
+                                        <a href="{% url 'recorddownload' pk=item.pk %}"><el-button type="success">Download</el-button></a>
+                                    {% else %}
+                                        <el-button type="success" disabled>Download</el-button>
+                                    {% endif %}
+                                    {% if item.state == 'Success' %}
+                                        <a href="{% url 'replay' pk=item.pk %}"><el-button type="primary">Replay</el-button></a>
+                                    {% else %}
+                                        <el-button type="primary" disabled>Replay</el-button>
+                                    {% endif %}
+                                    <a href="{% url 'recorddelete' pk=item.pk %}"><el-button type="warning" onclick="return confirm('Are you sure to delete the record?')">Delete</el-button></a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>You have not played any games yet.</p>
+            {% endif %}
+        </el-aside>
+        <el-main>
+            <img src="/static/images/gamerecord.jpg" width="100%" />
+        </el-main>
+    </el-container>
+</div>
+
+{% endblock %}

@@ -1,0 +1,177 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+        <title>FC15 Website</title>
+        {% load staticfiles %}
+  		<!-- Import style sheet -->
+  		<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+        <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.min.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'app/content/forms.css' %}"/>
+        <!--<link rel="stylesheet" type="text/css" href="/static/app/content/swiper.min.css" />-->
+        <!-- Use bootstrap for some special elements -->
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <!-- Use jquery for some animation -->
+        <script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>
+
+        {% block heading %}{% endblock %}
+
+        <!-- Fade-in animation for text in banner -->
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $(".fi").animate({marginTop:20, opacity:'show'},{ duration: 1500 });
+            });
+        </script>
+        <style type="text/css">
+            .fi{ background-color: rgba(0, 0, 0, 0);  width:100%; padding:20px; color:#fff; display:none;}
+        </style>
+
+        <!-- Style Sheets for swiper -->
+        <style>
+            html, body {
+                position: relative;
+                height: 100%;
+            }
+            body {
+                background: #fff;
+                font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+                font-size: 14px;
+                color:#000;
+                margin: 0;
+                padding: 0;
+            }   
+            /*.swiper-container {
+                width: 100%;
+                height: 90%;
+            }
+             .swiper-slide {
+                text-align: center;
+                font-size: 18px;
+                background: #eef;
+
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: -webkit-flex;
+                display: flex;
+                -webkit-box-pack: center;
+                -ms-flex-pack: center;
+                -webkit-justify-content: center;
+                justify-content: center;
+                -webkit-box-align: center;
+                -ms-flex-align: center;
+                -webkit-align-items: center;
+                align-items: center;
+            }*/
+        </style>
+    </head>
+
+	<body style="width: 100%; height: 100%;">
+        <!-- Vue-style navbar -->
+        <div id="app" style="font-family: Arial;">
+            <div class="line"></div>
+            <el-menu
+                :default-active="activeIndex2"
+                class="el-menu-demo"
+                mode="horizontal"
+                @select="handleSelect"
+                background-color="#545c64"
+                text-color="#fff"
+                active-text-color="#ffd04b">
+                <el-menu-item index="1">
+  					<a href="/home/"><i class="el-icon-menu"></i>Home</a>
+  				</el-menu-item>
+                <el-menu-item index="2">
+  					<a href="/index/"><i class="el-icon-document"></i>Index</a>
+  				</el-menu-item>
+                <el-submenu index="3">
+  					<template slot="title"><i class="el-icon-info"></i>About</template>
+  					<a href="/about_rule/"><el-menu-item index="3-1"><i class="el-icon-tickets"></i>Game Rule</el-menu-item></a>
+  					<a href="/about_story/"><el-menu-item index="3-2"><i class="el-icon-edit"></i>Background Story</el-menu-item></a>
+  					<a href="http://daasta.cn/"><el-menu-item index="3-3"><i class="el-icon-goods"></i>DAASTA</el-menu-item></a>
+  				</el-submenu>
+                <el-submenu index="4">
+    				<template slot="title"><i class="el-icon-service"></i>Game</template>
+    				<a href="/document/"><el-menu-item index="4-1"><i class="el-icon-document"></i>Documents</el-menu-item></a>
+    				<a href="/rank/"><el-menu-item index="4-2"><i class="el-icon-star-off"></i>Ranking</el-menu-item></a>
+    				<a href="/team/"><el-menu-item index="4-3"><i class="el-icon-circle-plus"></i>Teams</el-menu-item></a>
+    				<a href="/upload/"><el-menu-item index="4-4"><i class="el-icon-upload"></i>Uploading code</el-menu-item></a>
+    				<a href="/playgame/"><el-menu-item index="4-5"><i class="el-icon-time"></i>Playing online</el-menu-item></a>
+                    <a href="/ui/"><el-menu-item index="4-6"><i class="el-icon-caret-right"></i>Game replay</el-menu-item></a>
+  				</el-submenu>
+                <el-submenu index="5">
+                    <template slot="title"><i class="el-icon-edit"></i>Blogs</template>
+                    <a href="/viewblogs/"><el-menu-item index="5-1"><i class="el-icon-view"></i>View blogs</el-menu-item></a>
+                    <a href="/postblog/"><el-menu-item index="5-2"><i class="el-icon-edit-outline"></i>Post blogs</el-menu-item></a>
+                </el-submenu>
+
+                {% if username %}
+                    <el-submenu index="6">
+                        <template slot="title"><i class="el-icon-success"></i>Hello {{ username }}!</template>
+                        <a href="/change/"><el-menu-item index="6-3">Alter account</el-menu-item></a>
+    				    <a href="/resetrequest/"><el-menu-item index="6-4">Reset account</el-menu-item></a>
+    				    <a href="/logout/"><el-menu-item index="6-5">Log out</el-menu-item></a>
+                    </el-submenu>
+                {% else %}
+                    <el-submenu index="6">
+    				    <template slot="title"><i class="el-icon-success"></i>Sign in</template>
+    				    <a href="/login/"><el-menu-item index="6-1">Sign in</el-menu-item></a>
+    				    <a href="/regist/"><el-menu-item index="6-2">Sign up</el-menu-item></a>
+    				    <a href="/change/"><el-menu-item index="6-3">Alter account</el-menu-item></a>
+    				    <a href="/resetrequest/"><el-menu-item index="6-4">Reset account</el-menu-item></a>
+  				    </el-submenu>
+                {% endif %}
+            </el-menu>
+
+        {% block swiperspace %}{% endblock %} 
+
+		<!-- Main content -->
+			<!-- Show messages -->
+			<div class="showmessage">
+				{% if messages %}
+					<script language="javascript">
+						{% for msg in messages %}
+							alert('{{ msg.message }}');
+						{% endfor %}
+					</script>
+				{% endif %}
+				
+				<!-- maybe this can do
+				<el-button @click="visible = true">按钮</el-button>
+				<el-dialog :visible.sync='visible' title='hello world'>
+					<p>Welcome!</p>
+				</el-dialog>-->
+			</div>
+
+            <!-- Template for Django -->
+            {% block content %}{% endblock %} 
+			
+   	 	<!-- Footer -->
+   	 		<div class="line"></div>
+   	 		<el-row>
+   	 			<el-col :span="24">
+   	 				<div class="grid-content bg-dark">
+						<li style="color: #fff;">&copy; FC15, DAASTA, 2018></li>
+   	 				</div>
+   	 			</el-col>
+   	 		</el-row>
+   		</div>
+	</body>
+
+  	<!-- import Vue -->
+  	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+  	<!-- import components -->
+  	<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <!-- Scripts for Vue -->
+  	<script>
+    	new Vue({
+      		el: '#app',
+      		data: function() {
+        		return { visible: false }
+      		}
+        })
+  	</script>
+</html>

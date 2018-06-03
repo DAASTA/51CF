@@ -1,0 +1,231 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<el-row class="tac">
+    <el-col :span="4">
+        <el-menu
+            default-active="2"
+            class="el-menu-vertical-demo"
+            @open="handleOpen"
+            @close="handleClose">
+            <el-menu-item index="1">
+                <a href="#BookMark1">
+                    <i class="el-icon-info"></i>
+                    <span slot="title">宗旨及大赛概况</span>
+                </a>
+            </el-menu-item>
+            <el-menu-item index="2">
+                <a href="#BookMark2">
+                    <i class="el-icon-info"></i>
+                    <span slot="title">本届新生C语言大赛简介</span>
+                </a>
+            </el-menu-item>
+            <el-menu-item index="3">
+                <a href="#BookMark3">
+                    <i class="el-icon-info"></i>
+                    <span slot="title">赛题背景</span>
+                </a>
+            </el-menu-item>
+            <el-menu-item index="4">
+                <a href="#BookMark4">
+                    <i class="el-icon-info"></i>
+                    <span slot="title">参赛流程</span>
+                </a>
+            </el-menu-item>
+            <el-menu-item index="5">
+                <a href="#BookMark5">
+                    <i class="el-icon-info"></i>
+                    <span slot="title">奖励办法</span>
+                </a>
+            </el-menu-item>
+            <el-menu-item index="6">
+                <a href="#BookMark6">
+                    <i class="el-icon-info"></i>
+                    <span slot="title">报名方法</span>
+                </a>
+            </el-menu-item>
+            <el-menu-item index="7">
+                <a href="#BookMark7">
+                    <i class="el-icon-info"></i>
+                    <span slot="title">大赛日程（暂定）</span>
+                </a>
+            </el-menu-item>
+            <el-menu-item index="8">
+                <a href="#BookMark8">
+                    <i class="el-icon-info"></i>
+                    <span slot="title">大赛组织</span>
+                </a>
+            </el-menu-item>
+            <el-menu-item index="9">
+                <a href="/about_rule/">
+                    <i class="el-icon-info"></i>
+                    <span slot="title">比赛规则</span>
+                </a>
+            </el-menu-item>
+        </el-menu>
+    </el-col>
+
+    <el-col :span="20"><div class="contents" style="width: 90%; margin-left: 3%;">
+        <!-- Here should be the contents -->
+        <br />
+        <a href="/download_manual/">
+            <el-button type="success">下载参赛手册</el-button>
+        </a>
+        <a href="/download_0318ppt/">
+            <el-button type="warning">下载0318说明会PPT</el-button>
+        </a>
+        <br /><br />
+        <a id="BookMark1" style="font: bold 24px arial;">一、宗旨及大赛概况</a><br />
+        <p style="text-indent: 2em;">
+            清华大学自动化系新生C语言大赛是学校二星级赛事，以“增加同学科技热情，培养团队协作精神，提高选手设计创新能力，丰富校园文化生活”为宗旨，至今已成功举办十四届。
+        </p>
+        <p style="text-indent: 2em;">
+            比赛采用AI对战的方式，以C/C++为开发语言，希望锻炼同学的编程能力，体验编程之乐。另外，比赛凝聚了自动化系最优秀的同学组成开发团队，全力开发出了富有趣味性、挑战性的比赛平台。
+        </p>
+        <br />
+        <h5>新生C语言大赛历届赛题回顾（2004-2018）： </h5>
+        <table class="table" sytle="margin-left: 20%; width: 60%;">
+            <thead>
+                <tr>
+                    <th>年份</th>
+                    <th>主题</th>
+                    <th>类型</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>2004</td><td></td><td></td></tr>
+                <tr><td>2005</td><td></td><td></td></tr>
+                <tr><td>2006</td><td></td><td></td></tr>
+                <tr><td>2007</td><td>贪吃蛇的围剿</td><td>贪吃蛇</td></tr>
+                <tr><td>2008</td><td>八皇后的争夺</td><td>棋类</td></tr>
+                <tr><td>2009</td><td>怒海争锋</td><td>弹幕</td></tr>
+                <tr><td>2010</td><td>弹弹堂</td><td>泡泡堂</td></tr>
+                <tr><td>2011</td><td>机器人大战</td><td>弹幕</td></tr>
+                <tr><td>2012</td><td>仙境灵珠</td><td>格斗</td></tr>
+                <tr><td>2013</td><td>王子复仇记</td><td>即时策略</td></tr>
+                <tr><td>2014</td><td>天使羊</td><td>格斗</td></tr>
+                <tr><td>2015</td><td>深蓝海战</td><td>即时策略</td></tr>
+                <tr><td>2016</td><td>吞噬星空</td><td>agar</td></tr>
+                <tr><td>2017</td><td>百团大战</td><td>棋类</td></tr>
+                <tr><td>2018</td><td>塔阵兵锋</td><td>即时策略</td></tr>
+            </tbody>
+        </table>
+        <br /><a href="#top"><el-button type="primary" plain>Back to top</el-button></a>
+        <hr />
+
+        <br />
+        <a id="BookMark2" style="font: bold 24px arial;">二、本届新生C语言大赛简介</a><br />
+        <p style="text-indent: 2em;">
+            本届新生C语言大赛赛题为“塔阵兵锋”。比赛设计有以下亮点：
+        </p>
+        <p style="text-indent: 2em;">
+            <b>情景丰富的多AI混战：</b>和传统的双AI对抗的形式不同，本届大赛的每一场比赛都是4个AI同台竞技。每个队伍最多由3名队员组成，提交1份AI。赛题背景为对称地图下的攻防博弈，选手要及时占领中立建筑、调整己方建筑攻防属性、观察场面局势及时出击以在混战中夺利，攻占场上尽可能多的资源以获得胜利。丰富的情景带来了丰富的战术选择，为AI的编写思路提供了更多空间。
+        </p>
+        <p style="text-indent: 2em;">
+            <b>宏大科幻的背景设计：</b>游戏背景及界面设计宏大科幻，以金属元素稀贵为度量、以四国抗衡为背景的科幻设定大大增加了游戏的情节魅力与观赏乐趣。不仅如此，宏大背景设计也使得游戏规则设定更为精巧复杂，各个势力通过各自原先拥有的塔进行较量，广泛征兵、善用策略、强化科技，利用塔和兵线进行一系列的攻守较量，让游戏更加富有挑战和乐趣。
+        </p>
+        <br /><a href="#top"><el-button type="primary" plain>Back to top</el-button></a>
+        <hr />
+
+        <br />
+        <a id="BookMark3" style="font: bold 24px arial;">三、赛题背景</a><br />
+        <p style="text-indent: 2em;">
+            在幻想乡的梅塔利克大陆（Terre Métallique）上，所有的公民皆由金属制成，他们的身体来自各种金属——铅（Plomb）、锡（Étain）、 铁（Fer）、铜（Cuivre）、银（Argent）、金（Or），当然这些金属在每个公民个体的含量很不相同，大部分公民体内主要成分都是锡和铅，很少有公民得到铜或者更高级的体质。上述金属的稀有程度依次提高，而使用这些金属强化自身，公民的寿命就会得到延长，当金的含量足够高的时候，这位公民就获得了永生（Immortalité）。
+        </p>
+        <p style="text-indent: 2em;">
+            在这片土地上，这些金属资源的稀有程度同样也是依次递增的，铅和锡如同我们世界中空气的水一样常见，而铁和铜则是贵重的资源，银和金更是难得一见的稀世珍宝。在经历漫长的历史发展之后，这片大陆上暂时呈现出四个王国——风（Vent）火（Feu）水（Eau）土（Sol）和一个商人共和国——盐（Minéraux）互相制衡的政治局面。五个国家都拥有相同重要的关键技术——水银（Mercure），这项技术可以将现有的金属材料等级提升，每一个水印符文可以实现一级的等级提升， 这可以大幅度改善金属性能，而整个大陆已经探明的水银矿藏只有五片，分别位于各个国家。
+        </p>
+        <p style="text-indent: 2em;">
+            四个王国分别位于大陆的四个角落，每个王国拥有两座城池——塔（Tour），而共和国「盐」则位于整个大陆的中央，仅拥有一座城池。在长时间的和平之后，王国「土」的公民普遍体质偏弱，含有铁及以上金属元素的公民远不如其他国家多，国王决定对军事实力不足的共和国「盐」发动侵略，抢夺一片水银矿，来普遍地增强国民体质。而王国「火」见到和平遭到破坏，不能坐视不管，于是出兵阻止「土」的军队，维护大陆的和平。见到「火」「土」两国开战，其他两国的国王也是各有盘算，王国「风」的国王对于延长生命，追求永生十分痴迷，希望趁火打劫，袭击王国「火」，希望攻其不意，控制「火」的水银矿，为己所用；而王国「水」的国王由于沉迷研究水银，对本国的水银矿开采不加限制，水银矿脉已经濒临枯竭。他在混乱中看到了机会，决定从临近的王国「土」下手，暗中准备兵力，发动奇袭，一举拿下实力已经削弱的「土」国，但是他表面上持防守姿态，表现出不愿意参与这场战争。
+        </p>
+        <p style="text-indent: 2em;">
+            在「风」国发动奇袭后，「火」国疲于应战，打得不可开交；「水」国国王没有立即采取行动，而是将重心放在了发展生产，研发科技之上；由于「火」国与「风」国陷入苦战，无暇支援「盐」国，切断了向「土」国的兵线（Ligne des Soldats）；「土」国的兵线已经开到了「盐」的中心城——塔之下，即将对塔发起攻击；在经过一段时间的发展之后，「水」国终于出来“维护和平”，发动了向「土」国的进攻；而「火」「风」国两国国王也已经察觉「水」的阴谋，急忙停战，应对逐渐对他们不利的局势……
+        </p>
+        <p style="text-indent: 2em;">
+            以上仅是有可能的任何一场比赛的游戏进程，而玩家可以任意选择一个王国作为自己的势力，在初期选择开局的策略，通过兵线控制临近的塔，增强本国的军事实力。在时机成熟时，发动进攻，合理运用兵线的布置与切断，攻城掠地，得到的塔越多，己方的军事实力越强，生产效率越高。玩家与其他玩家控制的其他国家不断对抗，一个个征服其他国家，获得一片片水银矿脉，将士兵从锡升级成铁、铜、银，最终征服其他所有的国家，获得所有水银矿的控制权，实现对整个大陆的控制，成为黄金帝国（Empire d'or）——获胜。 
+        </p>
+        <br /><a href="#top"><el-button type="primary" plain>Back to top</el-button></a>
+        <hr />
+
+        <br />
+        <a id="BookMark4" style="font: bold 24px arial;">四、参赛流程</a><br />
+        <p style="text-indent: 2em;">
+            比赛预计在春季学期第3周（2018年3月12日左右）开放报名，春季学期第6周（2018年4月8日左右）进行初赛。在一个月的时间内，选手们将在比赛中提升自己的AI的实力水平参与初赛。
+        </p>
+        <p style="text-indent: 2em;">
+            决赛预计将于春季学期第10周（2018年4月30日）进行，前8名队伍将获得丰厚的奖金奖励，详情见下文的奖励办法。
+        </p>
+        <br /><a href="#top"><el-button type="primary" plain>Back to top</el-button></a>
+        <hr />
+
+        <br />
+        <a id="BookMark5" style="font: bold 24px arial;">五、奖励办法</a><br />
+        <p style="text-indent: 2em;">
+            按照队伍发放特等奖，一、二、三等奖及优秀奖，名额设置如下：
+        </p>
+        <table class="table" style="margin-left: 5%; width: 25%;">
+            <thead>
+                <tr><th>奖项</th><th>数量</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>冠军（即特等奖）</td><td>1</td></tr>
+                <tr><td>一等奖</td><td>1</td></tr>
+                <tr><td>二等奖</td><td>2</td></tr>
+                <tr><td>三等奖</td><td>4</td></tr>
+                <tr><td>♥女生奖</td><td>1</td></tr>
+            </tbody>
+        </table>
+        <br /><a href="#top"><el-button type="primary" plain>Back to top</el-button></a>
+        <hr />
+
+        <br />
+        <a id="BookMark6" style="font: bold 24px arial;">六、报名方法</a><br />
+        <p style="text-indent: 2em;">
+            登陆大赛官方报名网站： http://daasta.cn 进行组队报名。参赛选手限定为清华大学本科生，自由组队，每队不超过3人，确定队名和1名队长，每名队员均需报名。    
+        </p>
+        <br /><a href="#top"><el-button type="primary" plain>Back to top</el-button></a>
+        <hr />
+
+        <br />
+        <a id="BookMark7" style="font: bold 24px arial;">七、大赛日程（暂定）</a><br />
+        <p style="text-indent: 2em;">
+            大赛初定日程如下：（具体时间以通知为准）
+        </p>
+        <p>
+            报名  	第3周（2018年3月12日左右）<br />
+            初赛	第6周（2018年4月8日左右）<br />
+            决赛	第10周（2018年4月30日）
+        </p>
+        <p style="text-indent: 2em;">
+            相关通知将在大赛网站（http://daasta.cn）及时登出，相关资料也会在大赛论坛及时公布，请选手注意。
+        </p>
+        <br /><a href="#top"><el-button type="primary" plain>Back to top</el-button></a>
+        <hr />
+
+        <br />
+        <a id="BookMark8" style="font: bold 24px arial;">八、 大赛组织</a><br />
+        <p style="text-indent: 2em;">
+            <b>指导单位</b><br />
+            清华大学教务处<br />
+            清华大学团委<br />
+            清华大学学生科学技术协会<br /><br />
+
+            <b>承办单位</b><br />
+            清华大学自动化系学生科协<br /><br />
+
+            <b>赞助单位</b><br />
+            大赛指定合作商：商汤
+        </p>
+        <br /><a href="#top"><el-button type="primary" plain>Back to top</el-button></a>
+        <hr />
+
+        <br />
+        <a id="BookMark9" style="font: bold 24px arial;">九、 比赛规则</a><br />
+        <p style="text-indent: 2em;">
+            查看比赛规则请点击以下链接  <a href="/about_rule/">查看比赛规则</a>
+        </p>
+    </div></el-col>
+</el-row>
+
+{% endblock %}

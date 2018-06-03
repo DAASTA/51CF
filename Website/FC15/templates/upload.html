@@ -1,0 +1,103 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<div class="bg" style="width: 100%; background: url('/static/images/upload-bg.jpg') fixed center center no-repeat; background-size: cover; height: 950px; margin: 0px 0px 0px 0px;">
+    <div style="height: 4%; background-color: rgba(0, 0, 0, 0);"></div>
+    <div class="fi" style="margin-left: 30%; width: 40%; margin: auto; text-align: center;">
+        <font size="100" color="white" face="微软雅黑">Welcome to FC15!</font>
+        <p style="font: bold 18px 微软雅黑;">Please upload your .cpp file here.</p>
+        <hr />
+    </div>
+    <div style="background-color: rgba(0, 0, 0, 0);">
+        <div class="contact-input" style="margin-left: 30%; width: 40%; margin: auto; color: white; background-color: rgba(0, 0, 0, 0);">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form_input">
+                    <label for="filename" id="filename" style="margin-left: 10%; font: 16px 微软雅黑;">File Name</label>
+                    <input type="text" name="filename" class="contact-input" value="{{ filename }}"
+                        style="color: rgba(255, 255, 255, 1.0); margin-left: 10%; width: 80%; overflow: hidden;margin-bottom: 20px;  padding: 5px;  background: rgba(255, 255, 255, 0.3);  border-radius: 2px;  display: block; height: 29px;  padding: 0 9px;  border: 1px solid #cfdfe3;  border-bottom-color: #d2e2e7;  border-radius: 2px;  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);"/>
+                </div>
+                <div class="form_input">
+                    <label for="description" id="description" style="margin-left: 10%; font: 16px 微软雅黑;">Description</label><br />
+                    <textarea name="description" wrap="soft"  rows="20"
+                         style="height: 100px; color: rgba(255, 255, 255, 1.0); margin-left: 10%; width: 80%; margin-bottom: 20px;  padding: 5px;  background: rgba(255, 255, 255, 0.3);  border-radius: 2px;  display: block;  padding: 0 9px;  border: 1px solid #cfdfe3;  border-bottom-color: #d2e2e7;  border-radius: 2px;  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);">{{ description }}</textarea>
+                </div>
+                <div class="form_input">
+                    <label for="file" id="file" style="margin-left: 10%; font: 16px 微软雅黑;">File</label>
+                    <input type="file" name="file" class="contact-input"
+                        style="color: rgba(255, 255, 255, 1.0); margin-left: 10%; width: 80%; overflow: hidden;margin-bottom: 20px;  padding: 5px;  background: rgba(255, 255, 255, 0.3);  border-radius: 2px;  display: block; height: 29px;  padding: 0 9px;  color: #4d5a5e;  border: 1px solid #cfdfe3;  border-bottom-color: #d2e2e7;  border-radius: 2px;  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);"/>
+                </div>
+                <div class="buttons" style="margin-left: 0%;">
+                    <input type="submit" value="Submit" class="el-button" style="width: 30%; margin-left: 35%;" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Banner --
+<section id="banner">
+	<div class="inner">
+		<h2>Welcome {{ username }}!</h2>
+		<p>Please fill in the request to join the team here.</p>
+	</div>
+</section>
+
+<div class="banner">
+    <el-container>
+        <el-aside width="20%" style="background-color: aqua">
+
+        </el-aside>
+        <el-main>
+            <h3>Welcome {{ username }}! Please choose the file you want to upload</h3>
+        </el-main>
+    </el-container>
+    <div class="form">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <el-form ref="form" :model="form" label-width="80px">
+                <el-form-item label="Name">
+                    {{ form.filename }}
+                </el-form-item>
+                <el-form-item label="Description">
+                    {{ form.description }}
+                </el-form-item>
+                <el-form-item label="File">
+                    {{ form.file}}
+                </el-form-item>
+                <input type="submit" value="submit" class="button" onclick="return confirm('Are you sure to upload the code?')" />
+            </el-form>
+        </form>
+    </div>
+</div>
+
+<section id="wrapper">
+    <section id="one" class="wrapper spotlight style1">
+		<div class="inner"><div class="content">
+		    <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+                <h1>Welcome {{ username }} !</h1>
+                <h5>Please choose the file you want to upload</h5>
+                <hr />
+                <div class="form-group">
+                    <label for="id_filename" class="col-md-2 control-label">Filename</label>
+                    {{ form.filename }}
+                </div>
+                <div class="form-group">
+                    <label for="id_description" class="col-md-2 control-label">Description</label>
+                    {{ form.description }}
+                </div>
+                <div class="form-group">
+                    <label for="id_file" class="col-md-2 control-label">File</label>
+                    {{ form.file }}
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="submit" class="button" onclick="return confirm('Are you sure to upload the code?')" />
+                </div>
+            </form>
+		</div></div>
+	</section>
+</section>-->
+
+{% endblock %}

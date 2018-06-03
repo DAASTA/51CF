@@ -1,0 +1,86 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<div class="bg" style="width: 100%; background: url('/static/images/teamrequest-bg.jpg') fixed center center no-repeat; background-size: cover; height: 950px; margin: 0px 0px 0px 0px;">
+    <div style="height: 10%; background-color: rgba(0, 0, 0, 0);"></div>
+    <div class="fi" style="margin-left: 30%; width: 40%; margin: auto; text-align: center;">
+        <font size="100" color="white" face="微软雅黑">Welcome to FC15!</font>
+        <p style="font: bold 18px 微软雅黑;">Please fill in the forms to post a request to join this team.</p>
+        <hr />
+    </div>
+    <div style="background-color: rgba(0, 0, 0, 0);">
+        <div class="contact-input" style="margin-left: 30%; width: 40%; margin: auto; color: white; background-color: rgba(0, 0, 0, 0);">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form_input" style="margin-left: 10%; font: 16px 微软雅黑;">
+                    <label for="team" id="team">Team Name</label>
+                    <input type="text" name="destin_team" class="contact-input" value="{{ destin_team }}"
+                           style="color: rgba(255, 255, 255, 1.0); margin-left: 10%; width: 80%; margin-bottom: 20px;  padding: 5px;  background: rgba(255, 255, 255, 0.3);  border-radius: 2px;  display: block;  padding: 0 9px;  border: 1px solid #cfdfe3;  border-bottom-color: #d2e2e7;  border-radius: 2px;  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);"/>
+                </div>
+                <div class="form_input">
+                    <label for="message" id="message" style="margin-left: 10%; font: 16px 微软雅黑;">Message to the captain</label><br />
+                    <textarea name="message" wrap="soft"  rows="20"
+                         style="height: 40%; color: rgba(255, 255, 255, 1.0); margin-left: 10%; width: 80%; margin-bottom: 20px;  padding: 5px;  background: rgba(255, 255, 255, 0.3);  border-radius: 2px;  display: block;  padding: 0 9px;  border: 1px solid #cfdfe3;  border-bottom-color: #d2e2e7;  border-radius: 2px;  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);"></textarea>
+                </div>
+                <input type="submit" value="Submit" class="el-button" style="width: 30%; margin-left: 35%;" />
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--
+<el-container>
+    <el-aside width="20%">
+
+    </el-aside>
+    <el-main>
+        <div class="contact-input" style="margin-left: 20%;">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form_input">
+                    <label for="team" id="team">TeamName</label>
+                    <input type="text" name="destin_team" class="contact-input"
+                           style="width: 80%; overflow: hidden;margin-bottom: 20px;  padding: 5px;  background: #eef7f9;  border-radius: 2px;  display: block; height: 29px;  padding: 0 9px;  color: #4d5a5e;  background: white;  border: 1px solid #cfdfe3;  border-bottom-color: #d2e2e7;  border-radius: 2px;  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);"/>
+                </div>
+                <div class="form_input">
+                    <label for="msg" id="team">Message</label>
+                    <input type="text" name="message" class="contact-input"
+                           style="width: 80%; overflow: hidden;margin-bottom: 20px;  padding: 5px;  background: #eef7f9;  border-radius: 2px;  display: block; height: 29px;  padding: 0 9px;  color: #4d5a5e;  background: white;  border: 1px solid #cfdfe3;  border-bottom-color: #d2e2e7;  border-radius: 2px;  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);"/>
+                </div>
+                <input type="submit" value="Submit" class="el-button" />
+            </form>
+        </div>
+    </el-main>
+</el-container>
+
+<section id="wrapper">
+    <section id="one" class="wrapper spotlight style1">
+		<div class="inner">
+		    <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+                <h4>Welcome {{ username }} !</h4>
+                <h4>Please fill in the blanks to send a request to the captain.</h4>
+                <hr />
+
+                <div class="form-group">
+                    <label for="id_username" class="col-md-2 control-label">Destination team</label>
+                    {{ form.destin_team }}
+                </div>
+                <br />
+                <div class="form-group">
+                    <label for="id_password" class="col-md-2 control-label">Message</label>
+                    {{ form.message }}
+                </div>
+                <br />
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Submit" class="btn btn-default" onclick="return confirm('Are you sure to send the request to join the team?')" />
+                    </div>
+                </div>
+            </form>
+		</div>
+	</section>
+</section>-->
+
+{% endblock %}

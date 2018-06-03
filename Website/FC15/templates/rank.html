@@ -1,0 +1,93 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<div class="bg" style="width: 100%; background: url('/static/images/banner1.jpg') fixed center center no-repeat; background-size: cover; height: 350px; margin: 0px 0px 0px 0px;">
+    <div style="height: 5%; background-color: rgba(0, 0, 0, 0);"></div>
+    <div class="fi" style="margin-left: 30%; width: 40%; margin: auto; text-align: center;">
+        <font size="100" color="white" face="微软雅黑">Welcome, {{ username }}</font>
+        <p style="font: bold 18px 微软雅黑;">You can select or view your team's AIs for the ranking match and the rank.</p>
+        <hr />
+    </div>
+    <br />
+</div>
+
+<table class="table" style="margin-left: 10%; width: 80%;">
+    <thead>
+        <tr>
+            <th>Index</th>
+            <th>File Name</th>
+            <th>Description</th>
+            <th>Author</th>
+            <th>Timestamp</th>
+            <th>    </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in AI %}
+            <tr>
+                <td>{{ item.pk }}</td>
+                <td>{{ item.filename }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.username }}</td>
+                <td>{{ item.timestamp }}</td>
+                <td>
+                    {% if is_captain %}
+                        {% if item.selected %}
+                            <a href="{% url 'disselectai' pk=item.pk %}">
+                                <el-button type="warning">Disselect</el-button>
+                            </a>
+                        {% else %}
+                            <a href="{% url 'selectai' pk=item.pk %}">
+                                <el-button type="primary">Select</el-button>
+                            </a>
+                        {% endif %}
+                    {% else %}
+                        {% if item.selected %}
+                            <el-tag type="success">Selected</el-tag>
+                        {% else %}
+                            <el-tag type="info">Unselected</el-tag>
+                        {% endif %}
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<hr />
+
+<table class="table" style="margin-left: 10%; width: 80%;">
+    <thead>
+        <tr>
+            <th>Rank</th>
+            <th>Index</th>
+            <th>Name</th>
+            <th>Author</th>
+            <th>Team Name</th>
+            <th>Description</th>
+            <th>Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in rank %}
+            <tr>
+                <!--<td>{{ forloop.counter }}</td>
+                <td>{{ item.filename }}</td>
+                <td>{{ item.username }}</td>
+                <td>{{ item.teamname }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.score }}</td>-->
+                <td>{{ item.rank }}</td>
+                <td>{{ item.index }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.author }}</td>
+                <td>{{ item.teamname }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.score }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

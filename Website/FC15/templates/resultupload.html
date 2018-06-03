@@ -1,0 +1,18 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<br /><br />
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form_input">
+         <label for="file" id="file" style="margin-left: 10%; font: 16px 微软雅黑;">File</label>
+         <input type="file" name="file" class="contact-input"
+             style="color: rgba(255, 255, 255, 1.0); margin-left: 10%; width: 80%; overflow: hidden;margin-bottom: 20px;  padding: 5px;  background: rgba(255, 255, 255, 0.3);  border-radius: 2px;  display: block; height: 29px;  padding: 0 9px;  color: #4d5a5e;  border: 1px solid #cfdfe3;  border-bottom-color: #d2e2e7;  border-radius: 2px;  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);"/>
+    </div>
+    <div class="buttons" style="margin-left: 0%;">
+         <input type="submit" value="Submit" class="el-button" style="width: 30%; margin-left: 35%;" />
+    </div>
+</form>
+
+{% endblock %}
