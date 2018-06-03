@@ -1,0 +1,52 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<div class="banner" style="width: 100%; background: url('/static/images/{{ bgname }}') fixed center center no-repeat; background-size: cover; height: 1000px; margin: 0px 0px 0px 0px;">
+    <div style="height: 1%; background-color: rgba(0, 0, 0, 0);"></div>
+    <div class="fi" style="margin-left: 30%; width: 40%; margin-top: 20%; margin: auto; text-align: center;">
+        <font size="150" color="white" face="微软雅黑">{{ post.title }}</font>
+        <hr />
+        <p style="font: bold 16px 微软雅黑">Posted by <el-tag type="warning">{{ post.username }}</el-tag> at <el-tag type="success">{{ post.timestamp }}</el-tag></p>
+    </div>
+    <div style="margin-top: 0px;">
+    <textarea name="content" wrap="soft"  rows="20" disabled
+        style="margin-top: 10px; font: 18px 微软雅黑; height: 60%; color: rgba(255, 255, 255, 1.0); margin-left: 20%; width: 60%; margin-bottom: 20px;  padding: 5px;  background: rgba(255, 255, 255, 0.3);  border-radius: 2px;  display: block;  padding: 0 9px;  border: 1px solid #cfdfe3;  border-bottom-color: #d2e2e7;  border-radius: 2px;  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05), 0 1px rgba(255, 255, 255, 0.2);">{{ post.content }}</textarea>
+    </div>
+</div>
+
+<!-- Banner 
+<section id="banner">
+	<div class="inner">
+		<h2>Blog Detail</h2>
+        <a href="/index/" class="button">Read more</a>
+	</div>
+</section>
+
+<!-- Wrapper 
+<section id="wrapper">
+	<section id="one" class="wrapper spotlight style1">
+		<div class="inner">
+            <a href="" class="image"><img src="/static/images/pic02.jpg" alt="" /></a>
+			<div class="content">
+				<h2>{{ post.title }}</h2>
+                <hr />
+                <h5>Posted at {{ post.timestamp }}</h5>
+                <p>Posted by {{ post.username }}</p>
+			</div>
+		</div>
+	</section>
+
+    <section id="two" class="wrapper alt spotlight style2">
+		<div class="inner">
+			<div class="content">
+				<hr />
+				<p>{{ post.content }}</p>
+                <hr />
+                <a href="/index/" class="button">Go back</a>
+			</div>
+		</div>
+	</section>
+</section>-->
+
+{% endblock %}

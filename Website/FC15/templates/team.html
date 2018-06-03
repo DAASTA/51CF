@@ -1,0 +1,188 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<div class="bg" style="width: 100%; background: url('/static/images/team-bg.jpg') fixed center center no-repeat; background-size: cover; height: 350px; margin: 0px 0px 0px 0px;">
+    <div style="height: 5%; background-color: rgba(0, 0, 0, 0);"></div>
+    <div class="fi" style="margin-left: 30%; width: 40%; margin: auto; text-align: center;">
+        <font size="100" color="white" face="微软雅黑">Welcome, {{ username }}</font>
+        <p style="font: bold 18px 微软雅黑;">You can team up or create your own team here.</p>
+        <hr />
+    </div>
+    <br />
+</div>
+
+<div style="margin: 0px 0px 0px 0px; background-color: rgba(64, 158, 255, 0.9); width: 100%; height: 20%;">
+    <br />
+    <div style="background-color: rgba(0, 0, 0, 0); width: 40%; margin-left: 30%; margin-top: 0px;">
+        {% if myteam %}
+            <h3>Your own team: {{ myteam.teamname }}</h3>
+            <hr />
+            <h4>Introduction:</h4>
+            <p>{{ myteam.introduction|linebreaks }}</p>
+            <a href="/teamdetail/">
+                <el-button type="success">Show Detail</el-button>
+            </a>
+        {% else %}
+            {% if joinedteam %}
+                <h3>The team you have already joined</h3>
+                <h4>{{ joinedteam.teamname }}</h4>
+                <p>Introduction:</p>
+                <p>{{ joinedteam.introduction|linebreaks }}</p>
+                <a href="/teamdetail/">
+                    <el-button type="success">Show Detail</el-button>
+                </a>
+            {% else %}
+                <p>You have not joined a team yet. Please choose one or</p>
+                <a href="/createteam/">
+                    <el-button type="success">Create a team</el-button>
+                </a>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+<br /><br />
+<el-container>
+    <el-aside style="margin-left: 10%;">
+        <img src="/static/images/teamlist-bg.jpg" width="100%" />
+    </el-aside>
+    <el-main>
+        <div class="content" style="margin-left: 5%; width: 80%;">
+        <br /><br />
+            <h3>All teams available:</h3>
+            <hr />
+            <p>If you have not joined a team yet, you can choose one.</p>
+            <br />
+            <div class="table-responsive" style="">
+                <table class="table">
+                    <thead style="">
+                        <tr>
+                            <th>Index</th>
+                            <th>Teamname</th>
+                            <th>Captain</th>
+                            <th>Introduction</th>
+                            <th>Member Number</th>
+                            <th>Command</th>
+                        </tr>
+                    </thead>
+                    <tbody style="">
+                        {% for team in teams %}
+                        <tr>
+                            <td>{{ team.pk }}</td>
+                            <td>{{ team.teamname }}</td>
+                            <td>{{ team.captain }}</td>
+                            <td>{{ team.introduction }}</td>
+                            <td>{{ team.members }}</td>
+                            <td><a href="{% url 'jointeamrequest' pk=team.pk %}"><el-button type="success">Join this team</el-button></a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+    </div>
+    </el-main>
+</el-container>
+<!--
+    <div class="content" style="">
+        <br /><br />
+            <h3>All teams available:</h3>
+            <div class="table-responsive" style="">
+                <table class="table">
+                    <thead style="">
+                        <tr>
+                            <th>Index</th>
+                            <th>Teamname</th>
+                            <th>Captain</th>
+                            <th>Introduction</th>
+                            <th>Member Number</th>
+                            <th>Command</th>
+                        </tr>
+                    </thead>
+                    <tbody style="">
+                        {% for team in teams %}
+                        <tr>
+                            <td>{{ team.pk }}</td>
+                            <td>{{ team.teamname }}</td>
+                            <td>{{ team.captain }}</td>
+                            <td>{{ team.introduction }}</td>
+                            <td>{{ team.members }}</td>
+                            <td><a href="{% url 'jointeamrequest' pk=team.pk %}"><el-button type="success">Join this team</el-button></a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+    </div>
+
+<!-- 
+<section id="banner">
+	<div class="inner">
+		<h2>Welcome {{ username }} !</h2>
+		<p>You can join or create a team</p>
+	</div>
+</section>
+
+<section id="wrapper">
+
+<section id="one" class="wrapper spotlight style1">
+    <div class="inner">
+        <a href="#" class="image"><img src="/static/images/pic01.jpg" alt="" /></a>
+        <div class="content">
+
+            {% if myteam %}
+                <h2>The team whose captain is you:</h2>
+                <h3>{{ myteam.teamname }}</h3>
+                <p>Introduction:</p>
+                <p>{{ myteam.introduction|linebreaks }}</p>
+            {% else %}
+                {% if joinedteam %}
+                    <h3>The team you have already joined</h3>
+                    <h4>{{ joinedteam.teamname }}</h4>
+                    <p>Introduction:</p>
+                    <p>{{ joinedteam.introduction|linebreaks }}</p>
+                    <h4><a href="/teamdetail/">Show Detail</a></h4>
+                {% else %}
+                    <h3><a href="/createteam/">Create a team</a></h3>
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section id="two" class="wrapper alt spotlight style2">
+    <div class="inner">
+        <div class="content">
+            <h3>All teams available:</h3>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Index</th>
+                            <th>Teamname</th>
+                            <th>Captain</th>
+                            <th>Introduction</th>
+                            <th>Member Number</th>
+                            <th>Command</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for team in teams %}
+                        <tr>
+                            <td>{{ team.pk }}</td>
+                            <td>{{ team.teamname }}</td>
+                            <td>{{ team.captain }}</td>
+                            <td>{{ team.introduction }}</td>
+                            <td>{{ team.members }}</td>
+                            <td><a href="{% url 'jointeamrequest' pk=team.pk %}">Join this team</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+</section>-->
+ 
+{% endblock %}

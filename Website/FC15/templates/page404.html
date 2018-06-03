@@ -1,0 +1,20 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<div class="bg" style="width: 100%; background: url('/static/images/bg404.jpg') fixed center center no-repeat; background-size: cover; height: 95%; margin: 0px 0px 0px 0px;">
+    <div style="height: 4%; background-color: rgba(0, 0, 0, 0);"></div>
+    <div class="fi" style="margin-left: 30%; width: 40%; margin: auto; text-align: center;">
+        <font size="100" color="white" face="微软雅黑">Oh, no!</font>
+        <hr />
+    </div>
+    <div style="background-color: rgba(0, 0, 0, 0); margin: auto; text-align: center;">
+        <h1>404 Not Found.</h1>
+        <p>Please check which page you want to visit and check your spelling again.</p>
+        <p>If you do not know how to use this website please read the documents or ask someone else.</p>
+        <br /><br />
+        <a href="/home/"><el-button type="primary">Return to home page</el-button></a>
+    </div>
+</div>
+
+{% endblock %}

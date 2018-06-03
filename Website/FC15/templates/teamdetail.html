@@ -1,0 +1,161 @@
+﻿{% extends "base.html" %}
+
+{% block content %}
+
+<div class="bg" style="width: 100%; background: url('/static/images/login-bg.jpg') fixed center center no-repeat; background-size: cover; height: 950px; margin: 0px 0px 0px 0px;">
+    <div style="height: 10%; background-color: rgba(0, 0, 0, 0);"></div>
+    <div class="fi" style="margin-left: 30%; width: 40%; margin: auto; text-align: center;">
+        <font size="100" color="white" face="微软雅黑">Welcome, {{ username }}</font>
+        <p style="font: bold 18px 微软雅黑;">Here are the details about team '{{ team.teamname }}'</p>
+        <hr />
+    </div>
+    <br />
+    <div style="margin-left: 20%; width: 60%; color: white;">
+        <h4>Captain:  {{ team.captain }}</h4>
+        <br />
+        <h4>All members:</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Realname</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for member in members %}
+                <tr>
+                    <td>{{ member.username }}</td>
+                    <td>{{ member.realname }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br />
+        <h5>Introduction:<br />{{ team.introduction|linebreaks }}</h5>
+        <br />
+        <br />
+        {% if is_captain %}
+            <a href="/dismissteam/" class="button" onclick="return ocnfirm('Are you sure to dismiss your team?')">
+                <el-button type="danger">Dismiss the team</el-button>
+            </a>  
+        {% else %}
+            <a href="/quitteam/" class="button" onclick="return confirm('Are you sure to quit the team?')">
+                <el-button type="warning">Quit the team</el-button>
+            </a> 
+        {% endif %}
+
+        <hr />
+
+        {% if is_captain %}
+        <section id="two" class="wrapper alt spotlight style2">
+            <div class="inner">
+                <div class="content">
+                    <h3>Requests to join the team:</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Message</th>
+                                <th>Command</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for request in requests %}
+                                <tr>
+                                    <td>{{ request.username }}</td>
+                                    <td>{{ request.message }}</td>
+                                    <td>
+                                        <a href="{% url 'acceptrequest' pk=request.pk %}">
+                                            <el-button type="success">Accept</el-button>
+                                        </a>
+                                        <a href="{% url 'rejectrequest' pk=request.pk %}">
+                                            <el-button type="warning">Reject</el-button>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+        {% endif %}
+    </div>
+</div>
+<!--
+<section id="banner">
+	<div class="inner">
+		<h2>Welcome {{ username }} !</h2>
+		<p>Here are details about your team</p>
+	</div>
+</section>
+
+<section id="wrapper">
+
+<section id="one" class="wrapper spotlight style1">
+    <div class="inner">
+        <a href="#" class="image"><img src="/static/images/pic01.jpg" alt="" /></a>
+        <div class="content">
+            <h3>Team name: {{ team.teamname }}</h3>
+            <br />
+            <h4>Captain: {{ team.captain }}</h4>
+            <h4>All members:</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Realname</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for member in members %}
+                    <tr>
+                        <td>{{ member.username }}</td>
+                        <td>{{ member.realname }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <hr />
+            <h5>Introduction:<br />{{ team.introduction|linebreaks }}</h5>
+            <br />
+            {% if is_captain %}
+                <a href="/dismissteam/" class="button" onclick="return ocnfirm('Are you sure to dismiss your team?')">Dismiss the team</a>  
+            {% else %}
+                <a href="/quitteam/" class="button" onclick="return confirm('Are you sure to quit the team?')">Quit the team</a> 
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+{% if is_captain %}
+<section id="two" class="wrapper alt spotlight style2">
+    <div class="inner">
+        <div class="content">
+            <h3>Requests to join the team:</h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Username</th>
+                        <th>Message</th>
+                        <th>Command</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in requests %}
+                        <tr>
+                            <td>{{ request.username }}</td>
+                            <td>{{ request.message }}</td>
+                            <td><a href="{% url 'acceptrequest' pk=request.pk %}">Accept</a> | <a href="{% url 'rejectrequest' pk=request.pk %}">Reject</a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+</section>-->
+
+{% endblock %}
